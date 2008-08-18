@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -29,7 +30,7 @@ import org.apache.commons.logging.impl.SimpleLog;
 
 public class DaapClient {
 
-	private String hostname  =  "majoribanks.mcs.vuw.ac.nz";
+	private String hostname;
 	private int dbid;
 	private int revisionNumber;
 	private Log log ;
@@ -37,7 +38,7 @@ public class DaapClient {
 	private int port;
 	DaapUtilities helper;
 	
-	public DaapClient(String hostname, int port){
+	public DaapClient(String hostname, int port) throws IOException{
 		//This method should login and get a session ID,
 		//the database ID (dbid) by updateing and currentVersion [of database]
 		this.hostname = hostname;
@@ -59,18 +60,57 @@ public class DaapClient {
 		
 	}
 
-	public List<Track> getTrackList(){
-		return null;
+	public List<Track> getTrackList() throws IOException{
+		List<Track> tracks = new ArrayList<Track>();
+		String request  = "databases/"+ dbid +"/items?type=music&meta=dmap.itemkind,dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songgenre,daap.songcomposer,daap.songbitrate,daap.songsamplerate,daap.songtime&session-id="
+		+sessionID+"&revision-id="+revisionNumber;
+		
+		InputStream in = helper.request(hostname, "databases/" + dbid + "/items?type=music&meta=dmap.itemkind,dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songgenre,daap.songcomposer,daap.songbitrate,daap.songsamplerate,daap.songtime&session-id=21", log);
+		DaapEntry entry = DaapEntry.parseStream(in, helper.types);
+	
+
+		if ((entry == null) || (entry.getName() != DaapUtilities.stringToInt("adbs"))) {
+			//System.out.println(DaapUtilities.intToString(entry.getName()));
+			throw new IOException("'" + entry.getName() + "'");
+		}
+		
+		for (DaapEntry e2: entry) {
+			if (e2.getName() == DaapUtilities.stringToInt("mlcl")) {
+				//System.out.println(DaapUtilities.intToString(e2.getName()));
+				entry = e2;
+				break;
+			}
+		}
+		/*
+		//FileOutputStream fos = new FileOutputStream(new File("filelist.txt"));
+		for (DaapEntry e2: entry) {
+			if ((entry == null) || !entry.hasChildren()) {
+				continue;
+			}
+			final Map<Integer, Object> values = e2.getValueMap();
+			int reference = (Integer)values.get(DaapUtilities.stringToInt("miid"));
+			String songName = (String)values.get(helper.stringToInt("minm"));
+			System.out.println(reference + " " + songName);
+			//fos.write((reference + " " + songName+"\n").getBytes());
+			
+		}
+		*/
+		
+
+			helper.release(in);
+		
+		
+		return tracks;
 	}
 	
 	public InputStream getStream(Track track){
 		return null;
 	}
 
-	private void getSessionID() {
+	private void getSessionID() throws IOException {
 		String loginRequest = "login";
 		InputStream in = null;
-		try {
+		
 			in = helper.request(hostname, loginRequest, log);
 			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
 			
@@ -81,19 +121,14 @@ public class DaapClient {
 				}
 			}		
 
-		} catch (IOException e) {
-			e.printStackTrace();
-			
-		}finally{
-			helper.release(in);
-		}
+		helper.release(in);
+		
 	}
 	
-	private void getRevisionNumber(){
+	private void getRevisionNumber() throws IOException{
 		String request = "update?session-id="+sessionID;
 		InputStream in = null;		
 
-		try {
 			in = helper.request(hostname, request, log);
 			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
 			
@@ -103,22 +138,16 @@ public class DaapClient {
 					break;
 				}
 			}
-		
-		} catch (IOException e) {
-			System.out.println("Died while trying to get the revision number...");
-			e.printStackTrace();
-		}finally{
 			helper.release(in);
-		}
+
 		
 		
 	}
 	
-	private void getDatabaseId() {
+	private void getDatabaseId() throws IOException {
 		String request = "databases?session-id="+sessionID+"&revision-id="+revisionNumber;
 		InputStream in = null;
 		
-		try {
 			in = helper.request(hostname, request, log);
 			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
 			
@@ -146,13 +175,8 @@ public class DaapClient {
 			
 			System.out.println("dbid = "+dbid);
 			
-			
-		} catch (IOException e) {
-			System.out.println("Died while getting database id");
-			e.printStackTrace();
-		}finally{
 			helper.release(in);
-		}
+		
 	}
 	
 	private void doStuff() throws IOException{
