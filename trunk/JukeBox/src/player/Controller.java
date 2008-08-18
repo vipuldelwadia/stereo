@@ -8,6 +8,14 @@ package player;
  */
 public class Controller {
 	
+	private static Controller instance = new Controller();
+	
+	private Controller() {}
+	
+	public static Controller getInstance() {
+		return instance;
+	}
+	
 	/**
 	 * pauses the playing track
 	 *
