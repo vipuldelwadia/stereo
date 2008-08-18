@@ -28,22 +28,125 @@ public class DaapClient {
 
 	private String hostname  =  "majoribanks.mcs.vuw.ac.nz";
 	private int dbid;
-	private int currentVersion;
-	private Log log = new SimpleLog("Log");
+	private int revisionNumber;
+	private Log log ;
 	private int sessionID;
 	private int port;
-
+	DaapUtilities helper;
 	
 	public DaapClient(String hostname, int port){
 		//This method should login and get a session ID,
 		//the database ID (dbid) by updateing and currentVersion [of database]
 		this.hostname = hostname;
 		this.port = port;
-		HttpClient client = new HttpClient();
+		
+		log = new SimpleLog("Log");
+		
+		try {
+			helper = new DaapUtilities(hostname, log);
+		} catch (IOException e) {
+			System.out.println("Probably an invalid host");
+			e.printStackTrace();
+		}
+		//Get a session Id
+		getSessionID();
+		getRevisionNumber();
+		getDatabaseId();
+		
+		
+	}
+
+	
+
+	private void getSessionID() {
+		String loginRequest = "login";
+		InputStream in = null;
+		try {
+			in = helper.request(hostname, loginRequest, log);
+			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
+			
+			for (DaapEntry e: entry) {
+				if (e.getName() == DaapUtilities.stringToInt("mlid")) {
+					sessionID = (Integer)e.getValue();
+					break;
+				}
+			}		
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			
+		}finally{
+			helper.release(in);
+		}
+	}
+	
+	private void getRevisionNumber(){
+		String request = "update?session-id="+sessionID;
+		InputStream in = null;		
+
+		try {
+			in = helper.request(hostname, request, log);
+			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
+			
+			for (DaapEntry e: entry) {
+				if (e.getName() == DaapUtilities.stringToInt("musr")) {
+					revisionNumber = (Integer)e.getValue();
+					break;
+				}
+			}
+		
+		} catch (IOException e) {
+			System.out.println("Died while trying to get the revision number...");
+			e.printStackTrace();
+		}finally{
+			helper.release(in);
+		}
+		
 		
 	}
 	
-	public void doStuff() throws IOException{
+	private void getDatabaseId() {
+		String request = "databases?session-id="+sessionID+"&revision-id="+revisionNumber;
+		InputStream in = null;
+		
+		try {
+			in = helper.request(hostname, request, log);
+			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
+			
+			for(DaapEntry e:entry){
+				if (e.getName() == DaapUtilities.stringToInt("mlcl")) {
+					entry = e;
+					break;
+				}
+			}
+
+			for(DaapEntry e:entry){
+				if (e.getName() == DaapUtilities.stringToInt("mlit")) {
+					entry = e;
+					break;
+				}
+			}
+ 
+			for(DaapEntry e:entry){
+				if (e.getName() == DaapUtilities.stringToInt("miid")) {
+					entry = e;
+					dbid = (Integer)e.getValue();
+					break;
+				}
+			}
+			
+			System.out.println("dbid = "+dbid);
+			
+			
+		} catch (IOException e) {
+			System.out.println("Died while getting database id");
+			e.printStackTrace();
+		}finally{
+			helper.release(in);
+		}
+	}
+	
+	private void doStuff() throws IOException{
 
 		
 		
@@ -125,8 +228,6 @@ public class DaapClient {
 
 		
 	}
-	public static void main(String[] args) throws IOException {
-		(new DaapClient()).doStuff();
-	}
+	
 
 }
