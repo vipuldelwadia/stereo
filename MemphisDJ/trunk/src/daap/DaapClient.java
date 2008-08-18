@@ -103,9 +103,10 @@ public class DaapClient {
 		return tracks;
 	}
 	
-	public InputStream getStream(Track track){
-		return null;
-	}
+	public InputStream getStream(Track track) throws IOException{
+		int song = 1529529;
+		return helper.request(hostname, "databases/"+dbid+"/items/"+song+".mp3?session-id="+sessionID, log);
+		}
 
 	private void getSessionID() throws IOException {
 		String loginRequest = "login";
