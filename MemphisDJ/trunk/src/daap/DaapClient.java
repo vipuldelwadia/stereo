@@ -24,17 +24,23 @@ import org.apache.commons.httpclient.util.HttpURLConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.SimpleLog;
 
-public class daapclient {
+public class DaapClient {
 
 	private String hostname  =  "majoribanks.mcs.vuw.ac.nz";
 	private int dbid;
 	private int currentVersion;
 	private Log log = new SimpleLog("Log");
 	private int sessionID;
+	private int port;
 
 	
-	public daapclient(){
-		//This method should login and get a session ID, the database ID (dbid) by updateing and currentVersion [of database]
+	public DaapClient(String hostname, int port){
+		//This method should login and get a session ID,
+		//the database ID (dbid) by updateing and currentVersion [of database]
+		this.hostname = hostname;
+		this.port = port;
+		HttpClient client = new HttpClient();
+		
 	}
 	
 	public void doStuff() throws IOException{
@@ -120,7 +126,7 @@ public class daapclient {
 		
 	}
 	public static void main(String[] args) throws IOException {
-		(new daapclient()).doStuff();
+		(new DaapClient()).doStuff();
 	}
 
 }
