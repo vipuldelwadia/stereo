@@ -1,3 +1,5 @@
+package interfaces;
+
 import junit.framework.TestCase;
 
 

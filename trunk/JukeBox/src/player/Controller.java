@@ -1,4 +1,9 @@
+package player;
+
 import java.util.List;
+
+import playlist.Playlist;
+import playlist.Song;
 /**
  * 
  * @author coxdyla
