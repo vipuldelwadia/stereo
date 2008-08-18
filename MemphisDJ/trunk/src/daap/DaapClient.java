@@ -70,41 +70,34 @@ public class DaapClient {
 	
 
 		if ((entry == null) || (entry.getName() != DaapUtilities.stringToInt("adbs"))) {
-			//System.out.println(DaapUtilities.intToString(entry.getName()));
-			throw new IOException("'" + entry.getName() + "'");
+			throw new IOException("Failed in getting track list");
 		}
 		
-		for (DaapEntry e2: entry) {
-			if (e2.getName() == DaapUtilities.stringToInt("mlcl")) {
-				//System.out.println(DaapUtilities.intToString(e2.getName()));
-				entry = e2;
+		for (DaapEntry e: entry) {
+			if (e.getName() == DaapUtilities.stringToInt("mlcl")) {
+				entry = e;
 				break;
 			}
 		}
-		/*
-		//FileOutputStream fos = new FileOutputStream(new File("filelist.txt"));
-		for (DaapEntry e2: entry) {
+		
+		
+		for (DaapEntry e: entry) {
 			if ((entry == null) || !entry.hasChildren()) {
 				continue;
 			}
-			final Map<Integer, Object> values = e2.getValueMap();
-			int reference = (Integer)values.get(DaapUtilities.stringToInt("miid"));
-			String songName = (String)values.get(helper.stringToInt("minm"));
-			System.out.println(reference + " " + songName);
-			//fos.write((reference + " " + songName+"\n").getBytes());
-			
+			final Map<Integer, Object> values = e.getValueMap();
+			tracks.add(new Track(values));
+						
 		}
-		*/
-		
-
-			helper.release(in);
+			
+		helper.release(in);
 		
 		
 		return tracks;
 	}
 	
 	public InputStream getStream(Track track) throws IOException{
-		int song = 1529529;
+		int song = track.getTrackId();
 		return helper.request(hostname, "databases/"+dbid+"/items/"+song+".mp3?session-id="+sessionID, log);
 		}
 
@@ -174,7 +167,7 @@ public class DaapClient {
 				}
 			}
 			
-			System.out.println("dbid = "+dbid);
+			
 			
 			helper.release(in);
 		

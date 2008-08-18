@@ -1,6 +1,7 @@
 package music;
 
 import java.util.Date;
+import java.util.Map;
 
 import daap.DaapEntry;
 import daap.DaapUtilities;
@@ -36,10 +37,43 @@ public class Track {
 //	private final byte dataKind;
 //	private final String dataUrl;
 	
-	public Track(DaapEntry entry){
-		for(DaapEntry e:entry){
-			
-		}
-		
+	public Track(Map<Integer, Object> values){
+		trackId = (Integer)values.get(DaapUtilities.stringToInt("miid"));
+		name = (String)values.get(DaapUtilities.stringToInt("minm"));
+		artist = (String) values.get(DaapUtilities.stringToInt("asar"));
+		startTime=(Integer) values.get(DaapUtilities.stringToInt("asst"));
+		stopTime=(Integer) values.get(DaapUtilities.stringToInt("assp"));
+		time =(Integer) values.get(DaapUtilities.stringToInt("astm"));
+		album = (String)values.get(DaapUtilities.stringToInt("asal"));
 	}
+
+	public String getAlbum() {
+		return album;
+	}
+
+	public String getArtist() {
+		return artist;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public int getStartTime() {
+		return startTime;
+	}
+
+	public int getStopTime() {
+		return stopTime;
+	}
+
+	public int getTime() {
+		return time;
+	}
+
+	public int getTrackId() {
+		return trackId;
+	}
+	
+	
 }

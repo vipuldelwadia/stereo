@@ -125,11 +125,11 @@ public class DaapUtilities {
 		types.put(stringToInt("msrv"), DaapEntry.LIST);
 	}
 	
-	protected static int stringToInt(String name) {
+	public static int stringToInt(String name) {
 		return new BigInteger(name.getBytes()).intValue();
 	}
 	
-	protected static String intToString(int name) {
+	public static String intToString(int name) {
 		byte[] bytes = new byte[4];
 		int n = name;
 		for (int i = 0; i < 4; i++) {
