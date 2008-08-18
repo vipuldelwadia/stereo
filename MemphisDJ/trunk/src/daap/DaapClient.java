@@ -9,8 +9,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
+
+import music.Track;
 
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.Header;
@@ -56,7 +59,13 @@ public class DaapClient {
 		
 	}
 
+	public List<Track> getTrackList(){
+		return null;
+	}
 	
+	public InputStream getStream(Track track){
+		return null;
+	}
 
 	private void getSessionID() {
 		String loginRequest = "login";
