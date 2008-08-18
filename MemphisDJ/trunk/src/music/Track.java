@@ -8,7 +8,7 @@ import daap.DaapUtilities;
 
 public class Track {
 	private final int trackId;
-	private final String album;
+//	private final String album;
 	private final String name;
 	private final String artist;
 //	private final short beatsPerMinute;
@@ -27,9 +27,9 @@ public class Track {
 //	private final byte relativeVolume;
 //	private final int sampleRate;
 //	private final int size;
-	private final int startTime;
-	private final int stopTime;
-	private final int time;
+//	private final int startTime;
+//	private final int stopTime;
+//	private final int time;
 //	private final short trackCount;
 //	private final short tracknumber;
 //	private final byte userRating;
@@ -41,15 +41,15 @@ public class Track {
 		trackId = (Integer)values.get(DaapUtilities.stringToInt("miid"));
 		name = (String)values.get(DaapUtilities.stringToInt("minm"));
 		artist = (String) values.get(DaapUtilities.stringToInt("asar"));
-		startTime=(Integer) values.get(DaapUtilities.stringToInt("asst"));
+		/*startTime=(Integer) values.get(DaapUtilities.stringToInt("asst"));
 		stopTime=(Integer) values.get(DaapUtilities.stringToInt("assp"));
 		time =(Integer) values.get(DaapUtilities.stringToInt("astm"));
-		album = (String)values.get(DaapUtilities.stringToInt("asal"));
+		album = (String)values.get(DaapUtilities.stringToInt("asal"));*/
 	}
 
-	public String getAlbum() {
+	/*public String getAlbum() {
 		return album;
-	}
+	}*/
 
 	public String getArtist() {
 		return artist;
@@ -59,7 +59,7 @@ public class Track {
 		return name;
 	}
 
-	public int getStartTime() {
+	/*public int getStartTime() {
 		return startTime;
 	}
 
@@ -69,7 +69,7 @@ public class Track {
 
 	public int getTime() {
 		return time;
-	}
+	}*/
 
 	public int getTrackId() {
 		return trackId;
