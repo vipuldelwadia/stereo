@@ -43,5 +43,13 @@ public class Controller {
 		// TODO Auto-generated method stub
 		System.out.println("change volume: " + newVolume);
 	}
-
+	
+	/**
+	 * skips to the next track
+	 * 
+	 */
+	public void skipTrack() {
+		// TODO Auto-generated method stub (ha!)
+		System.out.println("skip track");
+	}
 }
