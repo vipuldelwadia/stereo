@@ -43,4 +43,15 @@ public class DaapClientTest {
 			fail();
 		}
 	}
+	
+	@Test
+	public void isAlivetest(){
+		try{
+		DaapClient client =  new DaapClient("majoribanks.mcs.vuw.ac.nz", 3689);
+
+		assertTrue(client.isAlive());
+		}catch(Exception e){
+			fail();
+		}
+	}
 }
