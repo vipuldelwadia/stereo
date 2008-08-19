@@ -47,30 +47,8 @@ public class DaapClientTest {
 //	
 //	}
 	
-	@Test
-	public void isAlivetest(){
-
-
-		assertTrue(client.isAlive());
-
-	}
 	
-	@Test
-	public void isDead(){
 
-
-	
-			System.out.println("sleeping ...");
-			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			assertFalse(client.isAlive());
-			
-	}
 	
 	@AfterClass
 	public static void teardown(){

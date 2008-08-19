@@ -3,7 +3,8 @@ package music;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import dacp.DACPServer;
+
+import server.DACPServer;
 
 public class DJ {
 
