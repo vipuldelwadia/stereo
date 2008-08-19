@@ -5,21 +5,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import daap.DaapClient;
+import daap.DaapClient.ClientExpiredException;
 
 public class Lackey {
 	private Handshake hs;
 
-	private List<DaapClient> clients;
-	
 	private Semaphore connectionQueue;
+	
+	private Map<DaapClient, Set<Track>> library;
 
 	public Lackey() {
-		clients = new ArrayList<DaapClient>();
+		library = new HashMap<DaapClient, Set<Track>>();
 		connectionQueue = new Semaphore(1, true);
 
 		try {
@@ -32,43 +32,33 @@ public class Lackey {
 		}
 
 		new Thread(hs).start();
+		new Thread(new ServerPoller()).start();
 	}
 
 	// public void removeTracks(Playlist plist){
 	//		
 	// }
 
+	public Playlist checkPlaylist (Playlist check){
+		return check;
+	}
+
 	public List<Track> getAllTracks() {
 		List<Track> tracks = new ArrayList<Track>();
-
-		List<DaapClient> toRemove = new ArrayList<DaapClient>();
-		for (DaapClient client : clients) {
-			try {
-				if (client.isAlive()) {
-					tracks.addAll(client.getTrackList());
-				} else {
-					toRemove.add(client);
-				}
-			} catch (IOException e) {
-				// swallow
-			}
+		for(Set<Track> trackSet:library.values()){
+			tracks.addAll(trackSet);
 		}
-
-		for (DaapClient c : toRemove) {
-			clients.remove(c);
-		}
-
 		return tracks;
 	}
 
-	public void newConnection(DaapClient newClient) throws InterruptedException {
+	public void newConnection(DaapClient newClient) throws InterruptedException, IOException {
 		if (newClient == null) 	return;
 		connectionQueue.acquire();
-		clients.add(newClient);
+		Set<Track> tracks = new HashSet<Track>(newClient.getTrackList());
+		library.put(newClient, tracks);
 		DJ.getInstance().tracksAdded();
 		connectionQueue.release();
 	}
-
 
 	private class Handshake implements Runnable {
 
@@ -119,11 +109,37 @@ public class Lackey {
 			}
 		}
 	}
-
-
 	
-	public Playlist checkPlaylist (Playlist check){
-		return check;
+	private class ServerPoller implements Runnable{
+		
+		public void run(){
+			while(true){
+				List<DaapClient> expired = new ArrayList<DaapClient>();
+				
+				for(DaapClient client:library.keySet()){
+					try {
+						if(client.isUpdated()){
+							library.put(client, new HashSet<Track>(client.getTrackList()));
+						}
+					} catch (ClientExpiredException e) {
+						expired.add(client);
+					}
+				}
+			
+				if(expired.size() > 0){
+					for(DaapClient c:expired){
+						library.remove(c);
+					}
+					DJ.getInstance().tracksRemoved();
+				}
+				
+				try {
+					this.wait(1000);
+				} catch (InterruptedException e) {
+					//swallow
+				}
+			}
+		}
 	}
 
 }

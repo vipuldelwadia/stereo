@@ -53,9 +53,7 @@ public class Track {
 	
 	/**Returns null if the connection closed*/
 	public InputStream getStream() throws IOException{
-		if(publisher.isAlive())
-			return publisher.getStream(this);
-		return null;
+		return publisher.getStream(this);
 	}
 	
 }
