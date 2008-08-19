@@ -14,7 +14,7 @@ public class PlayerTest {
 
 		try{
 			DaapClient client = new DaapClient(hostname, port);
-			testCompletePlay(client.getTrackList().get(34).getStream());
+			testCompletePlay(client.getTrackList().get(42).getStream());
 		}catch(IOException e){
 			e.printStackTrace();
 		}

@@ -98,5 +98,4 @@ public class Player implements music.Player {
 	}
 	
 	private Set<PlaybackListener> listeners = new HashSet<PlaybackListener>();
-
 }
