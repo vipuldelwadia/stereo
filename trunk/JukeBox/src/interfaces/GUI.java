@@ -61,11 +61,11 @@ public class GUI {
 		shell.open();
 		shell.layout();
 		// yucky hacky code to see that it works ok
+		// TODO remove this
 		List<Track> tracks = new ArrayList<Track>();
-		tracks.add(new Track());
-		tracks.add(new Track());
-		tracks.add(new Track());
+		for (int i = 0; i < 20; i++) tracks.add(new Track());
 		populatePlaylist(new Playlist(tracks));
+		playingTrackUpdated(new Track());
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
 				display.sleep();
