@@ -40,7 +40,7 @@ public class DACPClient {
 		send(DACPClientBroadcaster.pause());
 	}
 	
-	public void setVolume(int newVolume) {
+	public void setVolume(double newVolume) {
 		send(DACPClientBroadcaster.changeVolume(newVolume));
 	}
 	
