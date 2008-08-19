@@ -64,4 +64,8 @@ public class Lackey {
 		clients.add(newClient);
 		DJ.getInstance().tracksAdded();
 	}
+	
+	public Playlist checkPlaylist (Playlist check){
+		return check;
+	}
 }

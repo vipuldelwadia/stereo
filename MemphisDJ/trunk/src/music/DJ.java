@@ -1,6 +1,7 @@
 package music;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import dacp.DACPServer;
 
@@ -8,7 +9,8 @@ public class DJ {
 
 	private Lackey lackey;
 	private Playlist playlist;
-	private PlayerIF player;
+	private int playlistSize = 10;
+	private Player player;
 	private Track current;
 	
 	private static final DJ instance = new DJ();
@@ -20,40 +22,53 @@ public class DJ {
 	private DJ (){
 		lackey = new Lackey();
 		playlist = new Playlist();
-		//player = new Player();
+		player = new Player();
 		
 		try {
 			new DACPServer(3689);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			System.out.println("DACP Server initialisation failed.");
 			e.printStackTrace();
 		}
 		
-		List<Track> temp = lackey.getSomeTracks(10);
-		for(Track t : temp){
-			playlist.addTrack(t);
+		List<Track> lib = lackey.getAllTracks();
+		if (lib != null){
+			Collections.shuffle(lib);
+			for (int i = 0; i < playlistSize && i < lib.size(); i++){
+				Track t = lib.get(i);
+				//unnecessary?
+				if (t != null){
+					playlist.addTrack(t);
+				}
+			}
 		}
 		
-		//current = playlist.poll();
+		current = playlist.poll();
 		
-		//player.setInputStream(current.getStream());
+		try {
+			player.setInputStream(current.getStream());
+		} catch (IOException e) {
+			System.out.println("Failed to send stream to player.");
+			e.printStackTrace();
+		}
 		play();
 		
 	}
 	
+	public void addTrack(){
+		
+	}
+	
 	public void play(){
-		//player.start();
-		System.out.println("PLAY");
+		player.start();
 	}
 	
 	public void pause(){
-		//player.pause();
-		System.out.println("PAUSE");
+		player.pause();
 	}
 	
 	public void stop(){
-		//player.stop();
-		System.out.println("NOOOOOOO");
+		player.stop();
 	}
 	
 	public static void main(String[] args){
@@ -61,6 +76,15 @@ public class DJ {
 	}
 	
 	public void tracksAdded(){
+		
+		
+	}
+	public void tracksRemoved(){
+		playlist = lackey.checkPlaylist(playlist);
+		if (playlist.size() < playlistSize){
+			
+			
+		}
 		
 	}
 	

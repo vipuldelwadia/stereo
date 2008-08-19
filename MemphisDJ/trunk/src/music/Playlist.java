@@ -30,6 +30,10 @@ public class Playlist implements Iterable<Track>{
 		return false;
 	}
 	
+	public int size(){
+		return tracks.size();
+	}
+	
 	public Track peek(){
 		return tracks.get(0);
 	}
