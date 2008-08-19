@@ -63,7 +63,7 @@ public class ServerParser {
 				case ctrl_int: return "ctrl-int";
 				case update: return "update";
 				default: return "";
-			}
+			} 
 		}
 	}
 }
