@@ -6,18 +6,22 @@ import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Handshake{
+import music.Lackey;
+
+public class Handshake implements Runnable{
 
 	private ServerSocket connection;
 	private final int DAAPPORT = 3689;
 	private final int PORT = 8080;
 	private BufferedReader netInput = null;
-
-	public Handshake() throws IOException{
+	private Lackey lackey;
+	
+	public Handshake(Lackey l) throws IOException{
 		connection = new ServerSocket(PORT);
+		this.lackey = l;
 	}
 
-	public DaapClient createConnection() {
+	private DaapClient createConnection() {
 		try {
 			Socket client = connection.accept();
 			netInput = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -39,6 +43,12 @@ public class Handshake{
 		} catch (NullPointerException e) {
 			// Fails if the socket closes before input
 			return null;
+		}
+	}
+
+	public void run() {
+		while(true){
+			lackey.newConnection(createConnection());
 		}
 	}
 }
