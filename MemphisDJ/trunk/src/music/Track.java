@@ -3,6 +3,7 @@ package music;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import daap.DaapClient;
@@ -24,7 +25,12 @@ public class Track {
 	private DaapClient publisher;
 	
 	public Track(Map<Integer, Object> values,DaapClient parent){
-		tags = Collections.unmodifiableMap(values);
+		tags = new HashMap<Integer, Object>();
+		
+		for (Integer key: values.keySet()) {
+			tags.put(key, values.get(key));
+		}
+		
 		publisher = parent;
 	}
 

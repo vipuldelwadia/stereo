@@ -22,7 +22,7 @@ public class DJ {
 	private DJ (){
 		lackey = new Lackey();
 		playlist = new Playlist();
-		player = new Player();
+		player = new player.Player();
 		
 		try {
 			new DACPServer(3689);
