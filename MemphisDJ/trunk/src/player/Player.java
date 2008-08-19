@@ -2,17 +2,12 @@ package player;
 
 import java.io.InputStream;
 
-import javazoom.jl.decoder.JavaLayerError;
 import javazoom.jl.decoder.JavaLayerException;
-
-import music.Track;
-import daap.DaapClient;
 
 public class Player implements music.Player {
 
 	public void pause() {
-		// TODO Auto-generated method stub
-		
+		thread.suspend();
 	}
 
 	public void setInputStream(InputStream i) {
@@ -22,33 +17,47 @@ public class Player implements music.Player {
 	}
 
 	public void start() {
-		thread.start();
+		if (thread.isAlive()) {
+			thread.resume();
+		}
+		else {
+			thread.start();
+		}
 	}
 
 	public void stop() {
-		// TODO Auto-generated method stub
-		
+		thread.close();
+		thread.resume();
 	}
     
 	private TrackThread thread;
 	
 	private static class TrackThread extends Thread {
 		
-		private final InputStream stream;
+		private javazoom.jl.player.advanced.AdvancedPlayer player;
 		
 		public TrackThread(InputStream stream) {
-			this.stream = stream;
+			try {
+				player = new javazoom.jl.player.advanced.AdvancedPlayer(stream);
+			}
+			catch (JavaLayerException ex) {
+				ex.printStackTrace();
+				player = null;
+			}
+			
 		}
 		
 		public void run() {
-			
 			try {
-				javazoom.jl.player.Player player = new javazoom.jl.player.Player(stream);
 				player.play();
 			}
 			catch (JavaLayerException ex) {
 				ex.printStackTrace();
 			}
+		}
+		
+		public void close() {
+			player.close();
 		}
 	}
     
