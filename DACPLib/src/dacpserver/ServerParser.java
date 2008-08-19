@@ -1,4 +1,4 @@
-package server;
+package dacpserver;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,10 +6,11 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Map.Entry;
 
-import server.command.Pause;
-import server.command.Play;
-import server.command.ServerCommandInterface;
-import server.command.SetVolume;
+import daccpserver.command.Pause;
+import daccpserver.command.Play;
+import daccpserver.command.ServerCommandInterface;
+import daccpserver.command.SetVolume;
+
 
 public class ServerParser {
 

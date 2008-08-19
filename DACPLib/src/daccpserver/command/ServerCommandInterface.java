@@ -1,6 +1,6 @@
-package server.command;
+package daccpserver.command;
 
-import server.ServerListener;
+import dacpserver.ServerListener;
 
 public interface ServerCommandInterface {
 	public void doAction(ServerListener s);

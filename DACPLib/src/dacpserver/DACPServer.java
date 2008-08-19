@@ -1,4 +1,4 @@
-package server;
+package dacpserver;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
@@ -8,7 +8,8 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
-import server.command.ServerCommandInterface;
+import daccpserver.command.ServerCommandInterface;
+
 
 public class DACPServer {
 
