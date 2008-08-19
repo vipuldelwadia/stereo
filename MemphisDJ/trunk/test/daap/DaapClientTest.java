@@ -31,10 +31,10 @@ public class DaapClientTest {
 			List<Track> music = client.getTrackList();
 			InputStream in = client.getStream(music.get(0));
 			int x = in.read();
-			while(x!=-1){
-				System.out.print(x);
-				x = in.read();
-			}
+//			while(x!=-1){
+//				System.out.print(x);
+//				x = in.read();
+//			}
 			
 			in.close();
 		} catch (IOException e) {

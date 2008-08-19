@@ -62,10 +62,10 @@ public class DaapClient {
 
 	public List<Track> getTrackList() throws IOException{
 		List<Track> tracks = new ArrayList<Track>();
-		String request  = "databases/"+ dbid +"/items?type=music&meta=dmap.itemkind,dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songgenre,daap.songcomposer,daap.songbitrate,daap.songsamplerate,daap.songtime&session-id="
+		String request  = "databases/"+ dbid +"/items?type=music&meta=dmap.itemkind,dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songgenre,daap.songcomposer,daap.songbitrate,daap.songsamplerate,daap.songstarttime,daap.songstoptime,daap.songtime&session-id="
 		+sessionID+"&revision-id="+revisionNumber;
 		
-		InputStream in = helper.request(hostname, "databases/" + dbid + "/items?type=music&meta=dmap.itemkind,dmap.itemid,dmap.itemname,daap.songalbum,daap.songartist,daap.songgenre,daap.songcomposer,daap.songbitrate,daap.songsamplerate,daap.songtime&session-id=21", log);
+		InputStream in = helper.request(hostname, request, log);
 		DaapEntry entry = DaapEntry.parseStream(in, helper.types);
 	
 
