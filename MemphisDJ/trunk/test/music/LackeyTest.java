@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 
@@ -29,5 +30,11 @@ public class LackeyTest {
 
 	}
 	
+	@Ignore("infinite loops ftw!!!")
+	@Test
+	public void handshakeTest(){
+		Lackey lackey = new Lackey(null);
+		while(true);
+	}
 	
 }
