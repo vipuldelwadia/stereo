@@ -18,7 +18,7 @@ public class DJ {
 	}
 	
 	private DJ (){
-		lackey = new Lackey(this);
+		lackey = new Lackey();
 		playlist = new Playlist();
 		//player = new Player();
 		
@@ -60,6 +60,8 @@ public class DJ {
 		DJ.getInstance();
 	}
 	
-	
+	public void tracksAdded(){
+		
+	}
 	
 }

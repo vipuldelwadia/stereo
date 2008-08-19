@@ -9,13 +9,11 @@ import daap.DaapClient;
 import daap.Handshake;
 
 public class Lackey {
-	private Object dj;
 	private Handshake hs;
 	private List<DaapClient> clients;
 	
 	
-	public Lackey(Object dj){
-		this.dj = dj;
+	public Lackey(){
 		clients = new ArrayList<DaapClient>();
 		
 		try {
@@ -57,17 +55,6 @@ public class Lackey {
 		return tracks;
 	}
 	
-	public List<Track> getSomeTracks(int num){
-		if(num < 1) throw new IllegalArgumentException();
-		
-		List<Track> allTracks = getAllTracks();
-		
-		if(num >= allTracks.size()){
-			return allTracks;
-		}
-		
-		return new ArrayList<Track>(allTracks.subList(0, num));
-	}
 	
 	public synchronized void newConnection(DaapClient newClient){
 		if(newClient == null){
@@ -75,6 +62,6 @@ public class Lackey {
 		}
 		
 		clients.add(newClient);
-		
+		DJ.getInstance().tracksAdded();
 	}
 }
