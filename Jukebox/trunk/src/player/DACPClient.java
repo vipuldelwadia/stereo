@@ -1,4 +1,4 @@
-package player;
+package src.player;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;

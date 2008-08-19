@@ -1,4 +1,4 @@
-package playlist;
+package test.playlist;
 
 import static org.junit.Assert.*;
 

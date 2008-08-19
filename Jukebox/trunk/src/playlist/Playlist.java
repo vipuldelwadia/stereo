@@ -1,4 +1,4 @@
-package playlist;
+package src.playlist;
 
 import java.util.Collections;
 import java.util.List;

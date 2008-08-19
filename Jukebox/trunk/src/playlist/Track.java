@@ -1,4 +1,4 @@
-package playlist;
+package src.playlist;
 
 public class Track {
 	private final String title;
