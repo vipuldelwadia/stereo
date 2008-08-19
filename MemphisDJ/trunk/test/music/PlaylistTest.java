@@ -22,7 +22,10 @@ public class PlaylistTest {
 	
 	@Test
 	public void removeTest(){
+		p.addTrack(track);
 		assertTrue(p.removeTrack(track));
 	}
+	
+	
 
 }

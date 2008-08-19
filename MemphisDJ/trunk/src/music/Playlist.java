@@ -15,10 +15,6 @@ public class Playlist implements Iterable<Track>{
 		return tracks.add(t);
 	}
 	
-	public Track getTrack(int index){
-		return tracks.get(index);
-	}
-	
 	public boolean removeTrack(Track t){
 		return tracks.remove(t);
 	}
@@ -34,6 +30,14 @@ public class Playlist implements Iterable<Track>{
 		return false;
 	}
 	
+	public Track peek(){
+		return tracks.get(0);
+	}
 	
+	public Track poll(){
+		Track t = tracks.get(0);
+		removeTrack(t);
+		return t;
+	}
 	
 }
