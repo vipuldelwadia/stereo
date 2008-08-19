@@ -2,6 +2,7 @@ package dacp;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import music.DJ;
 
 public class ServerParser {
 
