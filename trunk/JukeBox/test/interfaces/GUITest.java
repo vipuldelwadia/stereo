@@ -45,7 +45,7 @@ public class GUITest {
 	
 	@Test
 	public void playListUpdated() {
-		g.playlistUpdated(new Playlist());
+		g.playlistUpdated(new Playlist(null));
 		// TODO make this more interesting as the playlist is more interesting
 	}
 	

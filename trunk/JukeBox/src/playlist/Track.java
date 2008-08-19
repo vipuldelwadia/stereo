@@ -5,6 +5,7 @@ public class Track {
 	private final String artist;
 	private final String album;
 	private final String genre;
+	// in seconds
 	private final int time;
 	
 	public Track(){
@@ -26,6 +27,9 @@ public class Track {
 	}
 	public String getTitle() {
 		return title;
+	}
+	public int getTime() {
+		return time;
 	}
 	/*
 	public String getTrack() {

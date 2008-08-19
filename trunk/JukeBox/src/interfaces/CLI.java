@@ -13,9 +13,11 @@ public class CLI{
 	public CLI(){
 		scan = new Scanner(System.in);
 		controller = Controller.getInstance();
+		run();
 	}
 	
 	public void run(){
+		System.out.println("");
 		while(true){
 			String input = scan.nextLine();
 			if(input.equalsIgnoreCase("exit")){
@@ -82,6 +84,9 @@ public class CLI{
 	
 	private void invalidInput(String message) {
 		// TODO print error message
+	}
+	public static void main(String[] args) {
+		new CLI();
 	}
 
 }

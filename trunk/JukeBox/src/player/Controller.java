@@ -71,8 +71,7 @@ public class Controller {
 	 */
 	public void changeVolume(int newVolume) {
 		if (newVolume < 0 || newVolume > 10) throw new IllegalArgumentException("volume must be between 0-10");
-		// TODO Auto-generated method stub
-		System.out.println("change volume: " + newVolume);
+		dacp.changeVolume(newVolume);
 	}
 	
 	/**

@@ -1,4 +1,7 @@
 package interfaces;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -15,6 +18,7 @@ import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
 import player.Controller;
 import playlist.Playlist;
@@ -29,6 +33,11 @@ public class GUI {
 	private Button playButton;
 	private Scale scale;
 	private Label songnameLabel;
+	private TableColumn albumColumn;
+	private TableColumn artistColumn;
+	private TableColumn genreColumn;
+	private TableColumn titleColumn;
+	private TableColumn timeColumn;
 
 	/**
 	 * Launch the application
@@ -51,6 +60,12 @@ public class GUI {
 		createContents();
 		shell.open();
 		shell.layout();
+		// yucky hacky code to see that it works ok
+		List<Track> tracks = new ArrayList<Track>();
+		tracks.add(new Track());
+		tracks.add(new Track());
+		tracks.add(new Track());
+		populatePlaylist(new Playlist(tracks));
 		while (!shell.isDisposed()) {
 			if (!display.readAndDispatch())
 				display.sleep();
@@ -212,17 +227,25 @@ public class GUI {
 		trackList.setLinesVisible(true);
 		trackList.setHeaderVisible(true);
 
-		final TableColumn albumColumn = new TableColumn(trackList, SWT.NONE);
-		albumColumn.setWidth(100);
-		albumColumn.setText("Album");
+		titleColumn = new TableColumn(trackList, SWT.NONE);
+		titleColumn.setWidth(100);
+		titleColumn.setText("Title");
 
-		final TableColumn artistColumn = new TableColumn(trackList, SWT.NONE);
+		artistColumn = new TableColumn(trackList, SWT.NONE);
 		artistColumn.setWidth(100);
 		artistColumn.setText("Artist");
 
-		final TableColumn titleColumn = new TableColumn(trackList, SWT.NONE);
-		titleColumn.setWidth(100);
-		titleColumn.setText("Title");
+		albumColumn = new TableColumn(trackList, SWT.NONE);
+		albumColumn.setWidth(100);
+		albumColumn.setText("Album");
+
+		genreColumn = new TableColumn(trackList, SWT.NONE);
+		genreColumn.setWidth(100);
+		genreColumn.setText("Genre");
+
+		timeColumn = new TableColumn(trackList, SWT.NONE);
+		timeColumn.setWidth(100);
+		timeColumn.setText("Time");
 
 		
 		/////////////////////////////////////////////////////////////////////
@@ -248,7 +271,15 @@ public class GUI {
 	}
 	
 	private void populatePlaylist(Playlist p) {
-		// TODO
+		System.out.println("pop");
+		for (Track t : p.getPlaylist()) {
+			TableItem track = new TableItem(trackList, SWT.NONE);
+			track.setText(0, t.getTitle());
+			track.setText(1, t.getAlbum());
+			track.setText(2, t.getArtist());
+			track.setText(3, t.getGenre());
+			track.setText(4, new Integer(t.getTime()).toString());
+		}
 	}
 
 }
