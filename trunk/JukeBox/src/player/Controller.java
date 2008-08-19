@@ -1,16 +1,41 @@
 package player;
 
+import java.io.IOException;
+import java.net.UnknownHostException;
+
 
 /**
  * 
  * @author coxdyla
  *This class interfaces the User interfaces with the servers playlist
+ * TODO make it recieve and interpret DACP requests
  */
 public class Controller {
 	
-	private static Controller instance = new Controller();
+	private final static Controller instance = new Controller();
+	private DACPClient dacp;
+	private static String host = "localhost";
+	private static int port = 51234;
 	
-	private Controller() {}
+	private Controller() {
+		try {
+			dacp = new DACPClient("cafe-baba", 51234);
+		} catch (UnknownHostException e) {
+			unknownHost(e);
+		} catch (IOException e) {
+			ioException(e);
+		}
+	}
+	
+	private void unknownHost(UnknownHostException e) {
+		e.printStackTrace();
+		System.exit(1);
+	}
+	
+	private void ioException(IOException e) {
+		e.printStackTrace();
+		System.exit(1);
+	}
 	
 	public static Controller getInstance() {
 		return instance;
@@ -21,16 +46,22 @@ public class Controller {
 	 *
 	 */
 	public void pauseTrack() {
-		// TODO Auto-generated method stub (ha!)
-		System.out.println("pause track");
+		try {
+			dacp.pause();
+		} catch (IOException e) {
+			ioException(e);
+		}
 	}
 
 	/**
 	 * plays the paused track
 	 */
 	public void playTrack() {
-		// TODO Auto-generated method stub
-		System.out.println("play track");
+		try {
+			dacp.play();
+		} catch (IOException e) {
+			ioException(e);
+		}
 	}
 
 	/**
@@ -51,5 +82,11 @@ public class Controller {
 	public void skipTrack() {
 		// TODO Auto-generated method stub (ha!)
 		System.out.println("skip track");
+	}
+
+	public void getVolume() {
+		// TODO Auto-generated method stub
+		
+		
 	}
 }

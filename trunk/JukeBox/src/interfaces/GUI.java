@@ -17,6 +17,8 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 
 import player.Controller;
+import playlist.Playlist;
+import playlist.Track;
 
 
 public class GUI {
@@ -25,7 +27,8 @@ public class GUI {
 	protected Shell shell;
 
 	private Button playButton;
-	
+	private Scale scale;
+	private Label songnameLabel;
 
 	/**
 	 * Launch the application
@@ -55,12 +58,10 @@ public class GUI {
 	}
 
 	private void play(){
-		playButton.setText("Pause");
 		Controller.getInstance().playTrack();
 	}
 
 	private void pause(){
-		playButton.setText("Play");
 		Controller.getInstance().pauseTrack();
 	}
 	
@@ -70,6 +71,48 @@ public class GUI {
 	
 	private void updateVolume(int volume) {
 		Controller.getInstance().changeVolume(volume);
+	}
+	
+	/**
+	 * sets the play/pause button to play
+	 *
+	 */
+	public void trackPlayed() {
+		playButton.setText("Pause");
+	}
+	
+	/**
+	 * sets the play/pause button to pause
+	 */
+	public void trackPaused() {
+		playButton.setText("Play");
+	}
+	
+	/**
+	 * sets the currently playing track to the given value
+	 * @throws NullPointerException if t is null
+	 */
+	public void playingTrackUpdated(Track t) {
+		if (t == null) throw new NullPointerException("t must not be null");
+		songnameLabel.setText(t.toString());
+	}
+	
+	/**
+	 * sets the current playlist to the given value
+	 * @throws NullPointerException if p is null
+	 */
+	public void playlistUpdated(Playlist p) {
+		if (p == null) throw new NullPointerException("p must not be null");
+		populatePlaylist(p);
+	}
+	
+	/**
+	 * sets the volume to the given value
+	 * @throws IllegalArgumentException if volume is < 0 or > 10
+	 */
+	public void volumeUpdated(int volume) {
+		if (volume < 0 || volume > 10) throw new IllegalArgumentException("volume must be between 0 and 10");
+		scale.setSelection(volume);
 	}
 
 	/**
@@ -93,8 +136,8 @@ public class GUI {
 		});
 
 		final FormData formData = new FormData();
-		formData.right = new FormAttachment(0, 235);
-		formData.left = new FormAttachment(0, 115);
+		formData.left = new FormAttachment(0, 30);
+		formData.right = new FormAttachment(0, 150);
 		playButton.setLayoutData(formData);
 		playButton.setText("Play");
 
@@ -105,10 +148,8 @@ public class GUI {
 			}
 		});
 		final FormData formData_1 = new FormData();
-		formData_1.bottom = new FormAttachment(playButton, 30, SWT.TOP);
-		formData_1.top = new FormAttachment(playButton, 0, SWT.TOP);
-		formData_1.right = new FormAttachment(0, 385);
-		formData_1.left = new FormAttachment(0, 265);
+		formData_1.left = new FormAttachment(0, 275);
+		formData_1.right = new FormAttachment(0, 395);
 		skipButton.setLayoutData(formData_1);
 		skipButton.setText("Skip");
 
@@ -120,7 +161,6 @@ public class GUI {
 		formData_2.left = new FormAttachment(0, 10);
 		progressBar.setLayoutData(formData_2);
 
-		final Scale scale;
 		scale = new Scale(shell, SWT.NONE);
 		formData.top = new FormAttachment(scale, -35, SWT.TOP);
 		formData.bottom = new FormAttachment(scale, -5, SWT.TOP);
@@ -153,7 +193,7 @@ public class GUI {
 		volumeLabel.setLayoutData(formData_4);
 		volumeLabel.setText("Volume");
 
-		final Label songnameLabel = new Label(shell, SWT.NONE);
+		songnameLabel = new Label(shell, SWT.NONE);
 		final FormData formData_5 = new FormData();
 		formData_5.right = new FormAttachment(progressBar, 0, SWT.RIGHT);
 		formData_5.bottom = new FormAttachment(0, 112);
@@ -184,8 +224,31 @@ public class GUI {
 		titleColumn.setWidth(100);
 		titleColumn.setText("Title");
 
-
-		//
+		
+		/////////////////////////////////////////////////////////////////////
+		////////////////////// T E M P //////////////////////////////////////
+		/////////////////////////////////////////////////////////////////////
+		// TODO remove this when the play/pause toggles properly!
+		Button pauseButton;
+		pauseButton = new Button(shell, SWT.NONE);
+		formData_1.top = new FormAttachment(pauseButton, -30, SWT.BOTTOM);
+		formData_1.bottom = new FormAttachment(pauseButton, 0, SWT.BOTTOM);
+		pauseButton.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(final SelectionEvent e) {
+				pause();
+			}
+		});
+		final FormData formData_7 = new FormData();
+		formData_7.top = new FormAttachment(playButton, -28, SWT.BOTTOM);
+		formData_7.bottom = new FormAttachment(playButton, 0, SWT.BOTTOM);
+		formData_7.right = new FormAttachment(playButton, 120, SWT.RIGHT);
+		formData_7.left = new FormAttachment(playButton, 5, SWT.RIGHT);
+		pauseButton.setLayoutData(formData_7);
+		pauseButton.setText("Pause");
+	}
+	
+	private void populatePlaylist(Playlist p) {
+		// TODO
 	}
 
 }

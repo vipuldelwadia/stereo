@@ -1,11 +1,8 @@
 package interfaces;
 
-import java.util.List;
 import java.util.Scanner;
 
 import player.Controller;
-import playlist.PlaylistObserver;
-import playlist.Track;
 
 
 
@@ -32,34 +29,59 @@ public class CLI{
 	}
 		
 	public void input(String input){
-		if(input.equalsIgnoreCase("Play")){
+		input = input.toLowerCase();
+		if(input.equals("play")){
 			controller.playTrack();
-			//TODO send play command 
 		}
-		else if(input.equalsIgnoreCase("Pause")){
+		else if(input.equals("pause")){
 			controller.pauseTrack();
-			//TODO send pause command
 		}
-		else if(input.equalsIgnoreCase("skip")){
-			//TODO send skip command
+		else if(input.equals("skip")){
+			controller.skipTrack();
 		}
 		else if(input.startsWith("set volume ")){
-			input = input.substring(11);
-			int vol = Integer.parseInt(input);
-			controller.changeVolume(vol);
+			input = input.substring("set volume ".length());
+			try {
+				int vol = Integer.parseInt(input);
+				if (vol < 0 || vol > 10) {
+					invalidInput("volume not between 0 and 10");
+				}
+				else {					
+					controller.changeVolume(vol);
+				}
+			}
+			catch (NumberFormatException e) {
+				invalidInput("volume not a valid number");
+			}
 			
 		}
 		else if(input.equalsIgnoreCase("get volume ")){
+			controller.getVolume();
 			//TODO get volume
 		}
 		else if(input.startsWith("playlist ")){
-			input = input.substring(9);
-			int songs = Integer.parseInt(input);
-			//TODO Pass the message on
+			input = input.substring("playlist ".length());
+			try {
+				int tracks = Integer.parseInt(input);
+				if (tracks < 0) {
+					invalidInput("tracks must not be < 0");
+				}
+				else {					
+					// TODO print tracks
+				}
+			}
+			catch (NumberFormatException e) {
+				invalidInput("volume not a valid number");
+			}
 		}
 		else if(input.equalsIgnoreCase("details")){
 			//TODO get song details printed
 		}
+		else invalidInput("invalid input");
+	}
+	
+	private void invalidInput(String message) {
+		// TODO print error message
 	}
 
 }
