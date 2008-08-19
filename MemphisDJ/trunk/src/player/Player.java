@@ -7,17 +7,24 @@ import javazoom.jl.decoder.JavaLayerException;
 public class Player implements music.Player {
 
 	public void pause() {
-		thread.suspend();
+		if (thread != null)
+			thread.suspend();
 	}
 
 	public void setInputStream(InputStream i) {
+
+		if (thread != null) {
+			stop();
+		}
+			
 		thread = new TrackThread(i);
-		
+
 		start();
 	}
 
 	public void start() {
-		if (thread.isAlive()) {
+		if (thread == null);
+		else if (thread.isAlive()) {
 			thread.resume();
 		}
 		else {
@@ -26,16 +33,19 @@ public class Player implements music.Player {
 	}
 
 	public void stop() {
-		thread.close();
-		thread.resume();
+		if (thread != null){
+			thread.close();
+			thread.resume();
+			thread = null;
+		}
 	}
-    
+
 	private TrackThread thread;
-	
+
 	private static class TrackThread extends Thread {
-		
+
 		private javazoom.jl.player.advanced.AdvancedPlayer player;
-		
+
 		public TrackThread(InputStream stream) {
 			try {
 				player = new javazoom.jl.player.advanced.AdvancedPlayer(stream);
@@ -44,9 +54,9 @@ public class Player implements music.Player {
 				ex.printStackTrace();
 				player = null;
 			}
-			
+
 		}
-		
+
 		public void run() {
 			try {
 				player.play();
@@ -55,10 +65,10 @@ public class Player implements music.Player {
 				ex.printStackTrace();
 			}
 		}
-		
+
 		public void close() {
 			player.close();
 		}
 	}
-    
+
 }
