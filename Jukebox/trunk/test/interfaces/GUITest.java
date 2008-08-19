@@ -1,9 +1,11 @@
 package test.interfaces;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
-import playlist.Playlist;
-import playlist.Track;
+import src.interfaces.GUI;
+import src.playlist.Playlist;
+import src.playlist.Song;
 
 
 public class GUITest {
@@ -56,7 +58,7 @@ public class GUITest {
 	
 	@Test
 	public void playingTrackUpdated() {
-		g.playingTrackUpdated(new Track());
+		g.playingTrackUpdated(new Song());
 	}
 	
 	@Test (expected = NullPointerException.class)

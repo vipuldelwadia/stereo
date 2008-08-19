@@ -3,7 +3,7 @@ package test.controller;
 import org.junit.Before;
 import org.junit.Test;
 
-import player.Controller;
+import src.player.Controller;
 
 
 public class ControllerTest {

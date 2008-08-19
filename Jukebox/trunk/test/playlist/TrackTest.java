@@ -1,18 +1,21 @@
 package test.playlist;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import src.playlist.Song;
 
 
 public class TrackTest {
 
-	private Track t;
+	private Song t;
 	
 	@Before
 	public void createTrack() {
-		t = new Track();
+		t = new Song();
 	}
 	
 	@Test
