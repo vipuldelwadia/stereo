@@ -12,16 +12,30 @@ public class PlayerTest {
 		String hostname = "majoribanks.mcs.vuw.ac.nz";
 		int port = 3689;
 
-		testPlayer(PlayerTest.class.getResourceAsStream("music.mp3"));
-
 		try{
 			DaapClient client = new DaapClient(hostname, port);
-			testPlayer(client.getTrackList().get(34).getStream());
+			testCompletePlay(client.getTrackList().get(34).getStream());
 		}catch(IOException e){
 			e.printStackTrace();
 		}
+		
+//		testPlayer(PlayerTest.class.getResourceAsStream("music.mp3"));
+//
+//		try{
+//			DaapClient client = new DaapClient(hostname, port);
+//			testPlayer(client.getTrackList().get(34).getStream());
+//		}catch(IOException e){
+//			e.printStackTrace();
+//		}
 	}
+	
 
+	public static void testCompletePlay(InputStream stream) {
+		Player player = new Player();
+		player.setInputStream(stream);
+	}
+	
+	
 	public static void testPlayer(InputStream stream) {
 		Player player = new Player();
 		player.setInputStream(stream);

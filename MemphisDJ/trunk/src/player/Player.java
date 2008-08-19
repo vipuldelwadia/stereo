@@ -1,6 +1,8 @@
 package player;
 
 import java.io.InputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import javazoom.jl.decoder.JavaLayerException;
 
@@ -39,10 +41,23 @@ public class Player implements music.Player {
 			thread = null;
 		}
 	}
+	
+	private void trackFinished() {
+		for (PlaybackListener l: listeners){
+			l.playbackFinished();
+		}
+	}
+	
+	private void trackStarted() {
+		for (PlaybackListener l: listeners){
+			l.playbackStarted();
+		}
+	}
+
 
 	private TrackThread thread;
 
-	private static class TrackThread extends Thread {
+	private class TrackThread extends Thread {
 
 		private javazoom.jl.player.advanced.AdvancedPlayer player;
 
@@ -58,17 +73,30 @@ public class Player implements music.Player {
 		}
 
 		public void run() {
+			trackStarted();
 			try {
 				player.play();
 			}
 			catch (JavaLayerException ex) {
 				ex.printStackTrace();
 			}
+			
+			trackFinished();
 		}
 
 		public void close() {
 			player.close();
 		}
 	}
+
+	public void addPlaybackListener(PlaybackListener l) {
+		listeners.add(l);
+	}
+
+	public void removePlaybackListener(PlaybackListener l) {
+		listeners.remove(l);
+	}
+	
+	private Set<PlaybackListener> listeners = new HashSet<PlaybackListener>();
 
 }
