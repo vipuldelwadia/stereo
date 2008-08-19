@@ -33,7 +33,7 @@ public class Lackey {
 //		
 //	}
 	
-	public Iterable<Track> getAllTracks(){
+	public List<Track> getAllTracks(){
 		List<Track> tracks = new ArrayList<Track>();
 		
 		List<DaapClient> toRemove = new ArrayList<DaapClient>();
@@ -54,6 +54,18 @@ public class Lackey {
 		}
 		
 		return tracks;
+	}
+	
+	public List<Track> getSomeTracks(int num){
+		if(num < 1) throw new IllegalArgumentException();
+		
+		List<Track> allTracks = getAllTracks();
+		
+		if(num >= allTracks.size()){
+			return allTracks;
+		}
+		
+		return new ArrayList<Track>(allTracks.subList(0, num -1));
 	}
 	
 	public void newConnection(DaapClient newClient){
