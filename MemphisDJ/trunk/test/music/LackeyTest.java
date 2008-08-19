@@ -18,7 +18,11 @@ public class LackeyTest {
 		try {
 			DaapClient client = new DaapClient("majoribanks.mcs.vuw.ac.nz", 3689);
 			Lackey lackey = new Lackey();
-			lackey.newConnection(client);
+			try {
+				lackey.newConnection(client);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			List<Track> tracks = lackey.getAllTracks();
 			assertTrue(tracks.size() > 1600);
 			
