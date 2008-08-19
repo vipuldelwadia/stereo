@@ -31,17 +31,7 @@ public class DJ {
 			e.printStackTrace();
 		}
 		
-		List<Track> lib = lackey.getAllTracks();
-		if (lib != null){
-			Collections.shuffle(lib);
-			for (int i = 0; i < playlistSize && i < lib.size(); i++){
-				Track t = lib.get(i);
-				//unnecessary?
-				if (t != null){
-					playlist.addTrack(t);
-				}
-			}
-		}
+		fillPlaylist();	
 		
 		current = playlist.poll();
 		
@@ -55,8 +45,18 @@ public class DJ {
 		
 	}
 	
-	public void addTrack(){
-		
+	public void fillPlaylist(){
+		List<Track> lib = lackey.getAllTracks();
+		if (lib != null){
+			Collections.shuffle(lib);
+			for (int i = 0; i < playlistSize && i < lib.size(); i++){
+				Track t = lib.get(i);
+				//unnecessary?
+				if (t != null){
+					playlist.addTrack(t);
+				}
+			}
+		}
 	}
 	
 	public void play(){
@@ -83,7 +83,7 @@ public class DJ {
 		playlist = lackey.checkPlaylist(playlist);
 		if (playlist.size() < playlistSize){
 			
-			
+		fillPlaylist();	
 		}
 		
 	}
