@@ -8,50 +8,72 @@ import java.util.List;
 
 import music.Track;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 
 public class DaapClientTest {
+	private static DaapClient client;
 	
-	@Test
-	public void simpleTest(){
+	@BeforeClass
+	public static void setup(){
 		try {
-			new DaapClient("majoribanks.mcs.vuw.ac.nz", 3689);
+			client = new DaapClient("serranos.mcs.vuw.ac.nz", 3689);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fail();
 		}
 	}
 	
-	@Test
-	public void playTest(){
-		try {
-			DaapClient client =  new DaapClient("majoribanks.mcs.vuw.ac.nz", 3689);
-			List<Track> music = client.getTrackList();
-			InputStream in = client.getStream(music.get(0));
-			int x = in.read();
-//			while(x!=-1){
-//				System.out.print(x);
-//				x = in.read();
+
+//	@Test
+//	public void playTest(){
+//
+//			try {
+//				List<Track> music = client.getTrackList();
+//				InputStream in = client.getStream(music.get(0));
+//				int x = in.read();
+////			while(x!=-1){
+////				System.out.print(x);
+////				x = in.read();
+////			}
+//				
+//				in.close();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
 //			}
-			
-			in.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			fail();
-		}
-	}
+//	
+//	}
 	
 	@Test
 	public void isAlivetest(){
-		try{
-		DaapClient client =  new DaapClient("majoribanks.mcs.vuw.ac.nz", 3689);
+
 
 		assertTrue(client.isAlive());
-		}catch(Exception e){
-			fail();
-		}
+
+	}
+	
+	@Test
+	public void isDead(){
+
+
+	
+			System.out.println("sleeping ...");
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			assertFalse(client.isAlive());
+			
+	}
+	
+	@AfterClass
+	public static void teardown(){
+		client = null;
 	}
 }

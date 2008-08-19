@@ -17,13 +17,16 @@ import java.util.Map;
 import music.Track;
 
 import org.apache.commons.httpclient.Credentials;
+import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.UsernamePasswordCredentials;
 import org.apache.commons.httpclient.auth.AuthScope;
 import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.httpclient.util.HttpURLConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.SimpleLog;
@@ -103,16 +106,33 @@ public class DaapClient {
 
 	public boolean isAlive(){
 		String request = "server-info";
+		HttpMethod method = null;
+		HttpClient client = null;
 		try {
-			InputStream in = helper.request(hostname, request, log);
-			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
-			if(entry == null) {
-				in.close();
-				return false;
-			}
+			client = new HttpClient();
+			method =new GetMethod("http://" + hostname + ":"+port+"/" + request);
+		    
+			method.getParams().setParameter(HttpMethodParams.RETRY_HANDLER, 
+		    		new DefaultHttpMethodRetryHandler(0, false));
+			
+			int statusCode = client.executeMethod(method);
+
+	        if (statusCode/100 != HttpStatus.SC_OK/100) {
+	          return false;
+	        }
+	        
+//			InputStream in = method.getResponseBodyAsStream();
+//			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
+//			if(entry == null) {
+//				in.close();
+//				return false;
+//			}
+	        
 			return true;
-		} catch (IOException e) {
+		} catch (Exception e) {
 			return false;
+		}finally{
+			method.releaseConnection();
 		}
 	}
 	
