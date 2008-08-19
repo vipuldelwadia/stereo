@@ -17,13 +17,11 @@ public class LackeyTest {
 	public void getTracksTest(){
 		try {
 			DaapClient client = new DaapClient("majoribanks.mcs.vuw.ac.nz", 3689);
-			Lackey lackey = new Lackey(null);
+			Lackey lackey = new Lackey();
 			lackey.newConnection(client);
 			List<Track> tracks = lackey.getAllTracks();
 			assertTrue(tracks.size() > 1600);
 			
-			tracks = lackey.getSomeTracks(10);
-			assertEquals(10, tracks.size());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -33,7 +31,7 @@ public class LackeyTest {
 	@Ignore("infinite loops ftw!!!")
 	@Test
 	public void handshakeTest(){
-		Lackey lackey = new Lackey(null);
+		Lackey lackey = new Lackey();
 		while(true);
 	}
 	
