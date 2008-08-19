@@ -271,7 +271,6 @@ public class GUI {
 	}
 	
 	private void populatePlaylist(Playlist p) {
-		System.out.println("pop");
 		for (Track t : p.getPlaylist()) {
 			TableItem track = new TableItem(trackList, SWT.NONE);
 			track.setText(0, t.getTitle());
