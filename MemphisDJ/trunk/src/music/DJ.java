@@ -4,9 +4,10 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import server.DACPServer;
+import dacpserver.DACPServer;
+import dacpserver.DACPServerListener;
 
-public class DJ {
+public class DJ implements DACPServerListener{
 
 	private Lackey lackey;
 	private Playlist playlist;
@@ -26,6 +27,8 @@ public class DJ {
 		player = new player.Player();
 		
 		try {
+			dacpserver.DACPServer s = new DACPServer(2689);
+			s.addServerListener(this);
 			new DACPServer(3689);
 		} catch (IOException e) {
 			System.out.println("DACP Server initialisation failed.");
@@ -72,6 +75,16 @@ public class DJ {
 		player.stop();
 	}
 	
+	public void setVolume(double volume) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void skip() {
+		// TODO Auto-generated method stub
+		
+	}
+
 	public static void main(String[] args){
 		DJ.getInstance();
 	}
@@ -88,5 +101,6 @@ public class DJ {
 		}
 		
 	}
+
 	
 }
