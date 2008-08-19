@@ -1,7 +1,11 @@
 package music;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collections;
 import java.util.Map;
+
+import daap.DaapClient;
 import daap.DaapUtilities;
 
 public class Track {
@@ -17,9 +21,11 @@ public class Track {
 	public static final int STOP_TIME = DaapUtilities.stringToInt("assp");
 	
 	private Map<Integer, Object> tags;
+	private DaapClient publisher;
 	
-	public Track(Map<Integer, Object> values){
+	public Track(Map<Integer, Object> values,DaapClient parent){
 		tags = Collections.unmodifiableMap(values);
+		publisher = parent;
 	}
 
 	/**
@@ -33,6 +39,14 @@ public class Track {
 
 	public int getTrackId() {
 		return (Integer)tags.get(TRACKID);
+	}
+	
+	public boolean isParent(DaapClient dad){
+		return publisher == dad;
+	}
+	
+	public InputStream getStream() throws IOException{
+		return publisher.getStream(this);
 	}
 	
 }

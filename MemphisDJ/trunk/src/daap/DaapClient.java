@@ -86,7 +86,7 @@ public class DaapClient {
 				continue;
 			}
 			final Map<Integer, Object> values = e.getValueMap();
-			tracks.add(new Track(values));
+			tracks.add(new Track(values,this));
 						
 		}
 			
@@ -101,6 +101,21 @@ public class DaapClient {
 		return helper.request(hostname, "databases/"+dbid+"/items/"+song+".mp3?session-id="+sessionID, log);
 		}
 
+	public boolean isAlive(){
+		String request = "server-info";
+		try {
+			InputStream in = helper.request(hostname, request, log);
+			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
+			if(entry == null) {
+				in.close();
+				return false;
+			}
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+	
 	private void getSessionID() throws IOException {
 		String loginRequest = "login";
 		InputStream in = null;
