@@ -26,7 +26,8 @@ public class Lackey {
 			e.printStackTrace();
 			System.exit(1);
 		}
-		hs.run();
+		
+		new Thread(hs).start();
 	}
 	
 //	public void removeTracks(Playlist plist){
@@ -65,14 +66,15 @@ public class Lackey {
 			return allTracks;
 		}
 		
-		return new ArrayList<Track>(allTracks.subList(0, num -1));
+		return new ArrayList<Track>(allTracks.subList(0, num));
 	}
 	
-	public void newConnection(DaapClient newClient){
+	public synchronized void newConnection(DaapClient newClient){
 		if(newClient == null){
 			return;
 		}
 		
 		clients.add(newClient);
+		
 	}
 }

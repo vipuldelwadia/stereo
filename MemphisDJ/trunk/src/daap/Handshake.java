@@ -48,7 +48,8 @@ public class Handshake implements Runnable{
 
 	public void run() {
 		while(true){
-			lackey.newConnection(createConnection());
+			DaapClient client = createConnection();
+			lackey.newConnection(client);
 		}
 	}
 }
