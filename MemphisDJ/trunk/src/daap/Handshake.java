@@ -13,13 +13,12 @@ public class Handshake{
 	private final int PORT = 8080;
 	private BufferedReader netInput = null;
 
-	public Handshake(){
-
+	public Handshake() throws IOException{
+		connection = new ServerSocket(PORT);
 	}
 
 	public DaapClient createConnection() {
 		try {
-			connection = new ServerSocket(PORT);
 			Socket client = connection.accept();
 			netInput = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			
@@ -42,14 +41,4 @@ public class Handshake{
 			return null;
 		}
 	}
-
-	public static void main(String[] args){
-		Handshake handshake = new Handshake();
-		while (true){
-			handshake.createConnection();
-		}
-	}
-
-
-
 }
