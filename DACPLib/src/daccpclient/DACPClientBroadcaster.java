@@ -1,6 +1,6 @@
 package daccpclient;
 
-public class ClientBroadcaster {
+public class DACPClientBroadcaster {
 	
 	public static String play() {
 		return "playpause";

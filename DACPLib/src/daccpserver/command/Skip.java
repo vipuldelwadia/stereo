@@ -1,10 +1,10 @@
 package daccpserver.command;
 
-import dacpserver.ServerListener;
+import dacpserver.DACPServerListener;
 
-public class Skip implements ServerCommandInterface {
+public class Skip implements DACPServerCommandInterface {
 
-	public void doAction(ServerListener s) {
+	public void doAction(DACPServerListener s) {
 		s.skip();
 	}
 

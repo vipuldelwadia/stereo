@@ -8,7 +8,7 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 
-import daccpserver.command.ServerCommandInterface;
+import daccpserver.command.DACPServerCommandInterface;
 
 
 public class DACPServer {
@@ -17,17 +17,17 @@ public class DACPServer {
 
 	private final ServerSocket SERVER_SOCK;
 
-	private final Set<ServerListener> listeners;
+	private final Set<DACPServerListener> listeners;
 	
 	public DACPServer(int port) throws IOException {
 		this.PORT = port;
 		SERVER_SOCK = new ServerSocket(PORT);
 		System.out.println("Server starting.\n--------\n");
 		listen();
-		listeners = new HashSet<ServerListener>();
+		listeners = new HashSet<DACPServerListener>();
 	}
 	
-	public void addServerListener(ServerListener s) {
+	public void addServerListener(DACPServerListener s) {
 		listeners.add(s);
 	}
 
@@ -68,8 +68,8 @@ public class DACPServer {
 									parseText+=current;
 								}
 								// TODO deal with malformed requests
-								ServerCommandInterface s = ServerParser.parse(parseText);
-								for (ServerListener l : listeners) {
+								DACPServerCommandInterface s = DACPServerParser.parse(parseText);
+								for (DACPServerListener l : listeners) {
 									s.doAction(l);
 								}
 							}

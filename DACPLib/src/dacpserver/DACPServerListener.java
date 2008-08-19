@@ -1,6 +1,6 @@
 package dacpserver;
 
-public interface ServerListener {
+public interface DACPServerListener {
 
 	public void play();
 	

@@ -1,8 +1,8 @@
 package daccpserver.command;
 
-import dacpserver.ServerListener;
+import dacpserver.DACPServerListener;
 
-public class SetVolume implements ServerCommandInterface {
+public class SetVolume implements DACPServerCommandInterface {
 
 	private final double volume;
 	
@@ -10,7 +10,7 @@ public class SetVolume implements ServerCommandInterface {
 		this.volume = volume;
 	}
 	
-	public void doAction(ServerListener s) {
+	public void doAction(DACPServerListener s) {
 		s.setVolume(volume);
 	}
 

@@ -1,10 +1,10 @@
 package daccpserver.command;
 
-import dacpserver.ServerListener;
+import dacpserver.DACPServerListener;
 
-public class Pause implements ServerCommandInterface {
+public class Pause implements DACPServerCommandInterface {
 
-	public void doAction(ServerListener s) {
+	public void doAction(DACPServerListener s) {
 		s.play();
 	}
 

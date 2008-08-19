@@ -34,14 +34,14 @@ public class DACPClient {
 	}
 	
 	public void play() {
-		send(ClientBroadcaster.play());
+		send(DACPClientBroadcaster.play());
 	}
 	public void pause() {
-		send(ClientBroadcaster.pause());
+		send(DACPClientBroadcaster.pause());
 	}
 	
 	public void setVolume(int newVolume) {
-		send(ClientBroadcaster.changeVolume(newVolume));
+		send(DACPClientBroadcaster.changeVolume(newVolume));
 	}
 	
 	public void send(String command) {

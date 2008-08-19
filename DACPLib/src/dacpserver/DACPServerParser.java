@@ -8,14 +8,14 @@ import java.util.Map.Entry;
 
 import daccpserver.command.Pause;
 import daccpserver.command.Play;
-import daccpserver.command.ServerCommandInterface;
+import daccpserver.command.DACPServerCommandInterface;
 import daccpserver.command.SetVolume;
 
 
-public class ServerParser {
+public class DACPServerParser {
 
 
-	public static ServerCommandInterface parse(String p) {
+	public static DACPServerCommandInterface parse(String p) {
 
 		try {
 			Scanner request = new Scanner(p);
@@ -52,7 +52,7 @@ public class ServerParser {
 		}
 	}
 
-	private static ServerCommandInterface parseControl(Scanner uri){
+	private static DACPServerCommandInterface parseControl(Scanner uri){
 		String database = uri.next();
 		System.out.println("Database: "+ database);
 		uri.useDelimiter("\\?"); /*Split the command from the rest of the variables*/
@@ -95,7 +95,7 @@ public class ServerParser {
 
 	}
 
-	private static ServerCommandInterface setProperty(Map<String, String> arguments) {
+	private static DACPServerCommandInterface setProperty(Map<String, String> arguments) {
 		if (arguments.containsKey("dmcp.volume")) {
 			String stringVolume = arguments.get("dmcp.volume");
 			try{
