@@ -3,7 +3,7 @@ package music;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class Playlist implements Iterable<Track>{
+public class Playlist implements Iterable<Track> {
 	
 	private ArrayList<Track> tracks;
 
@@ -43,5 +43,10 @@ public class Playlist implements Iterable<Track>{
 		removeTrack(t);
 		return t;
 	}
+
+	public boolean isEmpty() {
+		return tracks.isEmpty();
+	}
+
 	
 }
