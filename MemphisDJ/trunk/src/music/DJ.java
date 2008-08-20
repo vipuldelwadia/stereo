@@ -3,8 +3,10 @@ package music;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import player.PlaybackListener;
 import sun.misc.VM;
@@ -55,13 +57,56 @@ public class DJ implements DACPServerListener, PlaybackListener{
 				}
 			}
 			System.out.println("Playlist size: " + playlist.size());
-			
+
 		}	
 		else {
 			stop();
 			System.out.println("Library empty: stopped playback.");
 		}
 	}
+
+
+	/**
+	 * 
+	 * @param c A map of filter criterias. The key will be the search category such as 'artist' or 'album, the value associated with the key is the word the filter will try to match with. 
+	 * @return
+	 */
+	public void getTracksFiltered(Map<Integer, String> c){
+
+		Playlist returned = new Playlist();
+		List<Track> allTracks = lackey.getAllTracks();
+
+		//Search through every criteria for potential matches
+		for(int i=0;i<allTracks.size();i++){
+
+			Track currentTrack=allTracks.get(i);
+			boolean fitCrit=true;
+
+			for(int s : c.keySet()){
+				if (!c.get(s).equals((String)currentTrack.getTag(s)))	 {
+					fitCrit=false;
+					break;
+				}
+			}
+
+			if (fitCrit)returned.addTrack(currentTrack);
+
+		}
+		stop();
+		playlist=returned;
+		
+		current = playlist.poll();
+		System.out.println("Polled playlist.");
+
+			try {
+				player.setInputStream(current.getStream());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		
+	}
+
 
 	public void play(){
 		player.start();
@@ -78,17 +123,17 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	public void setVolume(double volume) {
 		currentVolume = volume;
 		URL url = DJ.class.getResource("setvolume.sh");
-		
+
 		try {
 			Process p = Runtime.getRuntime().exec("bash " + url.getFile() + " " + (int)volume);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
+
+
 	}
-	
+
 	public double getVolume(){
 		return currentVolume;
 	}
@@ -106,10 +151,10 @@ public class DJ implements DACPServerListener, PlaybackListener{
 		System.out.println("tracks added");
 
 		if(playlist.isEmpty()){
-			
+
 			fillPlaylist();
 			if (playlist.isEmpty()) return;
-			
+
 			current = playlist.poll();
 			System.out.println("Polled playlist.");
 			try {
@@ -143,7 +188,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 			try {
 				if (playlist.isEmpty()) fillPlaylist();
 				if (playlist.isEmpty()) return;
-				
+
 				current = playlist.poll();
 				System.out.println("Polled playlist.");
 				stream = current.getStream();
@@ -163,7 +208,8 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	public static void main(String[] args){
 
-		new DJ();
+		DJ a = new DJ();
+
 	}
-	
+
 }
