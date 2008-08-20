@@ -14,11 +14,6 @@ import src.playlist.Song;
 
 public class PlaylistTest {
 
-	@Test (expected = NullPointerException.class)
-	public void createPlaylistNull() {
-		new Playlist(null);
-	}
-	
 	@Test
 	public void createPlaylistEmpty() {
 		new Playlist(new ArrayList<Song>());

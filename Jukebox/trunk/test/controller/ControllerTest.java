@@ -37,22 +37,12 @@ public class ControllerTest {
 	
 	@Test
 	public void trackPlayed() {
-		try {
-            c.playTrack();
-        }
-        catch (IOException e) {
-            fail("Input/Output exception");
-        }
+		c.playTrack();
 	}
 	
 	@Test
 	public void trackPaused() {
-		try {
-            c.pauseTrack();
-        }
-        catch (IOException e) {
-            fail("Input/Output exception");
-        }
+		c.pauseTrack();
 	}
 	
 }

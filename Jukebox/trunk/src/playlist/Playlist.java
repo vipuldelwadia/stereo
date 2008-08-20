@@ -6,7 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Playlist implements Iterable<Song>{
-    private final static List<Song> EMPTY_PLAYLIST = new ArrayList<Song>(); 
+    private final static List<Song> EMPTY_SONGLIST = new ArrayList<Song>(); 
+    public final static Playlist EMPTY_PLAYLIST = new Playlist(EMPTY_SONGLIST);
     
     private final List<Song> playlist;
     
@@ -17,12 +18,14 @@ public class Playlist implements Iterable<Song>{
     }
     
     public Playlist(String xml) {
+        if (xml == null)
+            throw new NullPointerException("xml cannot be null");
         //TODO
         // XML Parsing -> playlist 
         // Here:
         
         //TEMP
-        this.playlist = EMPTY_PLAYLIST;
+        this.playlist = EMPTY_SONGLIST;
         
         //
     }
