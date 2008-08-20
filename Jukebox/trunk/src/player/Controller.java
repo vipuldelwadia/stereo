@@ -19,9 +19,6 @@ public class Controller {
     private final static boolean    DEBUG    = false;
     private final static Controller instance = new Controller();
     
-    private static String           host     = "localhost";
-    private static int              port     = 51234;
-    
     private DACPClient              dacp;
     
     private Controller() {
@@ -34,7 +31,7 @@ public class Controller {
         
         if (this.dacp == null)
             try {
-                this.dacp = new DACPClient("cafe-baba", 51234);
+                this.dacp = new DACPClient("playground", 3689);
                 return true;
             }
             catch (UnknownHostException e) {
