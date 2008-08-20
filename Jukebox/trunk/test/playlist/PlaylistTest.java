@@ -6,10 +6,11 @@ import static org.junit.Assert.assertNotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import djplaylist.Playlist;
-import djplaylist.Track;
 
 import org.junit.Test;
+
+import playlist.Playlist;
+import playlist.Track;
 
 
 

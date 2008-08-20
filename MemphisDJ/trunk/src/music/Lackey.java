@@ -8,10 +8,11 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import playlist.Playlist;
+import playlist.Track;
+
 import daap.DAAPClient;
 import daap.DAAPClient.ClientExpiredException;
-import djplaylist.Playlist;
-import djplaylist.Track;
 
 public class Lackey {
 	private Handshake hs;

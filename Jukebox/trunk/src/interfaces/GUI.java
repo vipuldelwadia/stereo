@@ -11,12 +11,13 @@ import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
-import djplaylist.Playlist;
-import djplaylist.Track;
 
 import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+
+import playlist.Playlist;
+import playlist.Track;
 
 
 

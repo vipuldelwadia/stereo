@@ -8,10 +8,11 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import playlist.Playlist;
+import playlist.Track;
+
 
 import daap.DAAPClient;
-import djplaylist.Playlist;
-import djplaylist.Track;
 
 
 public class LackeyTest {

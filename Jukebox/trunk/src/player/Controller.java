@@ -5,8 +5,9 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import djplaylist.Playlist;
-import djplaylist.Track;
+import playlist.Playlist;
+import playlist.Track;
+
 
 import daccpclient.DACPClient;
 

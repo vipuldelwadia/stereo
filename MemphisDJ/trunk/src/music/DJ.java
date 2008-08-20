@@ -11,12 +11,12 @@ import java.util.Set;
 
 
 import player.PlaybackListener;
+import playlist.Playlist;
+import playlist.Track;
 import sun.misc.VM;
 import daap.DAAPClient;
 import dacpserver.DACPServer;
 import dacpserver.DACPServerListener;
-import djplaylist.Playlist;
-import djplaylist.Track;
 
 public class DJ implements DACPServerListener, PlaybackListener{
 

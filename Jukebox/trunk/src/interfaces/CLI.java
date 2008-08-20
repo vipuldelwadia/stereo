@@ -3,11 +3,11 @@ package interfaces;
 import java.lang.reflect.Method;
 import java.util.Scanner;
 
-import djplaylist.Track;
-import djplaylist.Playlist;
 
 import player.Controller;
 import player.ControllerInterface;
+import playlist.Playlist;
+import playlist.Track;
 
 public class CLI {
     private Scanner    scan;
