@@ -1,17 +1,22 @@
 package djplaylist;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Iterator;
 
 
 public class Playlist implements Iterable<Track> {
 	
-	private ArrayList<Track> tracks;
+	private List<Track> tracks;
 
 	public Playlist(){
 		tracks = new ArrayList<Track>();
 	}
 	
+	public Playlist(List<Track> tracks) {
+		this.tracks = tracks;
+	}
+
 	public boolean addTrack(Track t){
 		return tracks.add(t);
 	}

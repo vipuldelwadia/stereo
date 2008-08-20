@@ -1,6 +1,6 @@
 package player;
 
-import jukebox.Playlist;
+import djplaylist.Playlist;
 
 
 

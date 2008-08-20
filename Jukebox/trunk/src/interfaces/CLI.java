@@ -3,10 +3,8 @@ package interfaces;
 import java.lang.reflect.Method;
 import java.util.Scanner;
 
-
-
-import jukebox.Playlist;
-import jukebox.Song;
+import djplaylist.Track;
+import djplaylist.Playlist;
 
 import player.Controller;
 import player.ControllerInterface;
@@ -38,8 +36,8 @@ public class CLI {
     private class Top {
         public void list() {
             Playlist p = controller.getPlaylist();
-            for(Song s:p){
-                System.out.println(s.toString());
+            for(Track t:p){
+                System.out.println(t.toString());
             }
         }
         public void play() {

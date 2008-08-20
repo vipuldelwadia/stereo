@@ -1,6 +1,6 @@
 package interfaces;
 
-import jukebox.Song;
+import djplaylist.Track;
 
 import org.junit.Before;
 import org.junit.Test;

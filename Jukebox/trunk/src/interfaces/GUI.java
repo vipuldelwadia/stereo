@@ -11,8 +11,8 @@ import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
-import jukebox.Playlist;
-import jukebox.Song;
+import djplaylist.Playlist;
+import djplaylist.Track;
 
 import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.widgets.Table;
@@ -28,7 +28,7 @@ public class GUI extends Thread {
     //    
     // private Button playButton;
     // private Scale scale;
-    // private Label songnameLabel;
+    // private Label TracknameLabel;
     // private TableColumn albumColumn;
     // private TableColumn artistColumn;
     // private TableColumn genreColumn;
@@ -61,17 +61,17 @@ public class GUI extends Thread {
             
             // yucky hacky code to see that it works ok
             // TODO remove this
-            List<Song> tracks = new ArrayList<Song>();
-            tracks.add(new Song("Lithium0", "Nirvana", "", "Rock", 260));
-            tracks.add(new Song("Lithium1", "Nirvana", "", "Rock", 260));
-            tracks.add(new Song("Lithium2", "Nirvana", "", "Rock", 260));
-            tracks.add(new Song("Lithium3", "Nirvana", "", "Rock", 260));
-            tracks.add(new Song("Lithium4", "Nirvana", "", "Rock", 260));
-            tracks.add(new Song("Lithium5", "Nirvana", "", "Rock", 260));
-            tracks.add(new Song("Lithium6", "Nirvana", "", "Rock", 260));
-            tracks.add(new Song("Lithium7", "Nirvana", "", "Rock", 260));
+//            List<Track> tracks = new ArrayList<Track>();
+//            tracks.add(new Track("Lithium0", "Nirvana", "", "Rock", 260));
+//            tracks.add(new Track("Lithium1", "Nirvana", "", "Rock", 260));
+//            tracks.add(new Track("Lithium2", "Nirvana", "", "Rock", 260));
+//            tracks.add(new Track("Lithium3", "Nirvana", "", "Rock", 260));
+//            tracks.add(new Track("Lithium4", "Nirvana", "", "Rock", 260));
+//            tracks.add(new Track("Lithium5", "Nirvana", "", "Rock", 260));
+//            tracks.add(new Track("Lithium6", "Nirvana", "", "Rock", 260));
+//            tracks.add(new Track("Lithium7", "Nirvana", "", "Rock", 260));
             
-            Playlist playlist = new Playlist(tracks);
+            Playlist playlist = new Playlist();
             window.setPlaylist(playlist);
         }
         catch (Exception e) {
@@ -131,10 +131,10 @@ public class GUI extends Thread {
     
     public void setPlaylist(Playlist p) {
         if (p == null || p.size() == 0)
-            populatePlaylist(new Playlist(new ArrayList<Song>()));
+            populatePlaylist(new Playlist(new ArrayList<Track>()));
         else {
             populatePlaylist(p);
-            playingTrackUpdated(p.getSong(0));
+            playingTrackUpdated(p.peek());
         }
     }
     
@@ -154,16 +154,16 @@ public class GUI extends Thread {
     // Controller.getInstance().changeVolume(volume);
     // }
     
-    protected void selectSong(TableItem item) {
+    protected void selectTrack(TableItem item) {
         int index = this.trackList.indexOf(item);
-        this.selectSong(index);
+//        this.selectTrack(index);
     }
     
-    protected void selectSong(int index) {
-        Song selectedSong = this.playlist.getSong(index);
-        if (selectedSong != null)
-            this.playingTrackUpdated(selectedSong);
-    }
+//    protected void selectTrack(int index) {
+//        Track selectedTrack = this.playlist.getTrack(index);
+//        if (selectedTrack != null)
+//            this.playingTrackUpdated(selectedTrack);
+//    }
     
     /**
      * sets the play/pause button to play
@@ -186,7 +186,7 @@ public class GUI extends Thread {
      * @throws NullPointerException
      *             if t is null
      */
-    public void playingTrackUpdated(Song t) {
+    public void playingTrackUpdated(Track t) {
         if (t == null)
             throw new NullPointerException("t must index not be null");
         this.label.setText(t.toString());
@@ -297,25 +297,25 @@ public class GUI extends Thread {
     // volumeLabel.setLayoutData(formData_4);
     // volumeLabel.setText("Volume");
     //        
-    // songnameLabel = new Label(shell, SWT.NONE);
+    // TracknameLabel = new Label(shell, SWT.NONE);
     // final FormData formData_5 = new FormData();
     // formData_5.right = new FormAttachment(progressBar, 0, SWT.RIGHT);
     // formData_5.bottom = new FormAttachment(0, 112);
     // formData_5.top = new FormAttachment(0, 82);
     // formData_5.left = new FormAttachment(0, 10);
-    // songnameLabel.setLayoutData(formData_5);
-    // songnameLabel.setText("SongName");
+    // TracknameLabel.setLayoutData(formData_5);
+    // TracknameLabel.setText("TrackName");
     //        
     // trackList = new Table(shell, SWT.BORDER);
     // trackList.addSelectionListener(new SelectionListener() {
     //            
     // public void widgetDefaultSelected(SelectionEvent arg0) {
-    // selectSong(0);
+    // selectTrack(0);
     // }
     //            
     // public void widgetSelected(SelectionEvent arg0) {
     // if (arg0.item instanceof TableItem)
-    // selectSong((TableItem) arg0.item);
+    // selectTrack((TableItem) arg0.item);
     // }
     //            
     // });
@@ -333,13 +333,13 @@ public class GUI extends Thread {
     // titleColumn.setWidth(100);
     // titleColumn.setText("Title");
     //        
-    // artistColumn = new TableColumn(trackList, SWT.NONE);//        for (Song t : p.getSongs()) {
-//  TableItem songItem = new TableItem(trackList, SWT.NONE);
-//  songItem.setText(0, t.getTitle());
-//  songItem.setText(1, t.getAlbum());
-//  songItem.setText(2, t.getArtist());
-//  songItem.setText(3, t.getGenre());
-//  songItem.setText(4, new Integer(t.getSeconds()).toString());
+    // artistColumn = new TableColumn(trackList, SWT.NONE);//        for (Track t : p.getTracks()) {
+//  TableItem TrackItem = new TableItem(trackList, SWT.NONE);
+//  TrackItem.setText(0, t.getTitle());
+//  TrackItem.setText(1, t.getAlbum());
+//  TrackItem.setText(2, t.getArtist());
+//  TrackItem.setText(3, t.getGenre());
+//  TrackItem.setText(4, new Integer(t.getSeconds()).toString());
 //  
 //}
 
@@ -382,13 +382,13 @@ public class GUI extends Thread {
     
     private synchronized void populatePlaylist(Playlist p) {
         this.playlist = p;
-//        for (Song t : p.getSongs()) {
-//            TableItem songItem = new TableItem(trackList, SWT.NONE);
-//            songItem.setText(0, t.getTitle());
-//            songItem.setText(1, t.getAlbum());
-//            songItem.setText(2, t.getArtist());
-//            songItem.setText(3, t.getGenre());
-//            songItem.setText(4, new Integer(t.getSeconds()).toString());
+//        for (Track t : p.getTracks()) {
+//            TableItem TrackItem = new TableItem(trackList, SWT.NONE);
+//            TrackItem.setText(0, t.getTitle());
+//            TrackItem.setText(1, t.getAlbum());
+//            TrackItem.setText(2, t.getArtist());
+//            TrackItem.setText(3, t.getGenre());
+//            TrackItem.setText(4, new Integer(t.getSeconds()).toString());
 //            
 //        }
     }

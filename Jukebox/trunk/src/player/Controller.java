@@ -5,8 +5,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import jukebox.Playlist;
-import jukebox.Song;
+import djplaylist.Playlist;
+import djplaylist.Track;
 
 import daccpclient.DACPClient;
 
@@ -75,16 +75,16 @@ public class Controller implements ControllerInterface{
 	 */
     public Playlist getPlaylist(){
         //NASTY temp hack
-        List<Song> tracks = new ArrayList<Song>();
-        tracks.add(new Song("Lithium0", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium1", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium2", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium3", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium4", "Nirvana", "Hate the World", "Rock", 260));
-        tracks.add(new Song("Lithium5", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium6", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium7", "Nirvana", "", "Rock", 260));
-        tracks = (Math.random()>0.8)?new ArrayList<Song>():tracks.subList(0,(int)(Math.random()*tracks.size()));
+        List<Track> tracks = new ArrayList<Track>();
+//        tracks.add(new Song("Lithium0", "Nirvana", "", "Rock", 260));
+//        tracks.add(new Song("Lithium1", "Nirvana", "", "Rock", 260));
+//        tracks.add(new Song("Lithium2", "Nirvana", "", "Rock", 260));
+//        tracks.add(new Song("Lithium3", "Nirvana", "", "Rock", 260));
+//        tracks.add(new Song("Lithium4", "Nirvana", "Hate the World", "Rock", 260));
+//        tracks.add(new Song("Lithium5", "Nirvana", "", "Rock", 260));
+//        tracks.add(new Song("Lithium6", "Nirvana", "", "Rock", 260));
+//        tracks.add(new Song("Lithium7", "Nirvana", "", "Rock", 260));
+        tracks = (Math.random()>0.8)?new ArrayList<Track>():tracks.subList(0,(int)(Math.random()*tracks.size()));
         return new Playlist(tracks);
         //String xml = this.dacp.getXML("PLAYLIST");
         //return new Playlist(xml); 
