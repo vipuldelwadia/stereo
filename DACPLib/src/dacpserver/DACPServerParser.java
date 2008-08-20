@@ -95,7 +95,7 @@ public class DACPServerParser {
 				return new SetVolume(volume);
 			}
 			catch(NumberFormatException e) {
-				throw new IllegalArgumentException("not a valid volume");
+				throw new IllegalArgumentException("not a vtrl-intalid volume");
 			}
 		}
 		throw new IllegalArgumentException("not a valid parameter");
