@@ -25,7 +25,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 //	return instance;
 //	}
 
-	private DJ (){
+	public DJ (){
 		lackey = new Lackey(this);
 		playlist = new Playlist();
 		player = new player.Player();
