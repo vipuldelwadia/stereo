@@ -4,12 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.Map.Entry;
 
-import daccpserver.command.Pause;
-import daccpserver.command.Play;
-import daccpserver.command.DACPServerCommandInterface;
-import daccpserver.command.SetVolume;
+import daccpserver.command.*;
 
 
 public class DACPServerParser {
@@ -80,6 +76,8 @@ public class DACPServerParser {
 			return new Play();
 		case setproperty:
 			return setProperty(parameters);
+		case skip:
+			return new Skip();
 		default:
 			throw new IllegalArgumentException("command is not recognised");
 		}
@@ -118,6 +116,6 @@ public class DACPServerParser {
 	}
 
 	private enum COMMAND {
-		pause, playpause, setproperty;
+		pause, playpause, setproperty, skip;
 	}
 }
