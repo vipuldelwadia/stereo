@@ -1,4 +1,4 @@
-package djplaylist;
+package playlist;
 
 import java.io.IOException;
 import java.io.InputStream;

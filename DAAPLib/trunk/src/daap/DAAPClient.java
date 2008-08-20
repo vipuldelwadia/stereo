@@ -31,7 +31,8 @@ import org.apache.commons.httpclient.util.HttpURLConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.SimpleLog;
 
-import djplaylist.Track;
+import playlist.Track;
+
 
 public class DAAPClient {
 
