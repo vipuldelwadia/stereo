@@ -9,12 +9,12 @@ import daap.DAAPClient;
 public class PlayerTest {
 
 	public static void main(String args[]) {
-		String hostname = "majoribanks.mcs.vuw.ac.nz";
+		String hostname = "fiebigs.mcs.vuw.ac.nz";
 		int port = 3689;
 
 		try{
 			DAAPClient client = new DAAPClient(hostname, port);
-			testCompletePlay(client.getTrackList().get(42).getStream());
+			testCompletePlay(client.getTrackList().get(1).getStream());
 		}catch(IOException e){
 			e.printStackTrace();
 		}
