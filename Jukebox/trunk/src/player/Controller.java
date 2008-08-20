@@ -29,9 +29,9 @@ public class Controller {
         // TODO
         // Assumes once connected, it is always connected.
         
-        if (this.dacp == null)
+        if (this.dacp == null) {
             try {
-                this.dacp = new DACPClient("playground", 3689);
+                this.dacp = new DACPClient("climie", 3689);
                 return true;
             }
             catch (UnknownHostException e) {
@@ -42,7 +42,9 @@ public class Controller {
                 if (DEBUG)
                     e.printStackTrace();
             }
-        return false;
+            return false;
+        }
+        return true;
     }
     
     public static Controller getInstance() {
