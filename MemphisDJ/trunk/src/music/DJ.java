@@ -121,13 +121,13 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	}
 
 
-	public void tracksRemoved(){
+	public void libraryChanged(){
 		playlist = lackey.checkPlaylist(playlist);
 		if (playlist.size() < playlistSize){
 
 			fillPlaylist();	
 		}
-		System.out.println("Tracks removed.");
+		System.out.println("Library changed: playlist updated");
 	}
 
 	public void playbackFinished() {

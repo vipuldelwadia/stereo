@@ -43,9 +43,14 @@ public class Lackey {
 	// }
 
 	public Playlist checkPlaylist (Playlist check){
+		Set<Track> allTracks = new HashSet<Track>();
+		for(Set<Track> trackSet:library.values()){
+			allTracks.addAll(trackSet);
+		}
+		
 		for (Iterator<Track> iter = check.iterator(); iter.hasNext();) {
 			Track element = iter.next();
-			if(!library.keySet().contains(element.getParent())){
+			if(!allTracks.contains(element)){
 				iter.remove();
 			}
 		}
@@ -134,7 +139,9 @@ public class Lackey {
 				for(DAAPClient client:library.keySet()){
 					try {
 						if(client.isUpdated()){
+							System.out.println("client changed");
 							library.put(client, new HashSet<Track>(client.getTrackList()));
+							dj.libraryChanged();
 						}
 					} catch (ClientExpiredException e) {
 						expired.add(client);
@@ -145,7 +152,7 @@ public class Lackey {
 					for(DAAPClient c:expired){
 						library.remove(c);
 					}
-					dj.tracksRemoved();
+					dj.libraryChanged();
 				}
 				
 				try {
