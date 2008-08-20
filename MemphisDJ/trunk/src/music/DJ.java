@@ -44,7 +44,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 		List<Track> lib = lackey.getAllTracks();
 		if (lib != null && !lib.isEmpty()){
 			Collections.shuffle(lib);
-			for (int i = 0; i < playlistSize && i < lib.size(); i++){
+			for (int i = 0; playlist.size() < playlistSize && i < lib.size(); i++){
 				Track t = lib.get(i);
 				//unnecessary?
 				if (t != null){
@@ -52,6 +52,9 @@ public class DJ implements DACPServerListener, PlaybackListener{
 				}
 			}
 			System.out.println("Playlist size: " + playlist.size());
+			for(Track t : playlist){
+				System.out.println("" + t.getTrackId());
+			}
 		}	
 		else {
 			stop();
@@ -93,6 +96,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 			if (playlist.isEmpty()) return;
 			
 			current = playlist.poll();
+			System.out.println("Polled playlist.");
 			try {
 				player.setInputStream(current.getStream());
 			} catch (IOException e) {
@@ -100,7 +104,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 				e.printStackTrace();
 			}
 		}
-		else if (playlist.size() < playlistSize){
+		if (playlist.size() < playlistSize){
 			fillPlaylist();	
 		}
 
@@ -119,12 +123,14 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	public void playbackFinished() {
 		InputStream stream = null;
 		System.out.println("Playback finished.");
+		System.out.println("Size of Playlist: " + playlist.size());
 		while (stream == null) {
 			try {
 				if (playlist.isEmpty()) fillPlaylist();
 				if (playlist.isEmpty()) return;
 				
 				current = playlist.poll();
+				System.out.println("Polled playlist.");
 				stream = current.getStream();
 				fillPlaylist();
 			}
