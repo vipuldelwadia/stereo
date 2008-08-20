@@ -3,6 +3,8 @@ package interfaces;
 import org.junit.Before;
 import org.junit.Test;
 
+import player.Controller;
+
 import interfaces.CLI;
 
 public class CLITest {
@@ -10,7 +12,7 @@ public class CLITest {
     
     @Before
     public void testInstantiation() {
-        cli = new CLI();
+        cli = new CLI(new Controller());
     }
     
     @Test

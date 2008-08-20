@@ -11,9 +11,9 @@ public class CLI {
     private Scanner    scan;
     private Controller controller;
     
-    public CLI() {
+    public CLI(Controller controller) {
         scan = new Scanner(System.in);
-        controller = Controller.getInstance();
+        this.controller = controller;
         run();
     }
     
@@ -105,7 +105,7 @@ public class CLI {
     }
     
     public static void main(String[] args) {
-        new CLI();
+        new CLI(new Controller());
     }
     
 }

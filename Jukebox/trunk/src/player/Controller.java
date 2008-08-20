@@ -17,11 +17,10 @@ import daccpclient.DACPClient;
 public class Controller {
     
     private final static boolean    DEBUG    = false;
-    private final static Controller instance = new Controller();
     
     private DACPClient              dacp;
     
-    private Controller() {
+    public Controller() {
         this.connect();
     }
     
@@ -45,10 +44,6 @@ public class Controller {
             return false;
         }
         return true;
-    }
-    
-    public static Controller getInstance() {
-        return instance;
     }
     
     public boolean isValidController() {
