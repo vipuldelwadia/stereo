@@ -18,6 +18,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	private int playlistSize = 10;
 	private Player player;
 	private Track current;
+	private double currentVolume;
 
 //	private static final DJ instance = new DJ();
 
@@ -75,7 +76,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	}
 
 	public void setVolume(double volume) {
-		
+		currentVolume = volume;
 		URL url = DJ.class.getResource("setvolume.sh");
 		
 		try {
@@ -86,6 +87,10 @@ public class DJ implements DACPServerListener, PlaybackListener{
 		}
 		
 		
+	}
+	
+	public double getVolume(){
+		return currentVolume;
 	}
 
 	public void skip() {

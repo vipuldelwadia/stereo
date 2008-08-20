@@ -28,7 +28,6 @@ public class Lackey {
 		try {
 			hs = new Handshake(this);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			System.out.println("server socket failed to initialise");
 			e.printStackTrace();
 			System.exit(1);
