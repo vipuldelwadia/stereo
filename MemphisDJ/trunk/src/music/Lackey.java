@@ -17,11 +17,14 @@ public class Lackey {
 	private Semaphore connectionQueue;
 	
 	private Map<DaapClient, Set<Track>> library;
+	
+	private final DJ dj;
 
-	public Lackey() {
+	public Lackey(DJ dj) {
 		library = new HashMap<DaapClient, Set<Track>>();
 		connectionQueue = new Semaphore(1, true);
-
+		this.dj = dj;
+		
 		try {
 			hs = new Handshake(this);
 		} catch (IOException e) {
@@ -55,10 +58,17 @@ public class Lackey {
 	public void newConnection(DaapClient newClient) throws InterruptedException, IOException {
 		if (newClient == null) 	return;
 		connectionQueue.acquire();
+		System.out.println("Permission acquired");
 		Set<Track> tracks = new HashSet<Track>(newClient.getTrackList());
+		System.out.println("Tracks retrieved.");
 		library.put(newClient, tracks);
-		DJ.getInstance().tracksAdded();
+		System.out.println("Tracks and client added to library");
+		//DJ dj = DJ.getInstance();
+		System.out.println("Got DJ");
+		dj.tracksAdded();
+		System.out.println("DJ Informed");
 		connectionQueue.release();
+		System.out.println("Permission released");
 	}
 
 	private class Handshake implements Runnable {
@@ -101,7 +111,9 @@ public class Lackey {
 				DaapClient client = null;
 				try {
 					client = createConnection();
+					System.out.println("Lackey accepted connection.");
 					lackey.newConnection(client);
+					System.out.println("Lackey created connection.");
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (InterruptedException e) {
@@ -131,11 +143,11 @@ public class Lackey {
 					for(DaapClient c:expired){
 						library.remove(c);
 					}
-					DJ.getInstance().tracksRemoved();
+					dj.tracksRemoved();
 				}
 				
 				try {
-					this.wait(1000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					//swallow
 				}

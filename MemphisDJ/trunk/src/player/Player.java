@@ -4,6 +4,8 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
+import music.DJ;
+
 import javazoom.jl.decoder.JavaLayerException;
 
 public class Player implements music.Player {

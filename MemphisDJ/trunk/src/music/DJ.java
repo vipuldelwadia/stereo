@@ -17,21 +17,20 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	private Player player;
 	private Track current;
 
-	private static final DJ instance = new DJ();
+//	private static final DJ instance = new DJ();
 
-	public static DJ getInstance() {
-		return instance;
-	}
+//	public static DJ getInstance() {
+//	return instance;
+//	}
 
 	private DJ (){
-		lackey = new Lackey();
+		lackey = new Lackey(this);
 		playlist = new Playlist();
 		player = new player.Player();
 
 		try {
-			dacpserver.DACPServer s = new DACPServer(2689);
+			dacpserver.DACPServer s = new DACPServer(3689);
 			s.addServerListener(this);
-			new DACPServer(3689);
 		} catch (IOException e) {
 			System.out.println("DACP Server initialisation failed.");
 			e.printStackTrace();
@@ -70,15 +69,17 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	public void setVolume(double volume) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	public void skip() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public static void main(String[] args){
+
+		new DJ();
 	}
 
 	//Starts the player if playlist was empty
@@ -105,6 +106,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 
 	public void tracksRemoved(){
+		System.out.println("tracks were removed");
 		playlist = lackey.checkPlaylist(playlist);
 		if (playlist.size() < playlistSize){
 
@@ -130,7 +132,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	public void playbackStarted() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

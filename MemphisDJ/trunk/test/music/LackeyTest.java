@@ -17,7 +17,7 @@ public class LackeyTest {
 	public void getTracksTest(){
 		try {
 			DaapClient client = new DaapClient("majoribanks.mcs.vuw.ac.nz", 3689);
-			Lackey lackey = new Lackey();
+			Lackey lackey = new Lackey(null);
 			try {
 				lackey.newConnection(client);
 			} catch (InterruptedException e) {
@@ -35,7 +35,7 @@ public class LackeyTest {
 	@Ignore("infinite loops ftw!!!")
 	@Test
 	public void handshakeTest(){
-		Lackey lackey = new Lackey();
+		Lackey lackey = new Lackey(null);
 		while(true);
 	}
 	
