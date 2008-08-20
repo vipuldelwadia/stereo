@@ -1,6 +1,7 @@
 package music;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import static org.junit.Assert.*;
 import org.junit.Before;
@@ -8,7 +9,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 
-import daap.DaapClient;
+import daap.DAAPClient;
 
 
 public class LackeyTest {
@@ -16,7 +17,7 @@ public class LackeyTest {
 	@Test
 	public void getTracksTest(){
 		try {
-			DaapClient client = new DaapClient("majoribanks.mcs.vuw.ac.nz", 3689);
+			DAAPClient client = new DAAPClient("majoribanks.mcs.vuw.ac.nz", 3689);
 			Lackey lackey = new Lackey(null);
 			try {
 				lackey.newConnection(client);
@@ -37,6 +38,19 @@ public class LackeyTest {
 	public void handshakeTest(){
 		Lackey lackey = new Lackey(null);
 		while(true);
+	}
+	
+	@Test
+	public void checkListTest(){
+		Lackey l = new Lackey(null);
+		Playlist p = new Playlist();
+		try {
+			p.addTrack(new Track(new HashMap<Integer, Object>(), new DAAPClient("majoribanks.mcs.vuw.ac.nz", 3689)));
+			Playlist newP = l.checkPlaylist(p);
+			assertEquals(0, newP.size());
+		} catch (IOException e) {
+			fail();
+		}
 	}
 	
 }

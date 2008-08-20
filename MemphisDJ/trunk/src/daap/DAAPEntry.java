@@ -9,7 +9,7 @@ import java.util.Map;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class DaapEntry implements Iterable<DaapEntry> {
+public class DAAPEntry implements Iterable<DAAPEntry> {
 	
 	// see http://tapjam.net/daap/
 	
@@ -27,13 +27,13 @@ public class DaapEntry implements Iterable<DaapEntry> {
 												// as two shorts, e.g. 1.0)
 	public static final short LIST = 12;		// list
 	
-	public static DaapEntry parseStream(InputStream stream, Map<Integer, Short> types) throws IOException {
+	public static DAAPEntry parseStream(InputStream stream, Map<Integer, Short> types) throws IOException {
 		
-		DaapEntry.types = types;
+		DAAPEntry.types = types;
 		
-		DaapEntry.stream = new BufferedInputStream(stream);
+		DAAPEntry.stream = new BufferedInputStream(stream);
 		
-		DaapEntry entry = new DaapEntry();
+		DAAPEntry entry = new DAAPEntry();
 		entry.init();
 		
 		return entry;
@@ -133,12 +133,12 @@ public class DaapEntry implements Iterable<DaapEntry> {
 	}
 	
 	public boolean hasChildren() {
-		return this.type == DaapEntry.LIST;
+		return this.type == DAAPEntry.LIST;
 	}
 	
-	public Iterator<DaapEntry> iterator() {
+	public Iterator<DAAPEntry> iterator() {
 		
-		if (this.type != DaapEntry.LIST) {
+		if (this.type != DAAPEntry.LIST) {
 			return null;
 		}
 		
@@ -158,7 +158,7 @@ public class DaapEntry implements Iterable<DaapEntry> {
 			this.valueMap = new HashMap<Integer, Object>();
 		}
 		
-		for (DaapEntry entry: this) {
+		for (DAAPEntry entry: this) {
 			if (entry == null) continue;
 			
 			if (!this.valueMap.containsKey(entry.name)) {
@@ -173,19 +173,19 @@ public class DaapEntry implements Iterable<DaapEntry> {
 	 * Private constructor enforces singleton pattern
 	 *
 	 */
-	private DaapEntry() {
+	private DAAPEntry() {
 		//initialization is performed elsewhere
 	}
 	
 	protected boolean init() throws IOException {
 		
-		int name = DaapEntry.readInteger();
-		int length = DaapEntry.readInteger();
+		int name = DAAPEntry.readInteger();
+		int length = DAAPEntry.readInteger();
 		
-		Short type = DaapEntry.types.get(name);
+		Short type = DAAPEntry.types.get(name);
 		
 		if (type == null) {
-			System.err.println("parser: entry '" + DaapUtilities.intToString(name) + "' of length "+ length + "(" + DaapUtilities.intToString(length) + ") not found");
+			System.err.println("parser: entry '" + DAAPUtilities.intToString(name) + "' of length "+ length + "(" + DAAPUtilities.intToString(length) + ") not found");
 			return false;
 		}
 
@@ -228,7 +228,7 @@ public class DaapEntry implements Iterable<DaapEntry> {
 			this.value = readString(this.length);
 			break;
 		default:
-			System.err.println("unknown type: " + this.type + " of length " + this.length + " for " + DaapUtilities.intToString(this.name));
+			System.err.println("unknown type: " + this.type + " of length " + this.length + " for " + DAAPUtilities.intToString(this.name));
 		this.value = readString(this.length);
 			break;
 		}
@@ -255,16 +255,16 @@ public class DaapEntry implements Iterable<DaapEntry> {
 			
 			int value = parseInteger(bytes);
 			
-	        if (DaapEntry.types.containsKey(value)) {
+	        if (DAAPEntry.types.containsKey(value)) {
 	        	
 	        	read = read-4;
 	        	
 	        	this.name = value;
-	        	this.length = DaapEntry.readInteger();
-	        	this.type = DaapEntry.types.get(value);
+	        	this.length = DAAPEntry.readInteger();
+	        	this.type = DAAPEntry.types.get(value);
 	        	readValue();
 	        	
-	        	System.err.println("recovered after " + read + " bytes: " + DaapUtilities.intToString(value) + " length " + this.length + ", type " + this.type + ": " + value);
+	        	System.err.println("recovered after " + read + " bytes: " + DAAPUtilities.intToString(value) + " length " + this.length + ", type " + this.type + ": " + value);
 	        		
 	        	return read;
 	        }
@@ -277,7 +277,7 @@ public class DaapEntry implements Iterable<DaapEntry> {
 	}
 	
 	protected static BufferedInputStream getStream() {
-		return DaapEntry.stream;
+		return DAAPEntry.stream;
 	}
 	
 	private int name;
@@ -289,13 +289,13 @@ public class DaapEntry implements Iterable<DaapEntry> {
 	private DaapEntryIterator iterator;
 	private Map<Integer, Object> valueMap;
 	
-	private class DaapEntryIterator implements Iterator<DaapEntry> {
+	private class DaapEntryIterator implements Iterator<DAAPEntry> {
 		
-		private DaapEntry entry;
+		private DAAPEntry entry;
 		private int length;
 		private int consumed;
 		
-		public DaapEntryIterator(DaapEntry entry) {
+		public DaapEntryIterator(DAAPEntry entry) {
 			this.entry = entry;
 			this.length = entry.getLength();
 		}
@@ -304,7 +304,7 @@ public class DaapEntry implements Iterable<DaapEntry> {
 			return this.length > this.consumed;
 		}
 		
-		public DaapEntry next() {
+		public DAAPEntry next() {
 			
 			if (this.length <= this.consumed) {
 				return null;
@@ -312,7 +312,7 @@ public class DaapEntry implements Iterable<DaapEntry> {
 
 			//System.out.print("new entry: ");
 			try {
-				DaapEntry.getStream().mark(64);
+				DAAPEntry.getStream().mark(64);
 				
 				if (this.entry.init()) {
 					this.consumed += this.entry.getLength() + 8;

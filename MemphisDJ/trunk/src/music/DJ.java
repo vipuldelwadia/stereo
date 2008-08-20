@@ -81,10 +81,6 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	}
 
-	public static void main(String[] args){
-
-		new DJ();
-	}
 
 	//Starts the player if playlist was empty
 	public void tracksAdded(){
@@ -112,13 +108,12 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 
 	public void tracksRemoved(){
-		System.out.println("tracks were removed");
 		playlist = lackey.checkPlaylist(playlist);
 		if (playlist.size() < playlistSize){
 
 			fillPlaylist();	
 		}
-
+		System.out.println("Tracks removed.");
 	}
 
 	public void playbackFinished() {
@@ -145,4 +140,9 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	}
 
+	public static void main(String[] args){
+
+		new DJ();
+	}
+	
 }

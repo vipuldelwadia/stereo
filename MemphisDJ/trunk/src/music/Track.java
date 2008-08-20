@@ -5,25 +5,25 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import daap.DaapClient;
-import daap.DaapUtilities;
+import daap.DAAPClient;
+import daap.DAAPUtilities;
 
 public class Track {
-	private static final int TRACKID = DaapUtilities.stringToInt("miid");
-	public static final int ALBUM = DaapUtilities.stringToInt("asal");
-	public static final int ARTIST = DaapUtilities.stringToInt("asar");
-	public static final int BITRATE = DaapUtilities.stringToInt("asbr");
-	public static final int COMPOSER = DaapUtilities.stringToInt("ascp");
-	public static final int GENRE = DaapUtilities.stringToInt("asgn");
-	public static final int NAME = DaapUtilities.stringToInt("minm");
-	public static final int TIME = DaapUtilities.stringToInt("astm");
-	public static final int START_TIME = DaapUtilities.stringToInt("asst");
-	public static final int STOP_TIME = DaapUtilities.stringToInt("assp");
+	private static final int TRACKID = DAAPUtilities.stringToInt("miid");
+	public static final int ALBUM = DAAPUtilities.stringToInt("asal");
+	public static final int ARTIST = DAAPUtilities.stringToInt("asar");
+	public static final int BITRATE = DAAPUtilities.stringToInt("asbr");
+	public static final int COMPOSER = DAAPUtilities.stringToInt("ascp");
+	public static final int GENRE = DAAPUtilities.stringToInt("asgn");
+	public static final int NAME = DAAPUtilities.stringToInt("minm");
+	public static final int TIME = DAAPUtilities.stringToInt("astm");
+	public static final int START_TIME = DAAPUtilities.stringToInt("asst");
+	public static final int STOP_TIME = DAAPUtilities.stringToInt("assp");
 	
 	private Map<Integer, Object> tags;
-	private DaapClient publisher;
+	private DAAPClient publisher;
 	
-	public Track(Map<Integer, Object> values,DaapClient parent){
+	public Track(Map<Integer, Object> values,DAAPClient parent){
 		tags = new HashMap<Integer, Object>();
 		
 		for (Integer key: values.keySet()) {
@@ -46,8 +46,8 @@ public class Track {
 		return (Integer)tags.get(TRACKID);
 	}
 	
-	public boolean isParent(DaapClient dad){
-		return publisher == dad;
+	public DAAPClient getParent(){
+		return publisher;
 	}
 	
 	/**Returns null if the connection closed*/

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import music.Track;
-import daap.DaapClient;
+import daap.DAAPClient;
 
 public class PlayerTest {
 
@@ -13,7 +13,7 @@ public class PlayerTest {
 		int port = 3689;
 
 		try{
-			DaapClient client = new DaapClient(hostname, port);
+			DAAPClient client = new DAAPClient(hostname, port);
 			testCompletePlay(client.getTrackList().get(42).getStream());
 		}catch(IOException e){
 			e.printStackTrace();

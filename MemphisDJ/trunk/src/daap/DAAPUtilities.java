@@ -15,16 +15,16 @@ import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.logging.Log;
 
-public class DaapUtilities {
+public class DAAPUtilities {
 
-	protected DaapUtilities(final String hostname, final Log log) throws IOException {
+	protected DAAPUtilities(final String hostname, final Log log) throws IOException {
 		
 		this.names = new HashMap<Integer,String>();
 		this.types = new HashMap<Integer,Short>();
 		
 		this.requests = new HashMap<InputStream, HttpMethod>();
 		
-		DaapUtilities.initContentCodes(this.names, this.types);
+		DAAPUtilities.initContentCodes(this.names, this.types);
 		
 		this.retrieveContentCodes(hostname, log);
 	}
@@ -80,10 +80,10 @@ public class DaapUtilities {
 			throw new NullPointerException();
 		}
 		
-		DaapEntry entry = DaapEntry.parseStream(response, this.types);
+		DAAPEntry entry = DAAPEntry.parseStream(response, this.types);
 
 		if (entry.getName() == stringToInt("mccr")) {
-			for (DaapEntry e: entry) {
+			for (DAAPEntry e: entry) {
 
 				if (e.getName() != stringToInt("mdcl")) {
 					continue;
@@ -110,19 +110,19 @@ public class DaapUtilities {
 	
 	private static void initContentCodes(Map<Integer, String> names, Map<Integer, Short> types) {
 		names.put(stringToInt("mdcl"), "dmap.dictionary");
-		types.put(stringToInt("mdcl"), DaapEntry.LIST);
+		types.put(stringToInt("mdcl"), DAAPEntry.LIST);
 		names.put(stringToInt("mstt"), "dmap.status");
-		types.put(stringToInt("mstt"), DaapEntry.INTEGER);
+		types.put(stringToInt("mstt"), DAAPEntry.INTEGER);
 		names.put(stringToInt("mcnm"), "dmap.contentcodesnumber");
-		types.put(stringToInt("mcnm"), DaapEntry.INTEGER);
+		types.put(stringToInt("mcnm"), DAAPEntry.INTEGER);
 		names.put(stringToInt("mcty"), "dmap.contentcodestype");
-		types.put(stringToInt("mcty"), DaapEntry.SHORT);
+		types.put(stringToInt("mcty"), DAAPEntry.SHORT);
 		names.put(stringToInt("mcna"), "dmap.contentcodesname");
-		types.put(stringToInt("mcna"), DaapEntry.STRING);
+		types.put(stringToInt("mcna"), DAAPEntry.STRING);
 		names.put(stringToInt("mccr"), "dmap.contentcodes");
-		types.put(stringToInt("mccr"), DaapEntry.LIST);
+		types.put(stringToInt("mccr"), DAAPEntry.LIST);
 		names.put(stringToInt("msrv"), "dmap.serverinforesponse");
-		types.put(stringToInt("msrv"), DaapEntry.LIST);
+		types.put(stringToInt("msrv"), DAAPEntry.LIST);
 	}
 	
 	public static int stringToInt(String name) {

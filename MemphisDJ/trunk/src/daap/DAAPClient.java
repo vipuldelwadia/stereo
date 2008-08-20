@@ -31,7 +31,7 @@ import org.apache.commons.httpclient.util.HttpURLConnection;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.SimpleLog;
 
-public class DaapClient {
+public class DAAPClient {
 
 	private String hostname;
 
@@ -45,9 +45,9 @@ public class DaapClient {
 
 	private int port;
 
-	DaapUtilities helper;
+	DAAPUtilities helper;
 
-	public DaapClient(String hostname, int port) throws IOException {
+	public DAAPClient(String hostname, int port) throws IOException {
 		//This method should login and get a session ID,
 		//the database ID (dbid) by updateing and currentVersion [of database]
 		this.hostname = hostname;
@@ -56,7 +56,7 @@ public class DaapClient {
 		log = new SimpleLog("Log");
 
 		try {
-			helper = new DaapUtilities(hostname, log);
+			helper = new DAAPUtilities(hostname, log);
 		} catch (IOException e) {
 			System.out.println("Probably an invalid host");
 			e.printStackTrace();
@@ -82,21 +82,21 @@ public class DaapClient {
 		
 		try {
 			in = helper.request(hostname, request, log);
-			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
+			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
 			if ((entry == null)
-					|| (entry.getName() != DaapUtilities.stringToInt("adbs"))) {
+					|| (entry.getName() != DAAPUtilities.stringToInt("adbs"))) {
 				return null;
 			}
 
-			for (DaapEntry e : entry) {
-				if (e.getName() == DaapUtilities.stringToInt("mlcl")) {
+			for (DAAPEntry e : entry) {
+				if (e.getName() == DAAPUtilities.stringToInt("mlcl")) {
 					entry = e;
 					break;
 				}
 			}
 
-			for (DaapEntry e : entry) {
+			for (DAAPEntry e : entry) {
 				if ((entry == null) || !entry.hasChildren()) {
 					continue;
 				}
@@ -136,10 +136,10 @@ public class DaapClient {
 
 		try {
 			in = helper.request(hostname, loginRequest, log);
-			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
+			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
-			for (DaapEntry e : entry) {
-				if (e.getName() == DaapUtilities.stringToInt("mlid")) {
+			for (DAAPEntry e : entry) {
+				if (e.getName() == DAAPUtilities.stringToInt("mlid")) {
 					return (Integer) e.getValue();
 				}
 			}
@@ -162,10 +162,10 @@ public class DaapClient {
 
 		try {
 			in = helper.request(hostname, request, log);
-			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
+			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
-			for (DaapEntry e : entry) {
-				if (e.getName() == DaapUtilities.stringToInt("musr")) {
+			for (DAAPEntry e : entry) {
+				if (e.getName() == DAAPUtilities.stringToInt("musr")) {
 					return (Integer) e.getValue();
 				}
 			}
@@ -189,24 +189,24 @@ public class DaapClient {
 
 		try {
 			in = helper.request(hostname, request, log);
-			DaapEntry entry = DaapEntry.parseStream(in, helper.types);
+			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
-			for (DaapEntry e : entry) {
-				if (e.getName() == DaapUtilities.stringToInt("mlcl")) {
+			for (DAAPEntry e : entry) {
+				if (e.getName() == DAAPUtilities.stringToInt("mlcl")) {
 					entry = e;
 					break;
 				}
 			}
 
-			for (DaapEntry e : entry) {
-				if (e.getName() == DaapUtilities.stringToInt("mlit")) {
+			for (DAAPEntry e : entry) {
+				if (e.getName() == DAAPUtilities.stringToInt("mlit")) {
 					entry = e;
 					break;
 				}
 			}
 
-			for (DaapEntry e : entry) {
-				if (e.getName() == DaapUtilities.stringToInt("miid")) {
+			for (DAAPEntry e : entry) {
+				if (e.getName() == DAAPUtilities.stringToInt("miid")) {
 					entry = e;
 					return (Integer) e.getValue();
 				}

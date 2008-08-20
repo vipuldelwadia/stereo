@@ -14,12 +14,12 @@ import org.junit.Test;
 
 
 public class DaapClientTest {
-	private static DaapClient client;
+	private static DAAPClient client;
 	
 	@BeforeClass
 	public static void setup(){
 		try {
-			client = new DaapClient("serranos.mcs.vuw.ac.nz", 3689);
+			client = new DAAPClient("serranos.mcs.vuw.ac.nz", 3689);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

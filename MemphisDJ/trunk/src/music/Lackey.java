@@ -8,20 +8,20 @@ import java.net.Socket;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
-import daap.DaapClient;
-import daap.DaapClient.ClientExpiredException;
+import daap.DAAPClient;
+import daap.DAAPClient.ClientExpiredException;
 
 public class Lackey {
 	private Handshake hs;
 
 	private Semaphore connectionQueue;
 	
-	private Map<DaapClient, Set<Track>> library;
+	private Map<DAAPClient, Set<Track>> library;
 	
 	private final DJ dj;
 
 	public Lackey(DJ dj) {
-		library = new HashMap<DaapClient, Set<Track>>();
+		library = new HashMap<DAAPClient, Set<Track>>();
 		connectionQueue = new Semaphore(1, true);
 		this.dj = dj;
 		
@@ -43,6 +43,12 @@ public class Lackey {
 	// }
 
 	public Playlist checkPlaylist (Playlist check){
+		for (Iterator<Track> iter = check.iterator(); iter.hasNext();) {
+			Track element = iter.next();
+			if(!library.keySet().contains(element.getParent())){
+				iter.remove();
+			}
+		}
 		return check;
 	}
 
@@ -55,20 +61,16 @@ public class Lackey {
 	}
 
 
-	public void newConnection(DaapClient newClient) throws InterruptedException, IOException {
+	public void newConnection(DAAPClient newClient) throws InterruptedException, IOException {
 		if (newClient == null) 	return;
 		connectionQueue.acquire();
-		System.out.println("Permission acquired");
 		Set<Track> tracks = new HashSet<Track>(newClient.getTrackList());
 		System.out.println("Tracks retrieved.");
 		library.put(newClient, tracks);
 		System.out.println("Tracks and client added to library");
-		//DJ dj = DJ.getInstance();
-		System.out.println("Got DJ");
 		dj.tracksAdded();
 		System.out.println("DJ Informed");
 		connectionQueue.release();
-		System.out.println("Permission released");
 	}
 
 	private class Handshake implements Runnable {
@@ -88,7 +90,7 @@ public class Lackey {
 			this.lackey = l;
 		}
 
-		private DaapClient createConnection() throws IOException {
+		private DAAPClient createConnection() throws IOException {
 			Socket client = connection.accept();
 			netInput = new BufferedReader(new InputStreamReader(client
 					.getInputStream()));
@@ -98,7 +100,7 @@ public class Lackey {
 				String DAAPServer = client.getInetAddress().toString()
 						.substring(1);
 				client.close();
-				return new DaapClient(DAAPServer, DAAPPORT);
+				return new DAAPClient(DAAPServer, DAAPPORT);
 			}
 
 			client.close();
@@ -108,7 +110,7 @@ public class Lackey {
 
 		public void run() {
 			while (true) {
-				DaapClient client = null;
+				DAAPClient client = null;
 				try {
 					client = createConnection();
 					System.out.println("Lackey accepted connection.");
@@ -127,9 +129,9 @@ public class Lackey {
 		
 		public void run(){
 			while(true){
-				List<DaapClient> expired = new ArrayList<DaapClient>();
+				List<DAAPClient> expired = new ArrayList<DAAPClient>();
 				
-				for(DaapClient client:library.keySet()){
+				for(DAAPClient client:library.keySet()){
 					try {
 						if(client.isUpdated()){
 							library.put(client, new HashSet<Track>(client.getTrackList()));
@@ -140,7 +142,7 @@ public class Lackey {
 				}
 			
 				if(expired.size() > 0){
-					for(DaapClient c:expired){
+					for(DAAPClient c:expired){
 						library.remove(c);
 					}
 					dj.tracksRemoved();
