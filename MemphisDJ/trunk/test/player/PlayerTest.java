@@ -3,7 +3,7 @@ package player;
 import java.io.IOException;
 import java.io.InputStream;
 
-import music.Track;
+
 import daap.DAAPClient;
 
 public class PlayerTest {

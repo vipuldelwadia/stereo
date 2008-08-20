@@ -6,10 +6,12 @@ import static org.junit.Assert.assertNotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import jukebox.Playlist;
+import jukebox.Song;
+
 import org.junit.Test;
 
-import playlist.Playlist;
-import playlist.Song;
+
 
 
 public class PlaylistTest {

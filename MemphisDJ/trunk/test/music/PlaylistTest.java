@@ -4,6 +4,9 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import djplaylist.Playlist;
+import djplaylist.Track;
+
 public class PlaylistTest {
 	
 	Playlist p;

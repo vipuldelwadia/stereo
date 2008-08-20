@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="/vol/projects/week-of-code/stereo/libs/commons-logging-adapters-1.1.1.jar"/>
 	<classpathentry kind="lib" path="/vol/projects/week-of-code/stereo/libs/commons-logging-api-1.1.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DACPLib"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DAAPLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

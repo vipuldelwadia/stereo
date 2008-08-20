@@ -4,10 +4,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import player.Controller;
+import player.ControllerInterface;
 
 
 public class ControllerTest {
-	Controller c;
+	ControllerInterface c;
 
 	@Before
 	public void testInstantiation(){

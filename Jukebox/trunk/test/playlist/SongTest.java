@@ -2,11 +2,11 @@ package playlist;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import jukebox.Song;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import playlist.Song;
 
 
 public class SongTest {

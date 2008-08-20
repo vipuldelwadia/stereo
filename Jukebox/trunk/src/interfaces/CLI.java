@@ -3,15 +3,21 @@ package interfaces;
 import java.lang.reflect.Method;
 import java.util.Scanner;
 
+
+
+import jukebox.Playlist;
+import jukebox.Song;
+
 import player.Controller;
-import playlist.Playlist;
-import playlist.Song;
+import player.ControllerInterface;
 
 public class CLI {
     private Scanner    scan;
-    private Controller controller;
+    private ControllerInterface controller;
     
-    public CLI(Controller controller) {
+
+    public CLI(ControllerInterface controller) {
+
         scan = new Scanner(System.in);
         this.controller = controller;
         run();

@@ -10,6 +10,8 @@ import org.junit.Test;
 
 
 import daap.DAAPClient;
+import djplaylist.Playlist;
+import djplaylist.Track;
 
 
 public class LackeyTest {

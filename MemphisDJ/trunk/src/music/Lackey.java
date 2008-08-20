@@ -10,6 +10,8 @@ import java.util.concurrent.Semaphore;
 
 import daap.DAAPClient;
 import daap.DAAPClient.ClientExpiredException;
+import djplaylist.Playlist;
+import djplaylist.Track;
 
 public class Lackey {
 	private Handshake hs;
@@ -63,7 +65,9 @@ public class Lackey {
 		}
 		return tracks;
 	}
-
+	public Map<DAAPClient, Set<Track>> getLibrary(){
+		return library;
+	}
 
 	public void newConnection(DAAPClient newClient) throws InterruptedException, IOException {
 		if (newClient == null) 	return;
@@ -94,6 +98,7 @@ public class Lackey {
 			this.lackey = l;
 		}
 
+		
 		private DAAPClient createConnection() throws IOException {
 			Socket client = connection.accept();
 			netInput = new BufferedReader(new InputStreamReader(client

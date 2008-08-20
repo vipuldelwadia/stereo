@@ -11,12 +11,15 @@ import javax.swing.JSlider;
 import javax.swing.JTable;
 import javax.swing.WindowConstants;
 
+import jukebox.Playlist;
+import jukebox.Song;
+
 import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-import playlist.Playlist;
-import playlist.Song;
+
+
 
 public class GUI extends Thread {
     

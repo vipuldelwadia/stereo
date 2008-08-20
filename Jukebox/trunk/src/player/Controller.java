@@ -5,16 +5,18 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import playlist.Playlist;
-import playlist.Song;
+import jukebox.Playlist;
+import jukebox.Song;
+
 import daccpclient.DACPClient;
+
 
 /**
  * 
  * @author coxdyla This class interfaces the User interfaces with the servers
  *         playlist TODO make it recieve and interpret DACP requests
  */
-public class Controller {
+public class Controller implements ControllerInterface{
     
     private final static boolean    DEBUG    = false;
     
@@ -46,27 +48,31 @@ public class Controller {
         return true;
     }
     
+    
+
     public boolean isValidController() {
         return this.dacp != null;
     }
     
-    /**
-     * pauses the playing track
-     * 
-     */
+    /* (non-Javadoc)
+	 * @see player.ControllerInterface#pauseTrack()
+	 */
     public void pauseTrack() {
         if (this.connect())
             this.dacp.pause();
     }
     
-    /**
-     * plays the paused track
-     */
+    /* (non-Javadoc)
+	 * @see player.ControllerInterface#playTrack()
+	 */
     public void playTrack() {
         if (this.connect())
             this.dacp.play();
     }
     
+    /* (non-Javadoc)
+	 * @see player.ControllerInterface#getPlaylist()
+	 */
     public Playlist getPlaylist(){
         //NASTY temp hack
         List<Song> tracks = new ArrayList<Song>();
@@ -84,14 +90,9 @@ public class Controller {
         //return new Playlist(xml); 
     }
     
-    /**
-     * change the volume to the stated value
-     * 
-     * @param newVolume
-     *            int between 0 and 10
-     * @throws IllegalArgumentException
-     *             if newVolume is < 0 or > 10
-     */
+    /* (non-Javadoc)
+	 * @see player.ControllerInterface#changeVolume(int)
+	 */
     public void changeVolume(int newVolume) {
         if (newVolume < 0 || newVolume > 10)
             throw new IllegalArgumentException("volume must be between 0-10");
@@ -99,14 +100,16 @@ public class Controller {
             this.dacp.setVolume(newVolume*25.5);
     }
     
-    /**
-     * skips to the next track
-     * 
-     */
+    /* (non-Javadoc)
+	 * @see player.ControllerInterface#skipTrack()
+	 */
     public void skipTrack() {
         this.dacp.skip();
     }
     
+    /* (non-Javadoc)
+	 * @see player.ControllerInterface#getVolume()
+	 */
     public int getVolume() {
         String xml = this.dacp.getXML("VOLUME");
         
@@ -118,4 +121,9 @@ public class Controller {
         
         return volume;
     }
+
+	public void setPlaylist() {
+		// TODO Auto-generated method stub
+		
+	}
 }

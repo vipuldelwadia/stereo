@@ -1,11 +1,13 @@
 package interfaces;
 
+import jukebox.Song;
+
 import org.junit.Before;
 import org.junit.Test;
 
+
+
 import interfaces.GUI;
-import playlist.Playlist;
-import playlist.Song;
 
 
 public class GUITest {
@@ -47,7 +49,7 @@ public class GUITest {
 	
 	@Test
 	public void playListUpdated() {
-		g.playlistUpdated(Playlist.EMPTY_PLAYLIST);
+		//g.playlistUpdated(dj.EMPTY_PLAYLIST);
 		// TODO make this more interesting as the playlist is more interesting
 	}
 	
