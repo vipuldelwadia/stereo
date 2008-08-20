@@ -3,7 +3,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.Scanner;
 
 public class DACPClient {
 
@@ -39,6 +38,12 @@ public class DACPClient {
 	public void pause() {
 		send(DACPClientBroadcaster.pause());
 	}
+    
+    public void skip(){}
+    
+    public String getXML(String key){
+        return null;
+    }
 	
 	public void setVolume(double newVolume) {
 		send(DACPClientBroadcaster.changeVolume(newVolume));
