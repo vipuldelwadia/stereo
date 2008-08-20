@@ -25,21 +25,28 @@ public class CLI {
                 scan.close();
                 break;
             }
-            try {
-                input(input);
-            }
-            catch (IOException e) {
-                e.printStackTrace();
-            }
+            input(input);
         }
     }
     
-    public void input(String input) throws IOException {
+    public void input(String input){
         if (input.equals("play")) {
-            controller.playTrack();
+            try {
+                controller.playTrack();
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         else if (input.equals("pause")) {
-            controller.pauseTrack();
+            try {
+                controller.pauseTrack();
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
         else if (input.equals("skip")) {
             controller.skipTrack();

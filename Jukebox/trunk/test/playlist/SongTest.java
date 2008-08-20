@@ -9,22 +9,22 @@ import org.junit.Test;
 import src.playlist.Song;
 
 
-public class TrackTest {
+public class SongTest {
 
-	private Song t;
+	private Song s;
 	
 	@Before
 	public void createTrack() {
-		t = new Song();
+		s = new Song("Lithium0", "Nirvana", "", "Rock", 260);
 	}
 	
 	@Test
 	public void nonNullFields() {
-		assertNotNull(t.getAlbum());
-		assertNotNull(t.getArtist());
-		assertNotNull(t.getGenre());
-		assertNotNull(t.getTitle());
-		assertTrue(t.getTime() >= 0);
+		assertNotNull(s.getAlbum());
+		assertNotNull(s.getArtist());
+		assertNotNull(s.getGenre());
+		assertNotNull(s.getTitle());
+		assertTrue(s.getSeconds() >= 0);
 	}
 	
 }

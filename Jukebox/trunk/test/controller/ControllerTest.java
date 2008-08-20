@@ -1,5 +1,9 @@
 package test.controller;
 
+import static org.junit.Assert.fail;
+
+import java.io.IOException;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,12 +37,22 @@ public class ControllerTest {
 	
 	@Test
 	public void trackPlayed() {
-		c.playTrack();
+		try {
+            c.playTrack();
+        }
+        catch (IOException e) {
+            fail("Input/Output exception");
+        }
 	}
 	
 	@Test
 	public void trackPaused() {
-		c.pauseTrack();
+		try {
+            c.pauseTrack();
+        }
+        catch (IOException e) {
+            fail("Input/Output exception");
+        }
 	}
 	
 }
