@@ -39,7 +39,9 @@ public class DACPClient {
 		send(DACPClientBroadcaster.pause());
 	}
     
-    public void skip(){}
+    public void skip(){
+    	// TODO
+    }
     
     public String getXML(String key){
         return null;
@@ -54,7 +56,7 @@ public class DACPClient {
 	}
 
 	public static void main(String[] args) throws UnknownHostException, IOException{
-		new DACPClient("sakura", 51234);
+		new DACPClient("climie", 51234);
 	}
 
 }

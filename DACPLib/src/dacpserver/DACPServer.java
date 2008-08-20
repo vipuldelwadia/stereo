@@ -23,8 +23,8 @@ public class DACPServer {
 		this.PORT = port;
 		SERVER_SOCK = new ServerSocket(PORT);
 		System.out.println("Server starting.\n--------\n");
-		listen();
 		listeners = new HashSet<DACPServerListener>();
+		listen();
 	}
 	
 	public void addServerListener(DACPServerListener s) {
@@ -32,11 +32,17 @@ public class DACPServer {
 	}
 
 	private void listen() throws IOException {
-		while (true) {
-			System.out.println("Waiting for connection.");
-			new Thread(new ServerThread(SERVER_SOCK.accept())).start();
-			System.out.println("Accepting connections.");
-		}
+		new Thread(){
+			public void run(){
+				while (true) {
+					System.out.println("Waiting for connection.");
+					try {
+						new Thread(new ServerRunnable(SERVER_SOCK.accept())).start();
+					} catch (IOException e) {}
+					System.out.println("Accepting connections.");
+				}
+			}
+		}.start();
 	}
 
 	public static void main(String[] args) throws IOException {
@@ -47,7 +53,7 @@ public class DACPServer {
 		//s.listen();
 	}
 
-	private class ServerThread implements Runnable {
+	private class ServerRunnable implements Runnable {
 
 		private final Socket SOCK;
 
@@ -89,7 +95,7 @@ public class DACPServer {
 			}
 		}
 
-		private ServerThread(Socket s) {
+		private ServerRunnable(Socket s) {
 			this.SOCK = s;
 		}
 

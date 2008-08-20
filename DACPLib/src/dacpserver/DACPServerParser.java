@@ -22,16 +22,12 @@ public class DACPServerParser {
 			String type = request.next();
 			String URI = request.next();
 			String protocol = request.next();
-			System.out.println(type);
-			System.out.println(URI);
-			System.out.println(protocol);
 
 			Scanner uri = new Scanner(URI);
 			uri.useDelimiter("/");
 
 			String root = uri.next();
 			if(root.equalsIgnoreCase("ctrl-int")) root = "ctrl_int";
-			System.out.println(root);
 
 			//The following line is a more efficient version, but Clare won't let me do it :-(
 			//System.out.println(root = (root = uri.next()).equalsIgnoreCase("ctrl-int") ? "ctrl_int" : root);
@@ -54,7 +50,6 @@ public class DACPServerParser {
 
 	private static DACPServerCommandInterface parseControl(Scanner uri){
 		String database = uri.next();
-		System.out.println("Database: "+ database);
 		uri.useDelimiter("\\?"); /*Split the command from the rest of the variables*/
 		String command = uri.next().replaceAll("/", " ").trim();
 		Map<String,String> parameters = new HashMap<String,String>();
@@ -72,10 +67,6 @@ public class DACPServerParser {
 					throw new IllegalArgumentException("Invalid parameters.");
 				}
 			}
-		}
-
-		for(Entry<String, String> a: parameters.entrySet()){
-			System.out.println("Parameter: "+a.getKey()+" Value:"+a.getValue());
 		}
 
 //		System.out.println("Command: "+command+"\nparameter: "+parameter);

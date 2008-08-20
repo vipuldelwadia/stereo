@@ -5,7 +5,7 @@ import dacpserver.DACPServerListener;
 public class Pause implements DACPServerCommandInterface {
 
 	public void doAction(DACPServerListener s) {
-		s.play();
+		s.pause();
 	}
 
 }
