@@ -1,4 +1,4 @@
-package test.playlist;
+package playlist;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -8,8 +8,8 @@ import java.util.List;
 
 import org.junit.Test;
 
-import src.playlist.Playlist;
-import src.playlist.Song;
+import playlist.Playlist;
+import playlist.Song;
 
 
 public class PlaylistTest {

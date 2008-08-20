@@ -1,12 +1,12 @@
-package src.player;
+package player;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
-import src.playlist.Playlist;
-import src.playlist.Song;
+import playlist.Playlist;
+import playlist.Song;
 import daccpclient.DACPClient;
 
 /**

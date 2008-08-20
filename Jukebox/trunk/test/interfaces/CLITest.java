@@ -1,9 +1,9 @@
-package test.interfaces;
+package interfaces;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import src.interfaces.CLI;
+import interfaces.CLI;
 
 public class CLITest {
     CLI cli;

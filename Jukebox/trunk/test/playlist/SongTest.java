@@ -1,4 +1,4 @@
-package test.playlist;
+package playlist;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -6,7 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import src.playlist.Song;
+import playlist.Song;
 
 
 public class SongTest {

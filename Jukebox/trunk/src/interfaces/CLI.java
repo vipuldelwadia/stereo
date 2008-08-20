@@ -1,11 +1,11 @@
-package src.interfaces;
+package interfaces;
 
 import java.lang.reflect.Method;
 import java.util.Scanner;
 
-import src.player.Controller;
-import src.playlist.Playlist;
-import src.playlist.Song;
+import player.Controller;
+import playlist.Playlist;
+import playlist.Song;
 
 public class CLI {
     private Scanner    scan;

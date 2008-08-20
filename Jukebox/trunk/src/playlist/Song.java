@@ -1,4 +1,4 @@
-package src.playlist;
+package playlist;
 
 public class Song {
     

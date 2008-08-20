@@ -1,11 +1,11 @@
-package test.interfaces;
+package interfaces;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import src.interfaces.GUI;
-import src.playlist.Playlist;
-import src.playlist.Song;
+import interfaces.GUI;
+import playlist.Playlist;
+import playlist.Song;
 
 
 public class GUITest {

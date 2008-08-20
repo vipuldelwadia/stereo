@@ -1,13 +1,9 @@
-package test.controller;
-
-import static org.junit.Assert.fail;
-
-import java.io.IOException;
+package controller;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import src.player.Controller;
+import player.Controller;
 
 
 public class ControllerTest {

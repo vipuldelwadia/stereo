@@ -1,4 +1,4 @@
-package src.interfaces;
+package interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +15,8 @@ import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-import src.playlist.Playlist;
-import src.playlist.Song;
+import playlist.Playlist;
+import playlist.Song;
 
 public class GUI extends Thread {
     
