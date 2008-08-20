@@ -27,6 +27,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 		lackey = new Lackey(this);
 		playlist = new Playlist();
 		player = new player.Player();
+		player.addPlaybackListener(this);
 
 		try {
 			dacpserver.DACPServer s = new DACPServer(3689);
@@ -39,6 +40,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	// Stops player if library is empty
 	public void fillPlaylist(){
+		System.out.println("Attempting to fill playlist of size " + playlist.size());
 		List<Track> lib = lackey.getAllTracks();
 		if (lib != null && !lib.isEmpty()){
 			Collections.shuffle(lib);
@@ -49,9 +51,11 @@ public class DJ implements DACPServerListener, PlaybackListener{
 					playlist.addTrack(t);
 				}
 			}
-		}
+			System.out.println("Playlist size: " + playlist.size());
+		}	
 		else {
 			stop();
+			System.out.println("Library empty: stopped playback.");
 		}
 	}
 
@@ -119,6 +123,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	public void playbackFinished() {
 		InputStream stream = null;
+		System.out.println("Playback finished.");
 		while (stream == null) {
 			try {
 				if (playlist.isEmpty()) fillPlaylist();
