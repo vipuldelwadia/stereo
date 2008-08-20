@@ -158,7 +158,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	public static void main(String[] args){
 
-		new DJ().setVolume(50);
+		new DJ().setVolume(100);
 	}
 	
 }
