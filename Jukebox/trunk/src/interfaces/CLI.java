@@ -1,6 +1,5 @@
 package src.interfaces;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 import src.player.Controller;
@@ -31,22 +30,10 @@ public class CLI {
     
     public void input(String input){
         if (input.equals("play")) {
-            try {
-                controller.playTrack();
-            }
-            catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            controller.playTrack();
         }
         else if (input.equals("pause")) {
-            try {
-                controller.pauseTrack();
-            }
-            catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
+            controller.pauseTrack();
         }
         else if (input.equals("skip")) {
             controller.skipTrack();

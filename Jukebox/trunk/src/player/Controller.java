@@ -59,43 +59,23 @@ public class Controller {
     /**
      * pauses the playing track
      * 
-     * @throws IOException
-     * 
      */
-    public void pauseTrack() throws IOException {
+    public void pauseTrack() {
         if (this.connect())
             this.dacp.pause();
     }
     
     /**
      * plays the paused track
-     * 
-     * @throws IOException
      */
-    public void playTrack() throws IOException {
+    public void playTrack() {
         if (this.connect())
             this.dacp.play();
     }
     
     public Playlist getPlaylist(){
-        
-        //TODO
-        // Dummy Code --
-        
-        List<Song> tracks = new ArrayList<Song>();
-        tracks.add(new Song("Lithium0", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium1", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium2", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium3", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium4", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium5", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium6", "Nirvana", "", "Rock", 260));
-        tracks.add(new Song("Lithium7", "Nirvana", "", "Rock", 260));
-        Playlist playlist = new Playlist(tracks);
-        
-        // --
-        
-        return playlist;
+        String xml = this.dacp.getXML("PLAYLIST");
+        return new Playlist(xml); 
     }
     
     /**
@@ -118,11 +98,18 @@ public class Controller {
      * 
      */
     public void skipTrack() {
-        // this.dacp.skipTrack();
+        this.dacp.skip();
     }
     
     public int getVolume() {
-        // return this.dacp.getVolume();
-        return 0;
+        String xml = this.dacp.getXML("VOLUME");
+        
+        //PARSE xml -> int here:
+        
+        //
+        
+        int volume = 0;
+        
+        return volume;
     }
 }
