@@ -7,6 +7,7 @@ import java.util.List;
 
 import src.playlist.Playlist;
 import src.playlist.Song;
+import daccpclient.DACPClient;
 
 /**
  * 
@@ -109,7 +110,7 @@ public class Controller {
         if (newVolume < 0 || newVolume > 10)
             throw new IllegalArgumentException("volume must be between 0-10");
         if (this.connect())
-            this.dacp.changeVolume(newVolume);
+            this.dacp.setVolume(newVolume*25.5);
     }
     
     /**

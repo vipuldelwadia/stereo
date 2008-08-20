@@ -14,5 +14,6 @@
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.jface.text_3.2.2.r322_v20070104.jar"/>
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench_3.2.2.M20070119-0800.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/DACPLib"/>
 	<classpathentry kind="output" path=""/>
 </classpath>
