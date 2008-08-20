@@ -2,10 +2,12 @@ package music;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Collections;
 import java.util.List;
 
 import player.PlaybackListener;
+import sun.misc.VM;
 import dacpserver.DACPServer;
 import dacpserver.DACPServerListener;
 
@@ -52,9 +54,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 				}
 			}
 			System.out.println("Playlist size: " + playlist.size());
-			for(Track t : playlist){
-				System.out.println("" + t.getTrackId());
-			}
+			
 		}	
 		else {
 			stop();
@@ -75,12 +75,22 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	}
 
 	public void setVolume(double volume) {
-		// TODO Auto-generated method stub
-
+		
+		URL url = DJ.class.getResource("setvolume.sh");
+		
+		try {
+			Process p = Runtime.getRuntime().exec("bash " + url.getFile() + " " + (int)volume);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	public void skip() {
 		// TODO Auto-generated method stub
+		playbackFinished();
 
 	}
 
@@ -148,7 +158,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	public static void main(String[] args){
 
-		new DJ();
+		new DJ().setVolume(50);
 	}
 	
 }
