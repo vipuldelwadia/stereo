@@ -51,6 +51,7 @@ public class Lackey {
 		return tracks;
 	}
 
+
 	public void newConnection(DaapClient newClient) throws InterruptedException, IOException {
 		if (newClient == null) 	return;
 		connectionQueue.acquire();
