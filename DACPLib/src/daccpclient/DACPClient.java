@@ -40,7 +40,7 @@ public class DACPClient {
 	}
     
     public void skip(){
-    	// TODO
+    	send(DACPClientBroadcaster.skip());
     }
     
     public String getXML(String key){

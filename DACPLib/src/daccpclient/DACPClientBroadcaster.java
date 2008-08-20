@@ -9,6 +9,10 @@ public class DACPClientBroadcaster {
 	public static String pause() {
 		return "pause";
 	}
+	
+	public static String skip() {
+		return "skip";
+	}
 
 	public static String changeVolume(double newVolume) {
 		if(newVolume>255 || newVolume <0) throw new IllegalArgumentException("Volume must be between 0~255");
