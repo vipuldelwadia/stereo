@@ -88,8 +88,10 @@ public class DJ implements DACPServerListener, PlaybackListener{
 		System.out.println("tracks added");
 
 		if(playlist.isEmpty()){
+			
 			fillPlaylist();
-
+			if (playlist.isEmpty()) return;
+			
 			current = playlist.poll();
 			try {
 				player.setInputStream(current.getStream());
