@@ -1,5 +1,6 @@
 package src.interfaces;
 
+import java.lang.reflect.Method;
 import java.util.Scanner;
 
 import src.player.Controller;
@@ -28,66 +29,79 @@ public class CLI {
         }
     }
     
-    public void input(String input){
-        if (input.equals("play")) {
+    private class Top {
+        public void list() {
+            Playlist p = controller.getPlaylist();
+            for(Song s:p){
+                System.out.println(s.toString());
+            }
+        }
+        public void play() {
             controller.playTrack();
         }
-        else if (input.equals("pause")) {
+        public void pause() {
             controller.pauseTrack();
         }
-        else if (input.equals("skip")) {
+        public void skip() {
             controller.skipTrack();
         }
-        else if (input.startsWith("set volume ")) {
-            input = input.substring("set volume ".length());
-            try {
-                int vol = Integer.parseInt(input);
-                if (vol < 0 || vol > 10) {
-                    invalidInput("volume not between 0 and 10");
-                }
-                else {
-                    controller.changeVolume(vol);
-                }
-            }
-            catch (NumberFormatException e) {
-                invalidInput("volume not a valid number");
-            }
-            
+        public Object set() {
+            System.out.println("set");
+            return new Set();
         }
-        else if (input.equalsIgnoreCase("get volume ")) {
-            controller.getVolume();
-            // TODO get volume
-        }
-        else if (input.startsWith("playlist")) {
-            int tracks;
-            if (input.equals("playlist")) {
-                tracks = -1;
-            }
-            else {
-                input = input.substring("playlist ".length());
-                try {
-                    tracks = Integer.parseInt(input);
-                }
-                catch (NumberFormatException e) {
-                    tracks = 0;
-                }
-            }
-            Playlist p = controller.getPlaylist();
-            for (int i = 0; i < p.size() && (tracks < 0 || i < tracks); i++) {
-                Song s = p.getSong(i);
-                System.out.println("\t* " + s);
-            }
-            
-        }
-        else if (input.equalsIgnoreCase("details")) {
-            // TODO get song details printed
-        }
-        else
-            invalidInput("invalid input");
     }
     
-    private void invalidInput(String message) {
-        System.err.println(message);
+    private class Set {
+        public void volume(String volume) {
+            try {
+                Integer value = Integer.parseInt(volume);
+                controller.changeVolume(value);
+            }
+            catch (NumberFormatException ex) {
+                System.out.println("You were supposed to give me a volume dumbass!");
+            }
+        }
+    }
+    
+    public void input(String input){
+        
+        Scanner sc = new Scanner(input);
+        
+        Object o = new Top();
+        
+        while (sc.hasNext()) {
+            try {
+                Method[] methods = o.getClass().getMethods();
+                String name = sc.next();
+                boolean found = false;
+                for (Method m: methods) {
+                    if (m.getName().equals(name)) {
+                        found = true;
+                        String[] params = new String[m.getParameterTypes().length];
+                        for (int i = 0; i < params.length; i++) {
+                            if (sc.hasNext()) {
+                                params[i] = sc.next();
+                            }
+                            else {
+                                System.out.println("wrong parameters");
+                                return;
+                            }
+                        }
+                        o = m.invoke(o, params);
+                    }
+                }
+                if (found == false) {
+                    System.out.println("method not found");
+                    return;
+                }
+            }
+            catch (Exception ex) {
+                System.err.println("error calling method");
+                ex.printStackTrace();
+            }
+        }
+        
+        return;        
     }
     
     public static void main(String[] args) {
