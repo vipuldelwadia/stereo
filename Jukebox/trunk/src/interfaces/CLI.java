@@ -1,13 +1,13 @@
 package interfaces;
 
 import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Scanner;
 
 import controller.ControllerInterface;
 
 
 import player.Controller;
-import playlist.Playlist;
 import playlist.Track;
 
 public class CLI {
@@ -36,7 +36,7 @@ public class CLI {
     
     private class Top {
         public void list() {
-            Playlist p = controller.getPlaylist();
+        	List<Track> p = controller.getPlaylist();
             for(Track t:p){
                 System.out.println(t.toString());
             }

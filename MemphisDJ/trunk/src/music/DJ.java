@@ -14,7 +14,6 @@ import java.util.Queue;
 import java.util.Set;
 
 import player.PlaybackListener;
-import playlist.Playlist;
 import playlist.Track;
 import daap.DAAPClient;
 
@@ -23,7 +22,7 @@ public class DJ implements PlaybackListener{
 
 	private Lackey lackey;
 
-	private Playlist playlist;
+	private List<Track> playlist;
 
 	private int playlistSize = 10;
 
@@ -36,15 +35,10 @@ public class DJ implements PlaybackListener{
 	private int recentlyPlayedTracksSize=30;
 	private boolean paused;
 
-//	private static final DJ instance = new DJ();
-
-//	public static DJ getInstance() {
-//	return instance;
-//	}
-
+	
 	public DJ() {
 		init();
-		setPlaylist(new Playlist());
+		playlist = new ArrayList<Track>();
 		player = new player.Player();
 		player.addPlaybackListener(this);
 
@@ -58,11 +52,11 @@ public class DJ implements PlaybackListener{
 		}
 	}
 
+	
 	public void init() {
 		lackey = new Lackey(this);
 	}
 
-	// Stops player if library is empty
 	private void fillPlaylist() {
 		System.out.println("Attempting to fill playlist of size " + getPlaylist().size());
 		List<Track> lib = lackey.getAllTracks();
@@ -72,7 +66,7 @@ public class DJ implements PlaybackListener{
 				Track t = lib.get(i);
 				// unnecessary?
 				if (t != null) {
-					getPlaylist().addTrack(t);
+					getPlaylist().add(t);
 				}
 			}
 			System.out.println("Playlist size: " + getPlaylist().size());
@@ -82,6 +76,7 @@ public class DJ implements PlaybackListener{
 			System.out.println("Library empty: stopped playback.");
 		}
 	}
+	
 	/** This method will attempt to create a playlist so that people with the most will still
 	 * get there music played evenly. It also makes sure that the tracks have not been recently played
 	 *
@@ -96,7 +91,7 @@ public class DJ implements PlaybackListener{
 					List<Track> orderedClientTracks=new ArrayList(clientTracks);
 					Track t=orderedClientTracks.get((int)Math.random() % orderedClientTracks.size());
 					if(!(recentlyPlayedTracks.contains(t))){	
-						playlist.addTrack(t);
+						playlist.add(t);
 					}
 				}
 			}
@@ -116,6 +111,8 @@ public class DJ implements PlaybackListener{
 		}	
 		return clientsTracks;
 	}
+	
+	
 	/**
 	 * 
 	 * @param c
@@ -124,12 +121,12 @@ public class DJ implements PlaybackListener{
 	 *            is the word the filter will try to match with.
 	 * @return
 	 */
-	public Playlist getTracksFiltered(Map<Integer, String> c){
-		Playlist returned = new Playlist();
+	public List<Track> getPlaylistWithFilter(Map<Integer, String> c){
+		List<Track> returned = new ArrayList<Track>();
 		List<Track> allTracks = lackey.getAllTracks();
 
 		//Search through every criteria for potential matches
-		for(int i=0;i<allTracks.size();i++){
+		for(int i=0; i<allTracks.size(); i++){
 
 			Track currentTrack=allTracks.get(i);
 			boolean fitCrit=true;
@@ -141,18 +138,24 @@ public class DJ implements PlaybackListener{
 				}
 			}
 
-			if (fitCrit)returned.addTrack(currentTrack);
+			if (fitCrit)returned.add(currentTrack);
 
 		}
 		return returned;
 	}
-
-	public void setTracksFiltered(Map<Integer, String> c){
+	
+	/**
+	 * Takes a set of Track identifier (e.g Track.ALBUM) - value pairs
+	 * which will select from all songs the songs which meet
+	 * the criteria and then fill the playlist.
+	 * @param c
+	 */
+	public void setPlaylistWithFilter(Map<Integer, String> c){
 		stop();
-		playlist=getTracksFiltered(c);
+		playlist=getPlaylistWithFilter(c);
 
 		if (!playlist.isEmpty()) {
-			current = playlist.poll();
+			current = playlist.get(0); //TODO removing the track for Party Mode?
 			System.out.println("Polled playlist.");
 
 			recentlyPlayedTracks.add(current);
@@ -164,24 +167,7 @@ public class DJ implements PlaybackListener{
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
-
 		}
-	}
-
-	public void play() {
-		player.start();
-		paused=false;
-	}
-
-	public void pause(){
-		player.pause();
-		paused=true;
-	}
-
-	public void stop(){
-		player.stop();
-		paused=true;
 	}
 
 	public void setVolume(double volume) {
@@ -197,26 +183,17 @@ public class DJ implements PlaybackListener{
 			// System.out.println(sc.nextLine());
 			// }
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 
 	}
 
-	public double getVolume(){
-		return currentVolume;
-	}
 
-	public void skip() {
-		player.stop();
-		playbackFinished();
-	}
-
-
-	//Starts the player if playlist was empty
+	/*
+	 * Lackey calls when 
+	 */
 	public void tracksAdded(){
-
 		System.out.println("tracks added");
 
 		if(getPlaylist().isEmpty()){
@@ -224,7 +201,7 @@ public class DJ implements PlaybackListener{
 			fillPlaylist();
 			if (getPlaylist().isEmpty()) return;
 
-			current = getPlaylist().poll();
+			current = getPlaylist().get(0);  //TODO remove for party mode?
 			recentlyPlayedTracks.add(current);
 			if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
 				recentlyPlayedTracks.poll();
@@ -236,21 +213,87 @@ public class DJ implements PlaybackListener{
 				e.printStackTrace();
 			}
 		}
+		
 		if (getPlaylist().size() < playlistSize){
 			fillPlaylist();	
 		}
 
 	}
 
-
+	/*
+	 * Lackey calls this when the library has changed (i.e DAAP server dropped).
+	 * Validates the current playlist.
+	 */
 	public void libraryChanged(){
-		lackey.checkPlaylist(getPlaylist());
+		lackey.checkPlaylist(playlist);
 		if (getPlaylist().size() < playlistSize){
 			fillPlaylist();	
 		}
 		System.out.println("Library changed: playlist updated");
 	}
+	
 
+	/*
+	 * Modify DJ state
+	 */
+	public void play() {
+		player.start();
+		paused=false;
+	}
+
+	public void pause(){
+		player.pause();
+		paused=true;
+	}
+
+	public void stop(){
+		player.stop();
+		paused=true;
+	}
+
+	public void skip() {
+		player.stop();
+		playbackFinished();
+	}
+	
+	public void setPlaylist(List<Track> playlist) {
+		this.playlist = playlist;
+	}
+
+	
+	/*
+	 * Info about DJ state
+	 */
+	public double getVolume(){
+		return currentVolume;
+	}
+	
+	public boolean isPaused(){
+		return paused;
+	}
+	
+	public List<Track> getPlaylist() {
+		return playlist;
+	}
+
+	public Track getCurrentTrack(){
+		return current;
+	}
+	
+	public Queue<Track> getRecentlyPlayedTracks() {
+		return recentlyPlayedTracks;
+	}
+	
+	//TODO should this return a List or a playlist?
+	public List<Track> getLibrary(){
+		return Collections.unmodifiableList(lackey.getAllTracks());
+	}
+
+	
+	/*
+	 * Methods from PlaybackListener
+	 * 
+	 */
 	public void playbackFinished() {
 		InputStream stream = null;
 		System.out.println("Playback finished.");
@@ -261,7 +304,7 @@ public class DJ implements PlaybackListener{
 				if (playlist.isEmpty()) fillPlaylist();
 				if (playlist.isEmpty()) return;
 
-				current = playlist.poll();
+				current = playlist.get(0); //TODO remove for party mode?
 				recentlyPlayedTracks.add(current);
 				if(recentlyPlayedTracks.size() > recentlyPlayedTracksSize)
 					recentlyPlayedTracks.poll();
@@ -286,35 +329,14 @@ public class DJ implements PlaybackListener{
 
 		player.setInputStream(stream);
 	}
+	
 	public void playbackStarted() {
-		// TODO Auto-generated method stub
-
+		System.out.println("Playback started");
 	}
 
-	public void setPlaylist(Playlist playlist) {
-		this.playlist = playlist;
-	}
-
-	public Playlist getPlaylist() {
-		return playlist;
-	}
-
-	public Track getCurrentPlaying(){
-		return current;
-	}
-
-	public boolean getPaused(){
-		return paused;
-	}
-
-	public Queue<Track> getRecentlyPlayedTracks() {
-		return recentlyPlayedTracks;
-	}
-
+	
+	
 	public static void main(String[] args){
-
 		DJ a = new DJ();
-
 	}
-
 }

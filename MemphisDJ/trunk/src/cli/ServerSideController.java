@@ -4,10 +4,10 @@
 package cli;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import music.DJ;
-import playlist.Playlist;
 import playlist.Track;
 import controller.ControllerInterface;
 
@@ -31,7 +31,7 @@ public class ServerSideController implements ControllerInterface {
 		dj.setVolume((double)newVolume);
 	}
 
-	public Playlist getPlaylist() {
+	public List<Track> getPlaylist() {
 		return dj.getPlaylist();
 	}
 	
@@ -44,7 +44,7 @@ public class ServerSideController implements ControllerInterface {
 			filter.put(Track.ALBUM, criteria);
 		}
 		
-		dj.setTracksFiltered(filter);
+		dj.setPlaylistWithFilter(filter);
 	}
 	
 	public int getVolume() {
@@ -59,7 +59,7 @@ public class ServerSideController implements ControllerInterface {
 		dj.play();
 	}
 
-	public void setPlaylist(Playlist p) {
+	public void setPlaylist(List<Track> p) {
 		dj.setPlaylist(p);
 	}
 
@@ -72,8 +72,8 @@ public class ServerSideController implements ControllerInterface {
 	}
 	
 	public void status(){
-		System.out.println(" #Current Track: "+dj.getCurrentPlaying().toString()+" | Playback "+
-				(dj.getPaused()? "Paused" : "Playing")
+		System.out.println(" #Current Track: "+dj.getCurrentTrack().toString()+" | Playback "+
+				(dj.isPaused()? "Paused" : "Playing")
 				);
 	}
 

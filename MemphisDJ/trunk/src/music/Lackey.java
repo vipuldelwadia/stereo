@@ -15,7 +15,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
-import playlist.Playlist;
 import playlist.Track;
 
 import daap.DAAPClient;
@@ -48,7 +47,7 @@ public class Lackey {
 		new WorkerThread().start();
 	}
 	
-	public void checkPlaylist(Playlist check) {
+	public void checkPlaylist(List<Track> check) {
 		for (Iterator<Track> iter = check.iterator(); iter.hasNext();) {
 			Track element = iter.next();
 			if(!tracks.contains(element)){
@@ -65,8 +64,9 @@ public class Lackey {
 		worklist.add(new NewConnectionJob(client));
 	}
 	
-	//internal stuff
 	
+	
+	//internal stuff
 	private Queue<Job> worklist = new LinkedList<Job>();
 	
 	private class WorkerThread extends Thread {

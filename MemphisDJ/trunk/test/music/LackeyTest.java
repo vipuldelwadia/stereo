@@ -1,6 +1,7 @@
 package music;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import static org.junit.Assert.*;
@@ -8,7 +9,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import playlist.Playlist;
 import playlist.Track;
 
 
@@ -42,9 +42,9 @@ public class LackeyTest {
 	@Test
 	public void checkListTest(){
 		Lackey l = new Lackey(null);
-		Playlist p = new Playlist();
+		List<Track> p = new ArrayList<Track>();
 		try {
-			p.addTrack(new Track(new HashMap<Integer, Object>(), new DAAPClient("majoribanks.mcs.vuw.ac.nz", 3689)));
+			p.add(new Track(new HashMap<Integer, Object>(), new DAAPClient("majoribanks.mcs.vuw.ac.nz", 3689)));
 			l.checkPlaylist(p);
 			assertEquals(0, p.size());
 		} catch (IOException e) {

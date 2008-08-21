@@ -1,6 +1,7 @@
 package interfaces;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -16,7 +17,6 @@ import org.eclipse.swt.browser.WindowEvent;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-import playlist.Playlist;
 import playlist.Track;
 
 
@@ -47,7 +47,7 @@ public class GUI extends Thread {
     
     private JTable              table;
     
-    private Playlist            playlist;
+    private List<Track>            playlist;
     private Table               trackList;
     
     /**
@@ -72,7 +72,7 @@ public class GUI extends Thread {
 //            tracks.add(new Track("Lithium6", "Nirvana", "", "Rock", 260));
 //            tracks.add(new Track("Lithium7", "Nirvana", "", "Rock", 260));
             
-            Playlist playlist = new Playlist();
+            List<Track> playlist = new ArrayList<Track>();
             window.setPlaylist(playlist);
         }
         catch (Exception e) {
@@ -130,12 +130,13 @@ public class GUI extends Thread {
         // }
     }
     
-    public void setPlaylist(Playlist p) {
+    public void setPlaylist(List<Track> p) {
         if (p == null || p.size() == 0)
-            populatePlaylist(new Playlist(new ArrayList<Track>()));
+            populatePlaylist(new ArrayList<Track>());
         else {
             populatePlaylist(p);
-            playingTrackUpdated(p.peek());
+            if (!p.isEmpty())
+            	playingTrackUpdated(p.get(0));
         }
     }
     
@@ -200,7 +201,7 @@ public class GUI extends Thread {
      * @throws NullPointerException
      *             if p is null
      */
-    public void playlistUpdated(Playlist p) {
+    public void playlistUpdated(List<Track> p) {
         if (p == null)
             throw new NullPointerException("p must not be null");
         populatePlaylist(p);
@@ -381,7 +382,7 @@ public class GUI extends Thread {
     // pauseButton.setText("Pause");
     // }
     
-    private synchronized void populatePlaylist(Playlist p) {
+    private synchronized void populatePlaylist(List<Track> p) {
         this.playlist = p;
 //        for (Track t : p.getTracks()) {
 //            TableItem TrackItem = new TableItem(trackList, SWT.NONE);

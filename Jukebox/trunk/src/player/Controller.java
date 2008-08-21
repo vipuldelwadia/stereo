@@ -3,8 +3,8 @@ package player;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.List;
 
-import playlist.Playlist;
 import playlist.Track;
 import controller.ControllerInterface;
 
@@ -71,8 +71,8 @@ public class Controller implements ControllerInterface{
     /* (non-Javadoc)
 	 * @see player.ControllerInterface#getPlaylist()
 	 */
-    public Playlist getPlaylist(){
-         return new Playlist(this.dacp.getTracks());
+    public List<Track> getPlaylist(){
+         return this.dacp.getTracks();
     }
     
     /* (non-Javadoc)
@@ -99,7 +99,7 @@ public class Controller implements ControllerInterface{
     	return this.dacp.getVolume();
     }
 
-	public void setPlaylist(Playlist p) {
+	public void setPlaylist(List<Track> p) {
 		ArrayList<Track> tracks = new ArrayList<Track>();
 		for(Track t : tracks) tracks.add(t);
 		this.dacp.setTracks(tracks);

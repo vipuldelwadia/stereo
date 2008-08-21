@@ -1,6 +1,8 @@
 package controller;
 
-import playlist.Playlist;
+import java.util.List;
+
+import playlist.Track;
 
 
 
@@ -17,9 +19,9 @@ public interface ControllerInterface {
 	 */
 	public abstract void playTrack();
 	
-	public abstract void setPlaylist(Playlist p);
+	public abstract void setPlaylist(List<Track> p);
 
-	public abstract Playlist getPlaylist();
+	public abstract List<Track> getPlaylist();
 
 	/**
 	 * change the volume to the stated value
