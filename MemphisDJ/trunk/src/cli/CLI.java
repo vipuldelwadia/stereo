@@ -6,6 +6,8 @@ import java.util.Scanner;
 
 import controller.ControllerInterface;
 
+
+import playlist.Playlist;
 import playlist.Track;
 
 public class CLI {
@@ -33,45 +35,52 @@ public class CLI {
     }
     
     private class Top {
-        public void list() {
-        	List<Track> p = controller.getPlaylist();
+        public void list(String dummy) {
+            Playlist p = controller.getPlaylist();
             for(Track t:p){
                 System.out.println(t.toString());
             }
         }
-        public void play() {
+        public void play(String dummy) {
             controller.playTrack();
-        	status();
+        	status(null);
         }
         
-        public void status(){
+        public void status(String dummy){
         	controller.status();
         }
         
-        public void filter(String type, String s) {
+        public void filter(String param) {
         	//TODO FIX THIS HORRIBLE THING
-        	s=s.replace("_", " ");
-            controller.filter(type, s);
-            status();
+        	//s=s.replace("_", " ");
+        	//String crit = "";
+        	System.out.println(param);
+        	Scanner s = new Scanner(param);
+        	String type,crit;
+        	type=s.hasNext()? s.next().trim(): "";
+        	crit=s.hasNextLine()? s.nextLine().trim():"";
+        	System.out.println("Type: "+type+"|"+crit+"|");
+            controller.filter(type, crit);
+            status(null);
         }
         
-        public void tracklist() {
+        public void tracklist(String dummy) {
         	System.out.println(controller.getPlaylist().toString());
         }
         
-        public void pause() { 
+        public void pause(String dummy) { 
             controller.pauseTrack();
-            status();
+            status(null);
         }
-        public void skip() {
+        public void skip(String dummy) {
             controller.skipTrack();
-            status();
+            status(null);
         }
-        public Object set() {
+        public Object set(String dummy) {
             System.out.println("set");
             return new Set();
         }
-        public void stop(){
+        public void stop(String dummy){
         	System.out.println("Stopped");
         	controller.stop();
         }
@@ -102,17 +111,21 @@ public class CLI {
                 for (Method m: methods) {
                     if (m.getName().equals(name)) {
                         found = true;
-                        String[] params = new String[m.getParameterTypes().length];
-                        for (int i = 0; i < params.length; i++) {
-                            if (sc.hasNext()) {
-                                params[i] = sc.next();
-                            }
-                            else {
-                                System.out.println("wrong parameters");
-                                return;
-                            }
-                        }
-                        o = m.invoke(o, params);
+                        //System.out.println(sc.delimiter());
+                        //sc.useDelimiter("[\\p{javaWhitespace}\"]+");
+                        //System.out.println(sc.delimiter());
+                        //String[] params = new String[m.getParameterTypes().length];
+                        //for (int i = 0; i < params.length; i++) {
+                        //    if (sc.hasNext()) {
+                        //        params[i] = sc.next();
+                        //    }
+                        //    else {
+                        //        System.out.println("wrong parameters");
+                        //        return;
+                        //    }
+                        String params = sc.hasNextLine() ? sc.nextLine() : "";
+                        
+                        m.invoke(o, params);
                     }
                 }
                 if (found == false) {
