@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
 import player.PlaybackListener;
 import playlist.Playlist;
 import playlist.Track;
@@ -70,30 +69,6 @@ public class DJ implements DACPServerListener, PlaybackListener{
 			System.out.println("Library empty: stopped playback.");
 		}
 	}
-	public void fillPlaylistEvenly(){
-		System.out.println("Attempting to fill playlist of size " + getPlaylist().size());
-		Map<DAAPClient, Set<Track>> lib=lackey.getLibrary();
-		Set<DAAPClient> clients= lib.keySet();
-		if (lib != null && !lib.isEmpty()){
-			while(getPlaylist().size() < playlistSize){
-				for(DAAPClient d : clients){
-					Set<Track> tracks=lib.get(d);
-					Track random=tracks.iterator().next();
-					if (random != null){
-						getPlaylist().addTrack(random);
-				}
-
-				}
-			}
-			System.out.println("Playlist size: " + getPlaylist().size());
-			
-		}	
-		else {
-			stop();
-			System.out.println("Library empty: stopped playback.");
-		}
-	}
-
 
 	/**
 	 * 
@@ -154,7 +129,11 @@ public class DJ implements DACPServerListener, PlaybackListener{
 		URL url = DJ.class.getResource("setvolume.sh");
 
 		try {
+			System.out.println("setting volume to " + volume);
 			Process p = Runtime.getRuntime().exec("bash " + url.getFile() + " " + (int)volume);
+			//for (Scanner sc = new Scanner(p.getErrorStream()); sc.hasNextLine();) {
+			//	System.out.println(sc.nextLine());
+			//}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -169,8 +148,9 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	public void skip() {
 		// TODO Auto-generated method stub
+		//playbackFinished();
+		player.stop();
 		playbackFinished();
-
 	}
 
 
@@ -201,9 +181,8 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 
 	public void libraryChanged(){
-		setPlaylist(lackey.checkPlaylist(getPlaylist()));
+		lackey.checkPlaylist(getPlaylist());
 		if (getPlaylist().size() < playlistSize){
-
 			fillPlaylist();	
 		}
 		System.out.println("Library changed: playlist updated");
@@ -219,6 +198,9 @@ public class DJ implements DACPServerListener, PlaybackListener{
 				if (getPlaylist().isEmpty()) return;
 
 				current = getPlaylist().poll();
+				if(((String)current.getTag(Track.NAME)).endsWith(".ogg")||((String)current.getTag(Track.NAME)).endsWith(".wav")){
+					continue;
+				}
 				System.out.println("Polled playlist.");
 				stream = current.getStream();
 				fillPlaylist();
