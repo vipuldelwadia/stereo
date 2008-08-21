@@ -72,13 +72,13 @@ public class DACPServerParser {
 
 		switch(c) {
 		case pause:
-			return new Pause();
+			return new DACPPause();
 		case playpause:
-			return new Play();
+			return new DACPPlay();
 		case setproperty:
 			return setProperty(parameters);
 		case skip:
-			return new Skip();
+			return new DACPSkip();
 		default:
 			throw new IllegalArgumentException("command is not recognised");
 		}
@@ -93,7 +93,7 @@ public class DACPServerParser {
 				
 				if(volume>255 || volume <0) throw new IllegalArgumentException("Volume must be between 0~255"); 
 				
-				return new SetVolume(volume);
+				return new DACPSetVolume(volume);
 			}
 			catch(NumberFormatException e) {
 				throw new IllegalArgumentException("not a vtrl-intalid volume");

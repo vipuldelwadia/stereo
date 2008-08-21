@@ -1,7 +1,7 @@
 package util.command;
 
 
-public class Skip implements DACPCommand {
+public class DACPSkip implements DACPCommand {
 	public String toCommandString() {
 		
 		return "skip";

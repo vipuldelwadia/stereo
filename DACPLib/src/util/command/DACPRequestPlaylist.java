@@ -1,6 +1,6 @@
 package util.command;
 
-public class RequestPlaylist implements DACPCommand {
+public class DACPRequestPlaylist implements DACPCommand {
 
 
 	public String toCommandString() {

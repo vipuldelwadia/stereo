@@ -1,7 +1,7 @@
 package util.command;
 
 
-public class Pause implements DACPCommand {
+public class DACPPause implements DACPCommand {
 
 	public String toCommandString() {
 

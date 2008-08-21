@@ -1,6 +1,6 @@
 package util.command;
 
-public class Play implements DACPCommand {
+public class DACPPlay implements DACPCommand {
 
 	public String toCommandString() {
 		

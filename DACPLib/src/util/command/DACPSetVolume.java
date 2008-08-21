@@ -1,11 +1,11 @@
 package util.command;
 
 
-public class SetVolume implements DACPCommand {
+public class DACPSetVolume implements DACPCommand {
 
 	private final double volume;
 	
-	public SetVolume(double volume) {
+	public DACPSetVolume(double volume) {
 		this.volume = volume;
 	}
 
