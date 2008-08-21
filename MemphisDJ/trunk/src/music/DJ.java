@@ -156,7 +156,7 @@ public class DJ implements PlaybackListener{
 		playlist=getPlaylistWithFilter(c);
 
 		if (!playlist.isEmpty()) {
-			current = playlist.get(0); //TODO removing the track for Party Mode?
+			current = playlist.remove(0);
 			System.out.println("Polled playlist.");
 
 			recentlyPlayedTracks.add(current);
@@ -202,7 +202,7 @@ public class DJ implements PlaybackListener{
 			fillPlaylist();
 			if (getPlaylist().isEmpty()) return;
 
-			current = getPlaylist().get(0);  //TODO remove for party mode?
+			current = getPlaylist().remove(0);
 			recentlyPlayedTracks.add(current);
 			if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
 				recentlyPlayedTracks.poll();
@@ -305,7 +305,7 @@ public class DJ implements PlaybackListener{
 				if (playlist.isEmpty()) fillPlaylist();
 				if (playlist.isEmpty()) return;
 
-				current = playlist.get(0); //TODO remove for party mode?
+				current = playlist.remove(0); 
 				recentlyPlayedTracks.add(current);
 				if(recentlyPlayedTracks.size() > recentlyPlayedTracksSize)
 					recentlyPlayedTracks.poll();
