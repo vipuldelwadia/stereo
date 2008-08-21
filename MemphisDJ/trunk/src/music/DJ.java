@@ -134,7 +134,7 @@ public class DJ implements PlaybackListener{
 			boolean fitCrit=true;
 
 			for(int s : c.keySet()){
-				if (!c.get(s).equals((String)currentTrack.getTag(s)))	 {
+				if (!(c.get(s)).toLowerCase().equals(((String)currentTrack.getTag(s)).toLowerCase()))	 {
 					fitCrit=false;
 					break;
 				}
