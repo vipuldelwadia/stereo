@@ -82,14 +82,21 @@ public class Player implements music.Player {
 
 		private javazoom.jl.player.Player player;
 		private volatile boolean stopped = false;
+		private final InputStream in ;
 
 		public TrackThread(InputStream stream) {
+			in = stream;
 			try {
 				player = new javazoom.jl.player.Player(stream);
 			}
 			catch (JavaLayerException ex) {
 				ex.printStackTrace();
 				player.close();
+				try {
+					in.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				player = null;
 				
 			}
@@ -106,6 +113,11 @@ public class Player implements music.Player {
 				//ex.printStackTrace();
 			}
 			player.close();
+			try {
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			if (!stopped) trackFinished();
 		}
 

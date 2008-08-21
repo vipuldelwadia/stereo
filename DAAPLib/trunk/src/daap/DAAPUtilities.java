@@ -17,6 +17,8 @@ import org.apache.commons.logging.Log;
 
 public class DAAPUtilities {
 
+	HttpClient  client;	
+	
 	protected DAAPUtilities(final String hostname, final Log log) throws IOException {
 		
 		this.names = new HashMap<Integer,String>();
@@ -33,7 +35,7 @@ public class DAAPUtilities {
 		
 		log.debug("daap client: request for http://" + hostname + ":3689/" + request);
 		
-		HttpClient client = new HttpClient();
+		client = new HttpClient();
 		HttpMethod method = new GetMethod("http://" + hostname + ":3689/" + request);
 		
 		InputStream responseBody = null;
@@ -67,6 +69,11 @@ public class DAAPUtilities {
 	
 	protected void release(InputStream request) {
 		if ((request != null) && (this.requests.get(request) != null)) {
+			try {
+				request.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			this.requests.get(request).releaseConnection();
 			this.requests.remove(request);
 		}

@@ -112,7 +112,7 @@ public class DAAPClient {
 		} catch (IOException e) {
 			return null;
 		}finally{
-			helper.release(in);
+			//helper.release(in);
 		}
 	}
 
@@ -123,14 +123,14 @@ public class DAAPClient {
 	}
 
 	public boolean isUpdated() throws ClientExpiredException{
-		int newRevisionNumber = getRevisionNumber();
+		/*int newRevisionNumber = getRevisionNumber();
 		if(newRevisionNumber == -1) throw new ClientExpiredException();
 		if(revisionNumber != newRevisionNumber){
 			revisionNumber = newRevisionNumber;
 			return true;
-		}else{
+		}else{*/
 			return false;
-		}
+		//}
 	}
 
 	private int getSessionID() {
@@ -151,7 +151,7 @@ public class DAAPClient {
 		} catch (IOException e) {
 			return -1;
 		}finally{
-			helper.release(in);
+			//helper.release(in);
 		}
 
 	}
@@ -176,7 +176,7 @@ public class DAAPClient {
 		} catch (IOException e) {
 			return -1;
 		}finally{
-			helper.release(in);
+			//helper.release(in);
 		}
 	}
 
@@ -220,7 +220,7 @@ public class DAAPClient {
 		} catch (IOException e) {
 			return -1;
 		}finally{
-			helper.release(in);
+			//helper.release(in);
 		}
 
 	}
