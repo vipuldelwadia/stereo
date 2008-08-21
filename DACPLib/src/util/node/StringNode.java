@@ -1,7 +1,7 @@
 package util.node;
 
 public class StringNode extends Node {
-    public final String value;
+    private final String value;
     
     public StringNode(int code, int length, String value) {
         super(code, length);
@@ -11,4 +11,8 @@ public class StringNode extends Node {
     public String toString() {
         return "<" + super.toString() + " value=\"" + value + "\" />";
     }
+
+	public String getValue() {
+		return value;
+	}
 }

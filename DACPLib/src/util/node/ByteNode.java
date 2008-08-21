@@ -1,7 +1,7 @@
 package util.node;
 
 public class ByteNode extends Node {
-    public final byte value;
+    private final byte value;
     
     public ByteNode(int code, int length, byte value) {
         super(code, length);
@@ -11,5 +11,9 @@ public class ByteNode extends Node {
     public String toString() {
         return "<" + super.toString() + " value=\"" + value + "\" />";
     }
+
+	public byte getValue() {
+		return value;
+	}
 }
 
