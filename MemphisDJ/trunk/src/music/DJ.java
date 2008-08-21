@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -31,7 +32,7 @@ public class DJ implements PlaybackListener{
 	private Track current;
 
 	private double currentVolume;
-	private Queue<Track> recentlyPlayedTracks;
+	private Queue<Track> recentlyPlayedTracks=new LinkedList<Track>();
 	private int recentlyPlayedTracksSize=30;
 	private boolean paused;
 
@@ -125,8 +126,7 @@ public class DJ implements PlaybackListener{
 	 *            is the word the filter will try to match with.
 	 * @return
 	 */
-	public void setTracksFiltered(Map<Integer, String> c){
-
+	public Playlist getTracksFiltered(Map<Integer, String> c){
 		Playlist returned = new Playlist();
 		List<Track> allTracks = lackey.getAllTracks();
 
@@ -146,11 +146,11 @@ public class DJ implements PlaybackListener{
 			if (fitCrit)returned.addTrack(currentTrack);
 
 		}
+		return returned;
+	}
+	public void setTracksFiltered(Map<Integer, String> c){
 		stop();
-		playlist=returned;
-
-
-
+		playlist=getTracksFiltered(c);
 		if (!playlist.isEmpty()) {
 			current = playlist.poll();
 			System.out.println("Polled playlist.");
