@@ -64,13 +64,11 @@ public class DJ implements PlaybackListener{
 
 	// Stops player if library is empty
 	private void fillPlaylist() {
-		System.out.println("Attempting to fill playlist of size "
-				+ getPlaylist().size());
+		System.out.println("Attempting to fill playlist of size " + getPlaylist().size());
 		List<Track> lib = lackey.getAllTracks();
 		if (lib != null && !lib.isEmpty()) {
 			Collections.shuffle(lib);
-			for (int i = 0; getPlaylist().size() < playlistSize
-			&& i < lib.size(); i++) {
+			for (int i = 0; getPlaylist().size() < playlistSize && i < lib.size(); i++) {
 				Track t = lib.get(i);
 				// unnecessary?
 				if (t != null) {
@@ -148,15 +146,19 @@ public class DJ implements PlaybackListener{
 		}
 		return returned;
 	}
+
 	public void setTracksFiltered(Map<Integer, String> c){
 		stop();
 		playlist=getTracksFiltered(c);
+
 		if (!playlist.isEmpty()) {
 			current = playlist.poll();
 			System.out.println("Polled playlist.");
+
 			recentlyPlayedTracks.add(current);
-			if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
-			recentlyPlayedTracks.poll();
+			if(recentlyPlayedTracks.size() > recentlyPlayedTracksSize)
+				recentlyPlayedTracks.poll();
+
 			try {
 				player.setInputStream(current.getStream());
 			} catch (IOException e) {
@@ -166,6 +168,7 @@ public class DJ implements PlaybackListener{
 
 		}
 	}
+
 	public void play() {
 		player.start();
 		paused=false;
@@ -251,32 +254,37 @@ public class DJ implements PlaybackListener{
 	public void playbackFinished() {
 		InputStream stream = null;
 		System.out.println("Playback finished.");
-		System.out.println("Size of Playlist: " + getPlaylist().size());
+		System.out.println("Size of Playlist: " + playlist.size());
 		while (stream == null) {
 			try {
-				if (getPlaylist().isEmpty()) fillPlaylist();
-				if (getPlaylist().isEmpty()) return;
+				System.out.println("POLLING YEAH " + playlist.size());
+				if (playlist.isEmpty()) fillPlaylist();
+				if (playlist.isEmpty()) return;
 
-				current = getPlaylist().poll();
+				current = playlist.poll();
 				recentlyPlayedTracks.add(current);
-				if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
+				if(recentlyPlayedTracks.size() > recentlyPlayedTracksSize)
 					recentlyPlayedTracks.poll();
-				if(((String)current.getTag(Track.NAME)).endsWith(".ogg")||((String)current.getTag(Track.NAME)).endsWith(".wav")){
-					if (((String) current.getTag(Track.NAME)).endsWith(".ogg")
-							|| ((String) current.getTag(Track.NAME))
-							.endsWith(".wav")) {
-						continue;
-					}
-					System.out.println("Polled playlist.");
-					stream = current.getStream();
-					fillPlaylist();
+
+
+				if (((String) current.getTag(Track.NAME)).endsWith(".ogg")
+						|| ((String) current.getTag(Track.NAME))
+						.endsWith(".wav")) {
+					continue;
 				}
+				System.out.println("Polled playlist.");
+				stream = current.getStream();
+				fillPlaylist();
+
 			}
 			catch (IOException ex) {
 				ex.printStackTrace();
 			}
-			player.setInputStream(stream);
 		}
+
+
+
+		player.setInputStream(stream);
 	}
 	public void playbackStarted() {
 		// TODO Auto-generated method stub
@@ -290,11 +298,11 @@ public class DJ implements PlaybackListener{
 	public Playlist getPlaylist() {
 		return playlist;
 	}
-	
+
 	public Track getCurrentPlaying(){
 		return current;
 	}
-	
+
 	public boolean getPaused(){
 		return paused;
 	}
