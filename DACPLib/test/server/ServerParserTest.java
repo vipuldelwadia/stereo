@@ -4,8 +4,9 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import daccpserver.command.*;
-import dacpserver.DACPServerParser;
+import reader.DACPServerParser;
+import utils.command.*;
+
 
 
 public class ServerParserTest {
@@ -17,7 +18,7 @@ public class ServerParserTest {
 	
 	@Test
 	public void testParsePause() {
-		assertTrue(DACPServerParser.parse("GET ctrl-int/1/pause HTTP/1.1") instanceof Pause);
+		assertTrue(DACPServerParser.parse("GET ctrl-int/1/pause HTTP/1.1") instanceof DACPPause);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)

@@ -12,7 +12,7 @@ import utils.command.*;
 public class DACPServerParser {
 
 
-	public static DACPServerCommandInterface parse(String p) {
+	public static DACPCommand parse(String p) {
 
 		try {
 			Scanner request = new Scanner(p);
@@ -45,7 +45,7 @@ public class DACPServerParser {
 		}
 	}
 
-	private static DACPServerCommandInterface parseControl(Scanner uri){
+	private static DACPCommand parseControl(Scanner uri){
 		String database = uri.next();
 		uri.useDelimiter("\\?"); /*Split the command from the rest of the variables*/
 		String command = uri.next().replaceAll("/", " ").trim();
@@ -85,7 +85,7 @@ public class DACPServerParser {
 
 	}
 
-	private static DACPServerCommandInterface setProperty(Map<String, String> arguments) {
+	private static DACPCommand setProperty(Map<String, String> arguments) {
 		if (arguments.containsKey("dmcp.volume")) {
 			String stringVolume = arguments.get("dmcp.volume");
 			try{

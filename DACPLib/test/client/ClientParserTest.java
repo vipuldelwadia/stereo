@@ -6,7 +6,8 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import dacpclient.DACPClientParser;
+import reader.DACPClientParser;
+
 
 
 public class ClientParserTest {
