@@ -78,7 +78,7 @@ public class Lackey {
 				
 				while (!worklist.isEmpty()) {
 					Job job = worklist.poll();
-					System.out.println(job.getClass());
+					//System.out.println(job.getClass());
 					job.run();
 				}
 				
