@@ -40,4 +40,8 @@ public interface ControllerInterface {
 	public abstract int getVolume();
 
 	public abstract void stop();
+	
+	public abstract void status();
+	
+	public abstract void filter(String type, String criteria);
 }
