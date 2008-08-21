@@ -93,9 +93,9 @@ public class Player implements music.Player {
 				ex.printStackTrace();
 				player = null;
 				try {
-					this.stream.close();
-				} catch (IOException e) {
-					System.out.println("Failed to close the stream");
+					stream.skip(stream.available());
+				} catch (IOException e1) {
+					System.out.println("BROKEN!");
 				}
 			}
 
@@ -112,9 +112,9 @@ public class Player implements music.Player {
 			}
 			player.close();
 			try {
-				this.stream.close();
-			} catch (IOException e) {
-				System.out.println("Failed to close the stream");
+				stream.skip(stream.available());
+			} catch (IOException e1) {
+				System.out.println("BROKEN!");
 			}
 			if (!stopped) trackFinished();
 		}
