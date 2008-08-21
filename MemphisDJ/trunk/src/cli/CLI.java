@@ -7,7 +7,6 @@ import java.util.Scanner;
 import controller.ControllerInterface;
 
 
-import playlist.Playlist;
 import playlist.Track;
 
 public class CLI {
@@ -36,7 +35,7 @@ public class CLI {
     
     private class Top {
         public void list(String dummy) {
-            Playlist p = controller.getPlaylist();
+            List<Track> p = controller.getPlaylist();
             for(Track t:p){
                 System.out.println(t.toString());
             }

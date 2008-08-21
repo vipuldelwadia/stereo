@@ -4,12 +4,13 @@
 package cli;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import music.DJ;
-import playlist.Playlist;
 import playlist.Track;
 import controller.ControllerInterface;
+import daap.DAAPConstants;
 
 /**
  * @author abrahajoav
@@ -31,7 +32,7 @@ public class ServerSideController implements ControllerInterface {
 		dj.setVolume((double)newVolume);
 	}
 
-	public Playlist getPlaylist() {
+	public List<Track> getPlaylist() {
 		return dj.getPlaylist();
 	}
 	
@@ -39,12 +40,12 @@ public class ServerSideController implements ControllerInterface {
 		Map<Integer,String> filter=new HashMap<Integer, String>();
 
 		if (type.equalsIgnoreCase("artist")){
-			filter.put(Track.ARTIST, criteria);
+			filter.put(DAAPConstants.ARTIST, criteria);
 		} else if (type.equalsIgnoreCase("album")){
-			filter.put(Track.ALBUM, criteria);
+			filter.put(DAAPConstants.ALBUM, criteria);
 		}
 		
-		dj.setTracksFiltered(filter);
+		dj.setPlaylistWithFilter(filter);
 	}
 	
 	public int getVolume() {
@@ -59,7 +60,7 @@ public class ServerSideController implements ControllerInterface {
 		dj.play();
 	}
 
-	public void setPlaylist(Playlist p) {
+	public void setPlaylist(List<Track> p) {
 		dj.setPlaylist(p);
 	}
 
@@ -72,12 +73,11 @@ public class ServerSideController implements ControllerInterface {
 	}
 	
 	public void status(){
-		if(dj!=null && dj.getCurrentPlaying()!=null)
-		System.out.println(" #Current Track: "+dj.getCurrentPlaying().toString()+" | Playback "+
-				(dj.getPaused()? "Paused" : "Playing")
+		if(dj!=null && dj.getCurrentTrack()!=null)
+		System.out.println(" #Current Track: "+dj.getCurrentTrack().toString()+" | Playback "+
+				(dj.isPaused()? "Paused" : "Playing")
 				);
 		else
 			System.out.println("No track loaded.");
 	}
-
 }
