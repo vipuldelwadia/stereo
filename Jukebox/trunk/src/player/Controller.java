@@ -113,4 +113,14 @@ public class Controller implements ControllerInterface{
 	public void stop() {
 		this.dacp.stop();
 	}
+
+	public void filter(String type, String criteria) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void status() {
+		// TODO Auto-generated method stub
+		
+	}
 }
