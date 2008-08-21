@@ -301,7 +301,6 @@ public class DJ implements PlaybackListener{
 		System.out.println("Size of Playlist: " + playlist.size());
 		while (stream == null) {
 			try {
-				System.out.println("POLLING YEAH " + playlist.size());
 				if (playlist.isEmpty()) fillPlaylist();
 				if (playlist.isEmpty()) return;
 
