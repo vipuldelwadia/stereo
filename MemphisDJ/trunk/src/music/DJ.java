@@ -7,20 +7,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Queue;
-import java.util.Set;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 import player.PlaybackListener;
 import playlist.Playlist;
 import playlist.Track;
 import daap.DAAPClient;
-import dacpserver.DACPServer;
-import dacpserver.DACPServerListener;
 
-public class DJ implements DACPServerListener, PlaybackListener{
+//public class DJ implements DACPServerListener, PlaybackListener{
+public class DJ implements PlaybackListener{
 
 	private Lackey lackey;
 
@@ -50,8 +48,9 @@ public class DJ implements DACPServerListener, PlaybackListener{
 		player.addPlaybackListener(this);
 
 		try {
-			dacpserver.DACPServer s = new DACPServer(3689);
-			s.addServerListener(this);
+			DACPDJ s = new DACPDJ(3689);
+			//TODO
+			//s.addServerListener(this);
 		} catch (IOException e) {
 			System.out.println("DACP Server initialisation failed.");
 			e.printStackTrace();
