@@ -10,23 +10,25 @@ import javazoom.jl.decoder.JavaLayerException;
 
 public class Player implements music.Player {
 
-	public void pause() {
+	public synchronized void pause() {
 		if (thread != null)
 			thread.suspend();
 	}
 
-	public void setInputStream(InputStream i) {
-
+	public synchronized void setInputStream(InputStream i) {
+		System.out.println("Setting input stream in player");
 		if (thread != null) {
-			stop();
+			thread.resume();
+			thread.close();
+			thread = null;
 		}
-			
+		System.out.println("Making new thread");	
 		thread = new TrackThread(i);
 
 		start();
 	}
 
-	public void start() {
+	public synchronized void start() {
 		if (thread == null);
 		else if (thread.isAlive()) {
 			thread.resume();
@@ -36,36 +38,45 @@ public class Player implements music.Player {
 		}
 	}
 
-	public void stop() {
+	public synchronized void stop() {
 		if (thread != null){
-			thread.close();
 			thread.resume();
+			thread.close();
 			thread = null;
 		}
 	}
-	
+
 	private void trackFinished() {
-		for (PlaybackListener l: listeners){
-			l.playbackFinished();
-		}
+		Thread t = new Thread() {
+			public void run() {
+				for (PlaybackListener l: listeners)
+					l.playbackFinished();
+			}
+		};
+		t.start();
 	}
-	
+
 	private void trackStarted() {
-		for (PlaybackListener l: listeners){
-			l.playbackStarted();
-		}
+		Thread t = new Thread() {
+			public void run() {
+				for (PlaybackListener l: listeners)
+					l.playbackStarted();
+			}
+		};
+		t.start();
 	}
 
 
-	private TrackThread thread;
+	private volatile TrackThread thread;
 
 	private class TrackThread extends Thread {
 
-		private javazoom.jl.player.advanced.AdvancedPlayer player;
+		private javazoom.jl.player.Player player;
+		private volatile boolean stopped = false;
 
 		public TrackThread(InputStream stream) {
 			try {
-				player = new javazoom.jl.player.advanced.AdvancedPlayer(stream);
+				player = new javazoom.jl.player.Player(stream);
 			}
 			catch (JavaLayerException ex) {
 				ex.printStackTrace();
@@ -80,13 +91,15 @@ public class Player implements music.Player {
 				player.play();
 			}
 			catch (JavaLayerException ex) {
-				ex.printStackTrace();
+				System.out.println("playback stopped with an exception");
+				//ex.printStackTrace();
 			}
-			
-			trackFinished();
+
+			if (!stopped) trackFinished();
 		}
 
 		public void close() {
+			stopped = true;
 			player.close();
 		}
 	}
@@ -98,6 +111,6 @@ public class Player implements music.Player {
 	public void removePlaybackListener(PlaybackListener l) {
 		listeners.remove(l);
 	}
-	
+
 	private Set<PlaybackListener> listeners = new HashSet<PlaybackListener>();
 }
