@@ -3,17 +3,22 @@ package music;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 import java.util.Map;
 
 import player.PlaybackListener;
 import playlist.Playlist;
 import playlist.Track;
+import daap.DAAPClient;
 import dacpserver.DACPServer;
 import dacpserver.DACPServerListener;
 
-public class DJ implements DACPServerListener, PlaybackListener {
+public class DJ implements DACPServerListener, PlaybackListener{
 
 	private Lackey lackey;
 
@@ -26,14 +31,14 @@ public class DJ implements DACPServerListener, PlaybackListener {
 	private Track current;
 
 	private double currentVolume;
-	
+	private Set<Track> recentlyPlayedTracks;
 	private boolean paused;
 
-	// private static final DJ instance = new DJ();
+//	private static final DJ instance = new DJ();
 
-	// public static DJ getInstance() {
-	// return instance;
-	// }
+//	public static DJ getInstance() {
+//	return instance;
+//	}
 
 	public DJ() {
 		init();
@@ -62,7 +67,7 @@ public class DJ implements DACPServerListener, PlaybackListener {
 		if (lib != null && !lib.isEmpty()) {
 			Collections.shuffle(lib);
 			for (int i = 0; getPlaylist().size() < playlistSize
-					&& i < lib.size(); i++) {
+			&& i < lib.size(); i++) {
 				Track t = lib.get(i);
 				// unnecessary?
 				if (t != null) {
@@ -76,7 +81,40 @@ public class DJ implements DACPServerListener, PlaybackListener {
 			System.out.println("Library empty: stopped playback.");
 		}
 	}
-
+	/** This method will attempt to create a playlist so that people with the most will still
+	 * get there music played evenly. It also makes sure that the tracks have not been recently played
+	 *
+	 */
+	private void fillPlaylistEvenly(){
+		Map<DAAPClient, Set<Track>> clientsTracks=libraryToOwnerMap();
+		if (clientsTracks != null && !clientsTracks.isEmpty()){
+			while (getPlaylist().size() < playlistSize){
+				Set<DAAPClient> clients=clientsTracks.keySet();
+				for(DAAPClient c: clients){
+					Set<Track> clientTracks =clientsTracks.get(c);
+					List<Track> orderedClientTracks=new ArrayList(clientTracks);
+					Track t=orderedClientTracks.get((int)Math.random() % orderedClientTracks.size());
+					if(!(recentlyPlayedTracks.contains(t))){	
+						playlist.addTrack(t);
+					}
+				}
+			}
+		}
+		else {
+			stop();
+			System.out.println("Library empty: stopped playback.");
+		}
+	}
+	private Map<DAAPClient, Set<Track>> libraryToOwnerMap(){
+		List<Track> lib = lackey.getAllTracks();
+		Map<DAAPClient, Set<Track>> clientsTracks=new HashMap<DAAPClient, Set<Track>>();
+		for(Track t:lib){
+			if(!(clientsTracks.containsKey(t.getParent())))clientsTracks.put(t.getParent(), new HashSet<Track>());
+			Set<Track> clientTracks=clientsTracks.get(t.getParent());
+			clientTracks.add(t);
+		}	
+		return clientsTracks;
+	}
 	/**
 	 * 
 	 * @param c
@@ -85,57 +123,56 @@ public class DJ implements DACPServerListener, PlaybackListener {
 	 *            is the word the filter will try to match with.
 	 * @return
 	 */
-	public void setTracksFiltered(Map<Integer, String> c) {
+	public void setTracksFiltered(Map<Integer, String> c){
 
 		Playlist returned = new Playlist();
 		List<Track> allTracks = lackey.getAllTracks();
 
-		// Search through every criteria for potential matches
-		for (int i = 0; i < allTracks.size(); i++) {
+		//Search through every criteria for potential matches
+		for(int i=0;i<allTracks.size();i++){
 
-			Track currentTrack = allTracks.get(i);
-			boolean fitCrit = true;
+			Track currentTrack=allTracks.get(i);
+			boolean fitCrit=true;
 
-			for (int s : c.keySet()) {
-				System.out.println("checking " + c.get(s) + " against "
-						+ (String) currentTrack.getTag(s));
-				if (!c.get(s).equalsIgnoreCase((String) currentTrack.getTag(s))) {
-					fitCrit = false;
+			for(int s : c.keySet()){
+				if (!c.get(s).equals((String)currentTrack.getTag(s)))	 {
+					fitCrit=false;
 					break;
 				}
 			}
 
-			if (fitCrit)
-				returned.addTrack(currentTrack);
+			if (fitCrit)returned.addTrack(currentTrack);
 
 		}
 		stop();
-		playlist = returned;
+		playlist=returned;
+
+
 
 		if (!playlist.isEmpty()) {
 			current = playlist.poll();
 			System.out.println("Polled playlist.");
-
+			recentlyPlayedTracks.add(current);
 			try {
 				player.setInputStream(current.getStream());
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 
+
 		}
 	}
-
 	public void play() {
 		player.start();
 		paused=false;
 	}
 
-	public void pause() {
+	public void pause(){
 		player.pause();
 		paused=true;
 	}
 
-	public void stop() {
+	public void stop(){
 		player.stop();
 		paused=true;
 	}
@@ -157,9 +194,10 @@ public class DJ implements DACPServerListener, PlaybackListener {
 			e.printStackTrace();
 		}
 
+
 	}
 
-	public double getVolume() {
+	public double getVolume(){
 		return currentVolume;
 	}
 
@@ -168,19 +206,20 @@ public class DJ implements DACPServerListener, PlaybackListener {
 		playbackFinished();
 	}
 
-	// Starts the player if playlist was empty
-	public void tracksAdded() {
 
-		//System.out.println("tracks added");
+	//Starts the player if playlist was empty
+	public void tracksAdded(){
 
-		if (getPlaylist().isEmpty()) {
+		System.out.println("tracks added");
+
+		if(getPlaylist().isEmpty()){
 
 			fillPlaylist();
-			if (getPlaylist().isEmpty())
-				return;
+			if (getPlaylist().isEmpty()) return;
 
 			current = getPlaylist().poll();
-			//System.out.println("Polled playlist.");
+			recentlyPlayedTracks.add(current);
+			System.out.println("Polled playlist.");
 			try {
 				player.setInputStream(current.getStream());
 			} catch (IOException e) {
@@ -188,16 +227,17 @@ public class DJ implements DACPServerListener, PlaybackListener {
 				e.printStackTrace();
 			}
 		}
-		if (getPlaylist().size() < playlistSize) {
-			fillPlaylist();
+		if (getPlaylist().size() < playlistSize){
+			fillPlaylist();	
 		}
 
 	}
 
-	public void libraryChanged() {
+
+	public void libraryChanged(){
 		lackey.checkPlaylist(getPlaylist());
-		if (getPlaylist().size() < playlistSize) {
-			fillPlaylist();
+		if (getPlaylist().size() < playlistSize){
+			fillPlaylist();	
 		}
 		System.out.println("Library changed: playlist updated");
 	}
@@ -205,30 +245,31 @@ public class DJ implements DACPServerListener, PlaybackListener {
 	public void playbackFinished() {
 		InputStream stream = null;
 		System.out.println("Playback finished.");
-		//System.out.println("Size of Playlist: " + getPlaylist().size());
+		System.out.println("Size of Playlist: " + getPlaylist().size());
 		while (stream == null) {
 			try {
-				if (getPlaylist().isEmpty())
-					fillPlaylist();
-				if (getPlaylist().isEmpty())
-					return;
+				if (getPlaylist().isEmpty()) fillPlaylist();
+				if (getPlaylist().isEmpty()) return;
 
 				current = getPlaylist().poll();
-				if (((String) current.getTag(Track.NAME)).endsWith(".ogg")
-						|| ((String) current.getTag(Track.NAME))
-								.endsWith(".wav")) {
-					continue;
+				recentlyPlayedTracks.add(current);
+				if(((String)current.getTag(Track.NAME)).endsWith(".ogg")||((String)current.getTag(Track.NAME)).endsWith(".wav")){
+					if (((String) current.getTag(Track.NAME)).endsWith(".ogg")
+							|| ((String) current.getTag(Track.NAME))
+							.endsWith(".wav")) {
+						continue;
+					}
+					System.out.println("Polled playlist.");
+					stream = current.getStream();
+					fillPlaylist();
 				}
-				//System.out.println("Polled playlist.");
-				stream = current.getStream();
-				fillPlaylist();
-			} catch (IOException ex) {
+			}
+			catch (IOException ex) {
 				ex.printStackTrace();
 			}
+			player.setInputStream(stream);
 		}
-		player.setInputStream(stream);
 	}
-
 	public void playbackStarted() {
 		// TODO Auto-generated method stub
 
@@ -241,20 +282,10 @@ public class DJ implements DACPServerListener, PlaybackListener {
 	public Playlist getPlaylist() {
 		return playlist;
 	}
-	
-	public Track getCurrentPlaying(){
-		return current;
-	}
-	
-	public boolean getPaused(){
-		return paused;
-	}
-	
 
-	public static void main(String[] args) {
+	public static void main(String[] args){
 
 		DJ a = new DJ();
-		//a.init();
 
 	}
 
