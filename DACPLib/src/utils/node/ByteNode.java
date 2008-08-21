@@ -1,4 +1,4 @@
-package dacpclient.node;
+package utils.node;
 
 public class ByteNode extends Node {
     public final byte value;

@@ -1,4 +1,4 @@
-package dacpserver;
+package utils;
 
 public interface DACPPacket {
 	//dacp known tags

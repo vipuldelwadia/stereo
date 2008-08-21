@@ -1,11 +1,12 @@
-package dacpserver;
+package reader;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import daccpserver.command.*;
+import utils.command.*;
+
 
 
 public class DACPServerParser {

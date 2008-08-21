@@ -1,4 +1,4 @@
-package dacpclient.node;
+package utils.node;
 
 public class LongLongNode extends Node {
     public final long value;

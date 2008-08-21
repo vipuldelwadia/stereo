@@ -4,11 +4,11 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import daccpserver.command.Pause;
-import daccpserver.command.Play;
-import daccpserver.command.RequestPlaylist;
-import daccpserver.command.SetVolume;
-import daccpserver.command.Skip;
+import utils.command.Pause;
+import utils.command.Play;
+import utils.command.RequestPlaylist;
+import utils.command.SetVolume;
+import utils.command.Skip;
 
 public class DACPWriter {
 

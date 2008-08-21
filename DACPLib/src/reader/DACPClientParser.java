@@ -1,4 +1,4 @@
-package dacpclient;
+package reader;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -10,14 +10,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-import dacpclient.node.BooleanNode;
-import dacpclient.node.ByteNode;
-import dacpclient.node.Composite;
-import dacpclient.node.IntegerNode;
-import dacpclient.node.LongLongNode;
-import dacpclient.node.LongNode;
-import dacpclient.node.Node;
-import dacpclient.node.StringNode;
+import utils.node.BooleanNode;
+import utils.node.ByteNode;
+import utils.node.Composite;
+import utils.node.IntegerNode;
+import utils.node.LongLongNode;
+import utils.node.LongNode;
+import utils.node.Node;
+import utils.node.StringNode;
+
 
 public class DACPClientParser {
     

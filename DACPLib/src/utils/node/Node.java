@@ -1,4 +1,4 @@
-package dacpclient.node;
+package utils.node;
 
 public class Node {
     public final int code;

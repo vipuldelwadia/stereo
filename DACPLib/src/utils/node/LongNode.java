@@ -1,9 +1,9 @@
-package dacpclient.node;
+package utils.node;
 
-public class StringNode extends Node {
-    public final String value;
+public class LongNode extends Node {
+    public final long value;
     
-    public StringNode(int code, int length, String value) {
+    public LongNode(int code, int length, long value) {
         super(code, length);
         this.value = value;
     }

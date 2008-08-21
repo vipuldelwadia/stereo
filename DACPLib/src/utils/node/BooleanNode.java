@@ -1,4 +1,4 @@
-package dacpclient.node;
+package utils.node;
 
 public class BooleanNode extends Node {
     public final boolean value;
