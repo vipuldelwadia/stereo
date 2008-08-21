@@ -1,6 +1,6 @@
 package writer;
 
-import utils.DACPPacket;
+import util.DACPPacket;
 
 
 public class DACPStatusPacket implements DACPPacket {
