@@ -91,7 +91,7 @@ public class DACPRequestParser {
 		if (arguments.containsKey("dmcp.volume")) {
 			String stringVolume = arguments.get("dmcp.volume");
 			try{
-				Double volume = Double.parseDouble(stringVolume);	
+				Integer volume = Integer.parseInt(stringVolume);	
 				
 				if(volume>255 || volume <0) throw new IllegalArgumentException("Volume must be between 0~255"); 
 				
