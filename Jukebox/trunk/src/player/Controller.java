@@ -3,15 +3,10 @@ package player;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.List;
-
-import controller.ControllerInterface;
 
 import playlist.Playlist;
 import playlist.Track;
-
-
-import dacpclient.DACPClient;
+import controller.ControllerInterface;
 
 
 /**
@@ -23,7 +18,7 @@ public class Controller implements ControllerInterface{
     
     private final static boolean    DEBUG    = false;
     
-    private DACPClient              dacp;
+    private DACPHeckler              dacp;
     
     public Controller() {
         this.connect();
@@ -35,7 +30,7 @@ public class Controller implements ControllerInterface{
         
         if (this.dacp == null) {
             try {
-                this.dacp = new DACPClient("climie", 3689);
+                this.dacp = new DACPHeckler("climie", 3689);
                 return true;
             }
             catch (UnknownHostException e) {
