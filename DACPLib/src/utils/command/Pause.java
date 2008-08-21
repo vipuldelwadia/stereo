@@ -1,4 +1,4 @@
-package utils.commands;
+package utils.command;
 
 
 public class Pause implements DACPCommand {
