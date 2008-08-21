@@ -16,6 +16,7 @@ import java.util.Set;
 import player.PlaybackListener;
 import playlist.Track;
 import daap.DAAPClient;
+import daap.DAAPConstants;
 
 //public class DJ implements DACPServerListener, PlaybackListener{
 public class DJ implements PlaybackListener{
@@ -310,8 +311,8 @@ public class DJ implements PlaybackListener{
 					recentlyPlayedTracks.poll();
 
 
-				if (((String) current.getTag(Track.NAME)).endsWith(".ogg")
-						|| ((String) current.getTag(Track.NAME))
+				if (((String) current.getTag(DAAPConstants.NAME)).endsWith(".ogg")
+						|| ((String) current.getTag(DAAPConstants.NAME))
 						.endsWith(".wav")) {
 					continue;
 				}

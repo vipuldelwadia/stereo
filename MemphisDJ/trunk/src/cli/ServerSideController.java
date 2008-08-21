@@ -10,6 +10,7 @@ import java.util.Map;
 import music.DJ;
 import playlist.Track;
 import controller.ControllerInterface;
+import daap.DAAPConstants;
 
 /**
  * @author abrahajoav
@@ -39,9 +40,9 @@ public class ServerSideController implements ControllerInterface {
 		Map<Integer,String> filter=new HashMap<Integer, String>();
 
 		if (type.equalsIgnoreCase("artist")){
-			filter.put(Track.ARTIST, criteria);
+			filter.put(DAAPConstants.ARTIST, criteria);
 		} else if (type.equalsIgnoreCase("album")){
-			filter.put(Track.ALBUM, criteria);
+			filter.put(DAAPConstants.ALBUM, criteria);
 		}
 		
 		dj.setPlaylistWithFilter(filter);
