@@ -3,9 +3,13 @@
  */
 package cli;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import music.DJ;
-import controller.ControllerInterface;
 import playlist.Playlist;
+import playlist.Track;
+import controller.ControllerInterface;
 
 /**
  * @author abrahajoav
@@ -30,7 +34,19 @@ public class ServerSideController implements ControllerInterface {
 	public Playlist getPlaylist() {
 		return dj.getPlaylist();
 	}
+	
+	public void filter(String type, String criteria){
+		Map<Integer,String> filter=new HashMap<Integer, String>();
 
+		if (type.equalsIgnoreCase("artist")){
+			filter.put(Track.ARTIST, criteria);
+		} else if (type.equalsIgnoreCase("album")){
+			filter.put(Track.ALBUM, criteria);
+		}
+		
+		dj.setTracksFiltered(filter);
+	}
+	
 	public int getVolume() {
 		return (int)dj.getVolume();
 	}
@@ -53,6 +69,12 @@ public class ServerSideController implements ControllerInterface {
 
 	public void stop() {
 		dj.stop();
+	}
+	
+	public void status(){
+		System.out.println(" #Current Track: "+dj.getCurrentPlaying().toString()+" | Playback "+
+				(dj.getPaused()? "Paused" : "Playing")
+				);
 	}
 
 }

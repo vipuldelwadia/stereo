@@ -42,18 +42,38 @@ public class CLI {
         }
         public void play() {
             controller.playTrack();
+        	status();
         }
-        public void pause() {
+        
+        public void status(){
+        	controller.status();
+        }
+        
+        public void filter(String type, String s) {
+        	//TODO FIX THIS HORRIBLE THING
+        	s=s.replace("_", " ");
+            controller.filter(type, s);
+            status();
+        }
+        
+        public void tracklist() {
+        	System.out.println(controller.getPlaylist().toString());
+        }
+        
+        public void pause() { 
             controller.pauseTrack();
+            status();
         }
         public void skip() {
             controller.skipTrack();
+            status();
         }
         public Object set() {
             System.out.println("set");
             return new Set();
         }
         public void stop(){
+        	System.out.println("Stopped");
         	controller.stop();
         }
     }
@@ -75,7 +95,6 @@ public class CLI {
         Scanner sc = new Scanner(input);
         
         Object o = new Top();
-        
         while (sc.hasNext()) {
             try {
                 Method[] methods = o.getClass().getMethods();
