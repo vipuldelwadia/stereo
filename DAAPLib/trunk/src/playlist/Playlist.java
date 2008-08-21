@@ -54,5 +54,13 @@ public class Playlist implements Iterable<Track> {
 		return tracks.isEmpty();
 	}
 
+	public String toString(){
+		String listing = "";
+		for (Track t: tracks){
+			listing +=t.toString() + "\n";
+		}
+		
+		return listing;
+	}
 	
 }

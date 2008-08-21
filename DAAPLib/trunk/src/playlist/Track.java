@@ -55,4 +55,8 @@ public class Track {
 		return publisher.getStream(this);
 	}
 	
+	public String toString(){
+		 return String.format("%-25s %-25s %-25s",getTag(Track.ARTIST),getTag(Track.ALBUM),getTag(Track.NAME));
+	}
+	
 }
