@@ -10,13 +10,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-
 import playlist.Track;
 import reader.DACPResponseParser;
 import util.node.Composite;
 import util.node.Node;
-import util.serializer.DACPReader;
+import util.node.StringNode;
 import writer.DACPRequestGenerator;
+import daap.DAAPConstants;
 
 public class DACPHeckler {
 
@@ -29,7 +29,7 @@ public class DACPHeckler {
 		this.HOST = host;
 		this.PORT = port;
 		connect();
-		listen();
+//		listen();
 		this.p = new PrintStream(sock.getOutputStream());
 	}
 
@@ -37,30 +37,30 @@ public class DACPHeckler {
 		sock = new Socket(HOST, PORT);
 	}
 	
-	private void listen() {
-		new Thread() {
-			public void run() {
-				while(true) {
-				try {
-					InputStream in = response();
-					if (in != null) {
-						DACPResponseParser r = new DACPResponseParser();
-						Composite c = r.parse(in);
-						translateResponse(c);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			}
-		}.start();
-	}
+//	private void listen() {
+//		new Thread() {
+//			public void run() {
+//				while(true) {
+//				try {
+//					InputStream in = response();
+//					if (in != null) {
+//						DACPResponseParser r = new DACPResponseParser();
+//						Composite c = r.parse(in);
+//						translateResponse(c);
+//					}
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//			}
+//		}.start();
+//	}
 	
-	private void translateResponse(Composite c) {
-		String code = c.intToCode(c.code);
+	private Object translateResponse(Composite c) {
+		String code = Node.intToCode(c.code);
 		if ("cmst".equals(code)) {
 			Track t = buildTrack(c);
-			// TODO pass t to Controller
+			return t;
 		}
 		else if ("apso".equals(code)) {
 			List<Track> tracks = new ArrayList<Track>();
@@ -69,15 +69,45 @@ public class DACPHeckler {
 					tracks.add(buildTrack((Composite) n));
 				}
 			}
-			// TODO pass tracks to Controller
+			return tracks;
 		}
-		else {
-			// TODO deal with other kinds
-		}
+		else return null;
 	}
 
 	private Track buildTrack(Composite c) {
 		Map<Integer, Object> fields = new HashMap<Integer, Object>();
+		
+		for(Node node : c.nodes) {
+			int code = node.code;
+			
+			if (DAAPConstants.ALBUM == code && node instanceof StringNode) {
+				fields.put(new Integer(DAAPConstants.ALBUM), ((StringNode)node).getValue());
+			}
+			else if (DAAPConstants.ARTIST == code && node instanceof StringNode) {
+				fields.put(new Integer(DAAPConstants.ARTIST), ((StringNode)node).getValue());
+			}
+			else if (DAAPConstants.BITRATE == code && node instanceof StringNode) {
+				fields.put(new Integer(DAAPConstants.BITRATE), ((StringNode)node).getValue());
+			}
+			else if (DAAPConstants.COMPOSER == code && node instanceof StringNode) {
+				fields.put(new Integer(DAAPConstants.COMPOSER), ((StringNode)node).getValue());
+			}
+			else if (DAAPConstants.GENRE == code && node instanceof StringNode) {
+				fields.put(new Integer(DAAPConstants.GENRE), ((StringNode)node).getValue());
+			}
+			else if (DAAPConstants.NAME == code && node instanceof StringNode) {
+				fields.put(new Integer(DAAPConstants.NAME), ((StringNode)node).getValue());
+			}
+			else if (DAAPConstants.SONG_TIME == code && node instanceof StringNode) {
+				fields.put(new Integer(DAAPConstants.SONG_TIME), ((StringNode)node).getValue());
+			}
+			else if (DAAPConstants.START_TIME == code && node instanceof StringNode) {
+				fields.put(new Integer(DAAPConstants.START_TIME), ((StringNode)node).getValue());
+			}
+			else if (DAAPConstants.STOP_TIME == code && node instanceof StringNode) {
+				fields.put(new Integer(DAAPConstants.STOP_TIME), ((StringNode)node).getValue());
+			}
+		}
 		
 		return new Track(fields, null);
 	}
@@ -182,8 +212,34 @@ public class DACPHeckler {
 	}
 	
 	public List<Track> getTracks(){
-		//TODO
-		return null;
+		List<Track> tracks = new ArrayList<Track>();
+		try {
+			send(DACPRequestGenerator.getTracks());
+			InputStream in;
+			in = response();
+			if (in != null) {
+				DACPResponseParser r = new DACPResponseParser();
+				Composite c = r.parse(in);
+				Object o = translateResponse(c);
+				if (o != null){
+					if (o instanceof List){
+						for (Object e : (List)o){
+							if (e instanceof Track)
+								tracks.add((Track)e);
+						}
+					}
+					else if (o instanceof Track){
+						tracks.add((Track)o);
+					}
+				}
+			}
+			
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return tracks;
 	}
 	
 	public void setTracks(List<Track> l){
