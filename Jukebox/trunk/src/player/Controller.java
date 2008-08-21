@@ -105,7 +105,12 @@ public class Controller implements ControllerInterface{
     }
 
 	public void setPlaylist(Playlist p) {
-		// TODO Auto-generated method stub
-		
+		ArrayList<Track> tracks = new ArrayList<Track>();
+		for(Track t : tracks) tracks.add(t);
+		this.dacp.setTracks(tracks);
+	}
+
+	public void stop() {
+		this.dacp.stop();
 	}
 }

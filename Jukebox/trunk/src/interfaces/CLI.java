@@ -54,6 +54,9 @@ public class CLI {
             System.out.println("set");
             return new Set();
         }
+        public void stop(){
+        	controller.stop();
+        }
     }
     
     private class Set {

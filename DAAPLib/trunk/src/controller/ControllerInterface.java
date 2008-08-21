@@ -39,4 +39,5 @@ public interface ControllerInterface {
 
 	public abstract int getVolume();
 
+	public abstract void stop();
 }

@@ -51,4 +51,8 @@ public class ServerSideController implements ControllerInterface {
 		dj.skip();
 	}
 
+	public void stop() {
+		dj.stop();
+	}
+
 }

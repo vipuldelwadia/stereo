@@ -64,12 +64,21 @@ public class DACPClient {
 		return null;
 	}
 	
+	public void setTracks(List<Track> l){
+		//TODO
+	}
+	
 	private void send(String command) {
 		p.println("GET /ctrl-int/1/" + command + " HTTP/1.1\r\n");
 	}
 
 	public static void main(String[] args) throws UnknownHostException, IOException{
 		new DACPClient("climie", 51234);
+	}
+
+	public void stop() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
