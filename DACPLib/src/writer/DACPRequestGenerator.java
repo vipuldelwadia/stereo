@@ -15,7 +15,7 @@ public class DACPRequestGenerator {
 	}
 
 	public static String getTracks() {
-		return "gettracks";
+		return "requestplaylist";
 	}
 
 	public static String changeVolume(double newVolume) {
