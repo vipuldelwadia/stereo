@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.Queue;
 import java.util.Set;
 import java.util.List;
 import java.util.Map;
@@ -31,7 +33,8 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	private Track current;
 
 	private double currentVolume;
-	private Set<Track> recentlyPlayedTracks;
+	private Queue<Track> recentlyPlayedTracks;
+	private int recentlyPlayedTracksSize=30;
 	private boolean paused;
 
 //	private static final DJ instance = new DJ();
@@ -153,6 +156,8 @@ public class DJ implements DACPServerListener, PlaybackListener{
 			current = playlist.poll();
 			System.out.println("Polled playlist.");
 			recentlyPlayedTracks.add(current);
+			if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
+			recentlyPlayedTracks.poll();
 			try {
 				player.setInputStream(current.getStream());
 			} catch (IOException e) {
@@ -219,6 +224,8 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 			current = getPlaylist().poll();
 			recentlyPlayedTracks.add(current);
+			if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
+				recentlyPlayedTracks.poll();
 			System.out.println("Polled playlist.");
 			try {
 				player.setInputStream(current.getStream());
@@ -253,6 +260,8 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 				current = getPlaylist().poll();
 				recentlyPlayedTracks.add(current);
+				if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
+					recentlyPlayedTracks.poll();
 				if(((String)current.getTag(Track.NAME)).endsWith(".ogg")||((String)current.getTag(Track.NAME)).endsWith(".wav")){
 					if (((String) current.getTag(Track.NAME)).endsWith(".ogg")
 							|| ((String) current.getTag(Track.NAME))
