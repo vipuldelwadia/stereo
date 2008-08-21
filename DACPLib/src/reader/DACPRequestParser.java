@@ -9,7 +9,7 @@ import util.command.*;
 
 
 
-public class DACPServerParser {
+public class DACPRequestParser {
 
 
 	public static DACPCommand parse(String p) {

@@ -20,7 +20,7 @@ import util.node.Node;
 import util.node.StringNode;
 
 
-public class DACPClientParser {
+public class DACPResponseParser {
     
 	public static final int cmst = parseInt("cmst");
 	public static final int mstt = parseInt("mstt");
@@ -67,7 +67,7 @@ public class DACPClientParser {
 //        
 //    }
     
-    public DACPClientParser() {    	
+    public DACPResponseParser() {    	
     	reply = new Handler();
     	
     	addStatusUpdate(reply);

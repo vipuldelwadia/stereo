@@ -6,17 +6,17 @@ import java.io.InputStream;
 import org.junit.Before;
 import org.junit.Test;
 
-import reader.DACPClientParser;
+import reader.DACPResponseParser;
 
 
 
 public class ClientParserTest {
 
-	DACPClientParser client;
+	DACPResponseParser client;
 
 	@Before
 	public void setup() {
-		client = new DACPClientParser();
+		client = new DACPResponseParser();
 	}
 
 	@Test

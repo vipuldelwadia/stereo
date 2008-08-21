@@ -1,6 +1,6 @@
 package writer;
 
-public class DACPClientBroadcaster {
+public class DACPRequestGenerator {
 	
 	public static String play() {
 		return "playpause";
