@@ -9,6 +9,15 @@ import music.DJ;
 import javazoom.jl.decoder.JavaLayerException;
 
 public class Player implements music.Player {
+	
+	public Player() {
+		final Player player = this;
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			public void run () {
+				player.stop();
+			}
+		});
+	}
 
 	public synchronized void pause() {
 		if (thread != null)
@@ -94,6 +103,7 @@ public class Player implements music.Player {
 				System.out.println("playback stopped with an exception");
 				//ex.printStackTrace();
 			}
+			player.close();
 
 			if (!stopped) trackFinished();
 		}
