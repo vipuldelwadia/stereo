@@ -52,20 +52,6 @@ public class DACPResponseParser {
 	public static final int mper = parseInt("mper");
 	
     private Handler reply;
-	
-//    public static void main(String args[]) {
-//        
-//        String host = null;// "127.0.0.1";
-//        int port = 3689;
-//        
-//        try {
-//            new Client().getContentCodes(host, port);
-//        }
-//        catch (UnknownHostException e) {
-//            System.err.println(host + " is not known");
-//        }
-//        
-//    }
     
     public DACPResponseParser() {    	
     	reply = new Handler();
@@ -77,17 +63,21 @@ public class DACPResponseParser {
     
     private InputStream stream;
     
-    public void parse(InputStream stream) {
+    public Composite parse(InputStream stream) {
     	this.stream = stream;
 
         int c = readInteger(stream);
         int b = readInteger(stream);
         Node tree = this.reply.visit(c, b);
         
-        System.out.println(tree.length);
-        for (Node n : ((Composite) tree).nodes) {
-        	System.out.println(n);
-        }
+        
+        
+        return (Composite) tree;
+        
+//        System.out.println(tree.length);
+//        for (Node n : ((Composite) tree).nodes) {
+//        	System.out.println(n);
+//        }
     }
     
     public void addStatusUpdate(Handler reply) {
@@ -127,29 +117,6 @@ public class DACPResponseParser {
         trackHandler.register(asar, new StringNodeHandler());
         trackHandler.register(mper, new LongNodeHandler());
         
-    }
-    
-    public void getContentCodes(String host, int port) throws UnknownHostException {
-        
-        try {
-            InputStream stream = request(host, port, "/content-codes");
-            
-            parse(stream);
-            
-           //   System.out.println(tree);
-            
-//            for (Node n : ((Composite) tree).nodes) {
-//                if (n.code == mdcl) {
-//                    Composite cc = (Composite) n;
-//                    System.out.printf("%s\t%d\t%s\n", ((StringNode) cc.nodes.get(0)).value, ((IntegerNode) cc.nodes.get(2)).value, ((StringNode) cc.nodes
-//                            .get(1)).value);
-//                }
-//            }
-            
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
     }
     
     private class Handler {
