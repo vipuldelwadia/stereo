@@ -8,4 +8,9 @@ public class Skip implements DACPServerCommandInterface {
 		s.skip();
 	}
 
+	public String toCommandString() {
+		
+		return "skip";
+	}
+
 }

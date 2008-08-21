@@ -14,4 +14,9 @@ public class SetVolume implements DACPServerCommandInterface {
 		s.setVolume(volume);
 	}
 
+	public String toCommandString() {
+		
+		return "setvolume=" + volume;
+	}
+
 }

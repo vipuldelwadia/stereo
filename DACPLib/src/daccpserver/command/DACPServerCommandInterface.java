@@ -4,4 +4,5 @@ import dacpserver.DACPServerListener;
 
 public interface DACPServerCommandInterface {
 	public void doAction(DACPServerListener s);
+	public String toCommandString();
 }

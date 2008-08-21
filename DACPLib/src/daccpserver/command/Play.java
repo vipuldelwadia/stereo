@@ -8,4 +8,9 @@ public class Play implements DACPServerCommandInterface {
 		s.play();
 	}
 
+	public String toCommandString() {
+		
+		return "playpause";
+	}
+
 }

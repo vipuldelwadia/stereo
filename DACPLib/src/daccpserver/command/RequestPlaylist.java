@@ -2,15 +2,15 @@ package daccpserver.command;
 
 import dacpserver.DACPServerListener;
 
-public class Pause implements DACPServerCommandInterface {
+public class RequestPlaylist implements DACPServerCommandInterface {
 
 	public void doAction(DACPServerListener s) {
-		s.pause();
+		// TODO Auto-generated method stub
+
 	}
 
 	public String toCommandString() {
-
-		return "pause";
+		return "request?playlist";
 	}
 
 }
