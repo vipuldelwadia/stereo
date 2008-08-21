@@ -17,9 +17,13 @@ import org.apache.commons.logging.Log;
 
 public class DAAPUtilities {
 
-	HttpClient  client;	
+	private HttpClient  client;	
+	private HttpClient  clientSong;	
 	
 	protected DAAPUtilities(final String hostname, final Log log) throws IOException {
+		
+		client = new HttpClient();
+		clientSong = new HttpClient();
 		
 		this.names = new HashMap<Integer,String>();
 		this.types = new HashMap<Integer,Short>();
@@ -31,11 +35,10 @@ public class DAAPUtilities {
 		this.retrieveContentCodes(hostname, log);
 	}
 	
-	protected InputStream request(String hostname, String request, Log log) throws IOException {
-		
+	private  InputStream request(HttpClient client, String hostname, String request, Log log) throws IOException {
 		log.debug("daap client: request for http://" + hostname + ":3689/" + request);
 		
-		client = new HttpClient();
+		
 		HttpMethod method = new GetMethod("http://" + hostname + ":3689/" + request);
 		
 		InputStream responseBody = null;
@@ -65,6 +68,14 @@ public class DAAPUtilities {
 	    }
 
 	    return null;
+	}
+	
+	protected InputStream request(String hostname, String request, Log log) throws IOException {
+		return request(client, hostname, request, log);
+	}
+	
+	protected InputStream songRequest(String hostname, String request, Log log) throws IOException {
+		return request(clientSong, hostname, request, log);
 	}
 	
 	protected void release(InputStream request) {

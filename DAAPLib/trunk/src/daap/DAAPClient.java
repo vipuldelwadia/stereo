@@ -118,19 +118,19 @@ public class DAAPClient {
 
 	public InputStream getStream(Track track) throws IOException {
 		int song = track.getTrackId();
-		return helper.request(hostname, "databases/" + dbid + "/items/" + song
+		return helper.songRequest(hostname, "databases/" + dbid + "/items/" + song
 				+ ".mp3?session-id=" + sessionID, log);
 	}
 
 	public boolean isUpdated() throws ClientExpiredException{
-		/*int newRevisionNumber = getRevisionNumber();
+		int newRevisionNumber = getRevisionNumber();
 		if(newRevisionNumber == -1) throw new ClientExpiredException();
 		if(revisionNumber != newRevisionNumber){
 			revisionNumber = newRevisionNumber;
 			return true;
-		}else{*/
+		}else{
 			return false;
-		//}
+		}
 	}
 
 	private int getSessionID() {
