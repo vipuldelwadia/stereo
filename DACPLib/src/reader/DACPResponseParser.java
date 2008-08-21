@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import util.DACPConstants;
 import util.node.BooleanNode;
 import util.node.ByteNode;
 import util.node.Composite;
@@ -18,40 +19,11 @@ import util.node.LongLongNode;
 import util.node.LongNode;
 import util.node.Node;
 import util.node.StringNode;
+import daap.DAAPConstants;
 
 
 public class DACPResponseParser {
-    
-	public static final int cmst = parseInt("cmst");
-	public static final int mstt = parseInt("mstt");
-	public static final int cmsr = parseInt("cmsr");
-	public static final int caps = parseInt("caps");
-	public static final int cash = parseInt("cash");
-	public static final int carp = parseInt("carp");
-	public static final int caas = parseInt("caas");
-	public static final int caar = parseInt("caar");
-	public static final int canp = parseInt("canp");
-	public static final int cann = parseInt("cann");
-	public static final int cana = parseInt("cana");
-	public static final int canl = parseInt("canl");
-	public static final int cang = parseInt("cang");
-	public static final int asai = parseInt("asai");
-	public static final int cmmk = parseInt("cmmk");
-	public static final int cant = parseInt("cant");
-	public static final int cast = parseInt("cast");
-	
-	public static final int muty = parseInt("muty");
-	public static final int mtco = parseInt("mtco");
-	public static final int mrco = parseInt("mrco");
-	public static final int mlcl = parseInt("mlcl");
-	public static final int mlit = parseInt("mlit");
-	public static final int mikd = parseInt("mikd");
-	public static final int miid = parseInt("miid");
-	public static final int minm = parseInt("minm");
-	public static final int asar = parseInt("asar");
-	public static final int mper = parseInt("mper");
-	
-    private Handler reply;
+   private Handler reply;
     
     public DACPResponseParser() {    	
     	reply = new Handler();
@@ -81,41 +53,47 @@ public class DACPResponseParser {
     }
     
     public void addStatusUpdate(Handler reply) {
-        reply.register(mstt, new IntegerNodeHandler());
-        reply.register(cmsr, new IntegerNodeHandler());
-        reply.register(caps, new ShortNodeHandler());
-        reply.register(cash, new BooleanNodeHandler());
-        reply.register(carp, new BooleanNodeHandler());
-        reply.register(caas, new IntegerNodeHandler());
-        reply.register(caar, new IntegerNodeHandler());
-        reply.register(canp, new LongLongNodeHandler());
-        reply.register(cann, new StringNodeHandler());
-        reply.register(cana, new StringNodeHandler());
-        reply.register(canl, new StringNodeHandler());
-        reply.register(cang, new StringNodeHandler());
-        reply.register(asai, new LongNodeHandler());
-        reply.register(cmmk, new IntegerNodeHandler());
-        reply.register(cant, new IntegerNodeHandler());
-        reply.register(cast, new IntegerNodeHandler());
+        reply.register(DACPConstants.mstt, new IntegerNodeHandler());
+        reply.register(DACPConstants.cmsr, new IntegerNodeHandler());
+        reply.register(DACPConstants.caps, new ShortNodeHandler());
+        reply.register(DACPConstants.cash, new BooleanNodeHandler());
+        reply.register(DACPConstants.carp, new BooleanNodeHandler());
+        reply.register(DACPConstants.caas, new IntegerNodeHandler());
+        reply.register(DACPConstants.caar, new IntegerNodeHandler());
+        reply.register(DACPConstants.canp, new LongLongNodeHandler());
+        reply.register(DACPConstants.cann, new StringNodeHandler());
+        reply.register(DACPConstants.cana, new StringNodeHandler());
+        reply.register(DACPConstants.canl, new StringNodeHandler());
+        reply.register(DACPConstants.cang, new StringNodeHandler());
+        reply.register(DACPConstants.asai, new LongNodeHandler());
+        reply.register(DACPConstants.cmmk, new IntegerNodeHandler());
+        reply.register(DACPConstants.cant, new IntegerNodeHandler());
+        reply.register(DACPConstants.cast, new IntegerNodeHandler());
     }
     
     public void addPlaylistRequest(Handler reply) {
-        reply.register(mstt, new IntegerNodeHandler());
-        reply.register(muty, new IntegerNodeHandler());
-        reply.register(mtco, new IntegerNodeHandler());
-        reply.register(mrco, new IntegerNodeHandler());
+        reply.register(DACPConstants.mstt, new IntegerNodeHandler());
+        reply.register(DACPConstants.muty, new IntegerNodeHandler());
+        reply.register(DACPConstants.mtco, new IntegerNodeHandler());
+        reply.register(DACPConstants.mrco, new IntegerNodeHandler());
         
         Handler playlistHandler = new Handler();
-        reply.register(mlcl, playlistHandler);
+        reply.register(DACPConstants.mlcl, playlistHandler);
         
         Handler trackHandler = new Handler();
-        playlistHandler.register(mlit, trackHandler);
-
-        trackHandler.register(mikd, new ByteNodeHandler());
-        trackHandler.register(miid, new IntegerNodeHandler());
-        trackHandler.register(minm, new StringNodeHandler());
-        trackHandler.register(asar, new StringNodeHandler());
-        trackHandler.register(mper, new LongNodeHandler());
+        
+        playlistHandler.register(DACPConstants.mlit, trackHandler);
+        playlistHandler.register(DAAPConstants.ITEM_KIND, new ByteNodeHandler());
+        playlistHandler.register(DAAPConstants.TRACK_ID, new IntegerNodeHandler()); 
+        playlistHandler.register(DAAPConstants.NAME, new StringNodeHandler());
+        playlistHandler.register(DAAPConstants.ARTIST, new StringNodeHandler());
+        playlistHandler.register(DAAPConstants.ALBUM, new StringNodeHandler());
+        playlistHandler.register(DAAPConstants.BITRATE, new ShortNodeHandler());
+        playlistHandler.register(DAAPConstants.COMPOSER, new StringNodeHandler());
+        playlistHandler.register(DAAPConstants.GENRE, new StringNodeHandler());
+        playlistHandler.register(DAAPConstants.SONG_TIME, new IntegerNodeHandler());
+        playlistHandler.register(DAAPConstants.START_TIME, new IntegerNodeHandler());
+        playlistHandler.register(DAAPConstants.STOP_TIME, new IntegerNodeHandler());
         
     }
     
