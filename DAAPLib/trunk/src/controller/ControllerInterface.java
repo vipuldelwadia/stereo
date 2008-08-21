@@ -1,12 +1,10 @@
-package player;
+package controller;
 
 import playlist.Playlist;
 
 
 
 public interface ControllerInterface {
-
-	public abstract boolean isValidController();
 
 	/**
 	 * pauses the playing track
@@ -19,7 +17,7 @@ public interface ControllerInterface {
 	 */
 	public abstract void playTrack();
 	
-	public abstract void setPlaylist();
+	public abstract void setPlaylist(Playlist p);
 
 	public abstract Playlist getPlaylist();
 

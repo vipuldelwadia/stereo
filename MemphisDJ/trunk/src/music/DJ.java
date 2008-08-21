@@ -147,8 +147,6 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	}
 
 	public void skip() {
-		// TODO Auto-generated method stub
-		//playbackFinished();
 		player.stop();
 		playbackFinished();
 	}
@@ -217,11 +215,11 @@ public class DJ implements DACPServerListener, PlaybackListener{
 
 	}
 
-	private void setPlaylist(Playlist playlist) {
+	public void setPlaylist(Playlist playlist) {
 		this.playlist = playlist;
 	}
 
-	private Playlist getPlaylist() {
+	public Playlist getPlaylist() {
 		return playlist;
 	}
 

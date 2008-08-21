@@ -3,9 +3,10 @@ package interfaces;
 import java.lang.reflect.Method;
 import java.util.Scanner;
 
+import controller.ControllerInterface;
+
 
 import player.Controller;
-import player.ControllerInterface;
 import playlist.Playlist;
 import playlist.Track;
 

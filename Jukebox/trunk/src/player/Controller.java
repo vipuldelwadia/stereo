@@ -5,6 +5,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import controller.ControllerInterface;
+
 import playlist.Playlist;
 import playlist.Track;
 
@@ -123,7 +125,7 @@ public class Controller implements ControllerInterface{
         return volume;
     }
 
-	public void setPlaylist() {
+	public void setPlaylist(Playlist p) {
 		// TODO Auto-generated method stub
 		
 	}
