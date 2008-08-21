@@ -52,19 +52,19 @@ public class DACPClientParser {
 	
     private Handler reply;
 	
-    public static void main(String args[]) {
-        
-        String host = null;// "127.0.0.1";
-        int port = 3689;
-        
-        try {
-            new Client().getContentCodes(host, port);
-        }
-        catch (UnknownHostException e) {
-            System.err.println(host + " is not known");
-        }
-        
-    }
+//    public static void main(String args[]) {
+//        
+//        String host = null;// "127.0.0.1";
+//        int port = 3689;
+//        
+//        try {
+//            new Client().getContentCodes(host, port);
+//        }
+//        catch (UnknownHostException e) {
+//            System.err.println(host + " is not known");
+//        }
+//        
+//    }
     
     public DACPClientParser() {    	
     	reply = new Handler();
