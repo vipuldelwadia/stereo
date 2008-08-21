@@ -14,6 +14,10 @@ public class DACPRequestGenerator {
 		return "skip";
 	}
 
+	public static String getTracks() {
+		return "gettracks";
+	}
+
 	public static String changeVolume(double newVolume) {
 		if(newVolume>255 || newVolume <0) throw new IllegalArgumentException("Volume must be between 0~255");
 		return "setproperty?dmcp.volume=" + newVolume;

@@ -81,19 +81,19 @@ public class DACPResponseParser {
         reply.register(DACPConstants.mlcl, playlistHandler);
         
         Handler trackHandler = new Handler();
-        
         playlistHandler.register(DACPConstants.mlit, trackHandler);
-        playlistHandler.register(DAAPConstants.ITEM_KIND, new ByteNodeHandler());
-        playlistHandler.register(DAAPConstants.TRACK_ID, new IntegerNodeHandler()); 
-        playlistHandler.register(DAAPConstants.NAME, new StringNodeHandler());
-        playlistHandler.register(DAAPConstants.ARTIST, new StringNodeHandler());
-        playlistHandler.register(DAAPConstants.ALBUM, new StringNodeHandler());
-        playlistHandler.register(DAAPConstants.BITRATE, new ShortNodeHandler());
-        playlistHandler.register(DAAPConstants.COMPOSER, new StringNodeHandler());
-        playlistHandler.register(DAAPConstants.GENRE, new StringNodeHandler());
-        playlistHandler.register(DAAPConstants.SONG_TIME, new IntegerNodeHandler());
-        playlistHandler.register(DAAPConstants.START_TIME, new IntegerNodeHandler());
-        playlistHandler.register(DAAPConstants.STOP_TIME, new IntegerNodeHandler());
+        
+        trackHandler.register(DAAPConstants.ITEM_KIND, new ByteNodeHandler());
+        trackHandler.register(DAAPConstants.TRACK_ID, new IntegerNodeHandler()); 
+        trackHandler.register(DAAPConstants.NAME, new StringNodeHandler());
+        trackHandler.register(DAAPConstants.ARTIST, new StringNodeHandler());
+        trackHandler.register(DAAPConstants.ALBUM, new StringNodeHandler());
+        trackHandler.register(DAAPConstants.BITRATE, new ShortNodeHandler());
+        trackHandler.register(DAAPConstants.COMPOSER, new StringNodeHandler());
+        trackHandler.register(DAAPConstants.GENRE, new StringNodeHandler());
+        trackHandler.register(DAAPConstants.SONG_TIME, new IntegerNodeHandler());
+        trackHandler.register(DAAPConstants.START_TIME, new IntegerNodeHandler());
+        trackHandler.register(DAAPConstants.STOP_TIME, new IntegerNodeHandler());
         
     }
     
@@ -109,11 +109,15 @@ public class DACPResponseParser {
                 read += 8;
                 
                 if (handlers.get(c) == null) {
-                    throw new Error("unexpected " + Node.intToCode(c));
+                	System.err.println("unexpected " + Node.intToCode(c));
+                	read += b;
+//                    throw new Error("unexpected " + Node.intToCode(c));
                 }
-                Node n = handlers.get(c).visit(c, b);
-                read += n.length;
-                node.append(n);
+                else {
+                    Node n = handlers.get(c).visit(c, b);
+                    read += n.length;
+                    node.append(n);
+                }
             }
             
             return node;
