@@ -49,7 +49,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	}
 
 	// Stops player if library is empty
-	public void fillPlaylist(){
+	private void fillPlaylist(){
 		System.out.println("Attempting to fill playlist of size " + getPlaylist().size());
 		List<Track> lib = lackey.getAllTracks();
 		if (lib != null && !lib.isEmpty()){
@@ -75,7 +75,7 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	 * @param c A map of filter criterias. The key will be the search category such as 'artist' or 'album, the value associated with the key is the word the filter will try to match with. 
 	 * @return
 	 */
-	public void getTracksFiltered(Map<Integer, String> c){
+	public void setTracksFiltered(Map<Integer, String> c){
 
 		Playlist returned = new Playlist();
 		List<Track> allTracks = lackey.getAllTracks();

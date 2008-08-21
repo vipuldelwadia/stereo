@@ -3,6 +3,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.List;
+
+import playlist.Track;
 
 public class DACPClient {
 
@@ -51,7 +54,17 @@ public class DACPClient {
 		send(DACPClientBroadcaster.changeVolume(newVolume));
 	}
 	
-	public void send(String command) {
+	public int getVolume(){
+		//TODO
+		return 0;
+	}
+	
+	public List<Track> getTracks(){
+		//TODO
+		return null;
+	}
+	
+	private void send(String command) {
 		p.println("GET /ctrl-int/1/" + command + " HTTP/1.1\r\n");
 	}
 
