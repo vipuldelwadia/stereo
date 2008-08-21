@@ -291,6 +291,14 @@ public class DJ implements DACPServerListener, PlaybackListener{
 	public Playlist getPlaylist() {
 		return playlist;
 	}
+	
+	public Track getCurrentPlaying(){
+		return current;
+	}
+	
+	public boolean getPaused(){
+		return paused;
+	}
 
 	public Queue<Track> getRecentlyPlayedTracks() {
 		return recentlyPlayedTracks;
