@@ -5,8 +5,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.*;
-import java.util.concurrent.Semaphore;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 import playlist.Playlist;
 import playlist.Track;
@@ -15,74 +22,124 @@ import daap.DAAPClient;
 import daap.DAAPClient.ClientExpiredException;
 
 public class Lackey {
-	private Handshake hs;
-
-	private Semaphore connectionQueue;
 	
-	private Map<DAAPClient, Set<Track>> library;
-	
+	private final Map<DAAPClient, Set<Track>> library;
 	private final DJ dj;
-
+	
+	private Set<Track> tracks = new HashSet<Track>();
+	private List<Track> tracklist = new ArrayList<Track>();
+	
+	
 	public Lackey(DJ dj) {
+		
 		library = new HashMap<DAAPClient, Set<Track>>();
-		connectionQueue = new Semaphore(1, true);
 		this.dj = dj;
 		
+		Handshake hs;
 		try {
 			hs = new Handshake(this);
+			hs.start();
 		} catch (IOException e) {
 			System.out.println("server socket failed to initialise");
 			e.printStackTrace();
 			System.exit(1);
 		}
-
-		new Thread(hs).start();
-		new Thread(new ServerPoller()).start();
-	}
-
-	// public void removeTracks(Playlist plist){
-	//		
-	// }
-
-	public Playlist checkPlaylist (Playlist check){
-		Set<Track> allTracks = new HashSet<Track>();
-		for(Set<Track> trackSet:library.values()){
-			allTracks.addAll(trackSet);
-		}
 		
+		new WorkerThread().start();
+	}
+	
+	public void checkPlaylist(Playlist check) {
 		for (Iterator<Track> iter = check.iterator(); iter.hasNext();) {
 			Track element = iter.next();
-			if(!allTracks.contains(element)){
+			if(!tracks.contains(element)){
 				iter.remove();
 			}
 		}
-		return check;
 	}
-
+	
 	public List<Track> getAllTracks() {
-		List<Track> tracks = new ArrayList<Track>();
-		for(Set<Track> trackSet:library.values()){
-			tracks.addAll(trackSet);
+		return tracklist;
+	}
+	
+	public void newConnection(DAAPClient client) {
+		worklist.add(new NewConnectionJob(client));
+	}
+	
+	//internal stuff
+	
+	private Queue<Job> worklist = new LinkedList<Job>();
+	
+	private class WorkerThread extends Thread {
+		
+		public void run() {
+			while (true) {
+				
+				worklist.offer(new ServerPollJob());
+				
+				while (!worklist.isEmpty()) {
+					Job job = worklist.poll();
+					System.out.println(job.getClass());
+					job.run();
+				}
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					//swallow
+				}
+			}
 		}
-		return tracks;
+		
 	}
-	public Map<DAAPClient, Set<Track>> getLibrary(){
-		return library;
+	
+	private interface Job {
+		public void run();
+	}
+	
+	private class NewConnectionJob implements Job {
+		private final DAAPClient client;
+		public NewConnectionJob(DAAPClient client) {
+			this.client = client;
+		}
+		public void run() {
+			if (client == null) 	return;
+			Set<Track> tracks = new HashSet<Track>(client.getTrackList());
+			System.out.println("Tracks retrieved: " + tracks.size());
+			library.put(client, tracks);
+			worklist.offer(new RebuildTracklistJob());
+			System.out.println("Tracks and client added to library");
+			worklist.offer(new TracksAddedJob());
+		}
 	}
 
-	public void newConnection(DAAPClient newClient) throws InterruptedException, IOException {
-		if (newClient == null) 	return;
-		connectionQueue.acquire();
-		Set<Track> tracks = new HashSet<Track>(newClient.getTrackList());
-		System.out.println("Tracks retrieved.");
-		library.put(newClient, tracks);
-		System.out.println("Tracks and client added to library");
-		dj.tracksAdded();
-		System.out.println("DJ Informed");
-		connectionQueue.release();
+	private class TracksAddedJob implements Job {
+		public void run() {
+			dj.tracksAdded();
+			System.out.println("DJ Informed");
+		}
+	}
+	
+	private class LibraryChangedJob implements Job {
+		public void run() {
+			dj.libraryChanged();
+			System.out.println("DJ Informed");
+		}
+	}
+	
+	private class RebuildTracklistJob implements Job {
+		public void run() {
+			Set<Track> newTracks = new HashSet<Track>();
+			List<Track> newTracklist = new ArrayList<Track>();
+			for(Set<Track> trackSet:library.values()){
+				newTracks.addAll(trackSet);
+				newTracklist.addAll(trackSet);
+			}
+			tracks = newTracks;
+			tracklist = newTracklist;
+		}
 	}
 
-	private class Handshake implements Runnable {
+	private class Handshake extends Thread {
 
 		private ServerSocket connection;
 
@@ -126,47 +183,39 @@ public class Lackey {
 					System.out.println("Lackey accepted connection.");
 					lackey.newConnection(client);
 					System.out.println("Lackey created connection.");
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				} catch (Exception e) {
+					System.err.println("Error creating connection");
+					//e.printStackTrace();
 				}
 			}
 		}
 	}
 	
-	private class ServerPoller implements Runnable{
+	private class ServerPollJob implements Job {
 		
 		public void run(){
-			while(true){
-				List<DAAPClient> expired = new ArrayList<DAAPClient>();
-				
-				for(DAAPClient client:library.keySet()){
-					try {
-						if(client.isUpdated()){
-							System.out.println("client changed");
-							library.put(client, new HashSet<Track>(client.getTrackList()));
-							dj.libraryChanged();
-						}
-					} catch (ClientExpiredException e) {
-						expired.add(client);
-					}
-				}
-			
-				if(expired.size() > 0){
-					for(DAAPClient c:expired){
-						library.remove(c);
-					}
-					dj.libraryChanged();
-				}
-				
+			List<DAAPClient> expired = new ArrayList<DAAPClient>();
+
+			for(DAAPClient client:library.keySet()){
 				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					//swallow
+					if(client.isUpdated()){
+						System.out.println("client changed");
+						library.put(client, new HashSet<Track>(client.getTrackList()));
+						worklist.offer(new RebuildTracklistJob());
+						worklist.offer(new LibraryChangedJob());
+					}
+				} catch (ClientExpiredException e) {
+					expired.add(client);
 				}
+			}
+
+			if(expired.size() > 0){
+				for(DAAPClient c:expired){
+					library.remove(c);
+				}
+				worklist.offer(new RebuildTracklistJob());
+				worklist.offer(new LibraryChangedJob());
 			}
 		}
 	}
-
 }
