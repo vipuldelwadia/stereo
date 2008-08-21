@@ -1,5 +1,6 @@
 package player;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +34,6 @@ public class Player implements music.Player {
 		}
 		System.out.println("Making new thread");	
 		thread = new TrackThread(i);
-
 		start();
 	}
 
@@ -82,14 +82,21 @@ public class Player implements music.Player {
 
 		private javazoom.jl.player.Player player;
 		private volatile boolean stopped = false;
+		private final InputStream stream;
 
 		public TrackThread(InputStream stream) {
+			this.stream = stream;
 			try {
 				player = new javazoom.jl.player.Player(stream);
 			}
 			catch (JavaLayerException ex) {
 				ex.printStackTrace();
 				player = null;
+				try {
+					this.stream.close();
+				} catch (IOException e) {
+					System.out.println("Failed to close the stream");
+				}
 			}
 
 		}
@@ -104,7 +111,11 @@ public class Player implements music.Player {
 				//ex.printStackTrace();
 			}
 			player.close();
-
+			try {
+				this.stream.close();
+			} catch (IOException e) {
+				System.out.println("Failed to close the stream");
+			}
 			if (!stopped) trackFinished();
 		}
 
