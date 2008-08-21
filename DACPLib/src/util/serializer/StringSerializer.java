@@ -1,4 +1,4 @@
-package utils.serializer;
+package util.serializer;
 
 import java.io.OutputStream;
 

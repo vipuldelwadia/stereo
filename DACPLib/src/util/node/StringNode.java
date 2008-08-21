@@ -1,4 +1,4 @@
-package utils.node;
+package util.node;
 
 public class StringNode extends Node {
     public final String value;

@@ -1,9 +1,9 @@
-package utils.node;
+package util.node;
 
-public class LongNode extends Node {
-    public final long value;
+public class IntegerNode extends Node {
+    public final int value;
     
-    public LongNode(int code, int length, long value) {
+    public IntegerNode(int code, int length, int value) {
         super(code, length);
         this.value = value;
     }

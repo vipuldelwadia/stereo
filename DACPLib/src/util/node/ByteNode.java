@@ -1,4 +1,4 @@
-package utils.node;
+package util.node;
 
 public class ByteNode extends Node {
     public final byte value;

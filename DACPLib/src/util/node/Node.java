@@ -1,4 +1,4 @@
-package utils.node;
+package util.node;
 
 public class Node {
     public final int code;

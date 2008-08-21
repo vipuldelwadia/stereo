@@ -1,4 +1,4 @@
-package utils.command;
+package util.command;
 
 
 public class Skip implements DACPCommand {

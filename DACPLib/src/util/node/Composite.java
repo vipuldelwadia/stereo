@@ -1,4 +1,4 @@
-package utils.node;
+package util.node;
 
 import java.util.ArrayList;
 import java.util.List;

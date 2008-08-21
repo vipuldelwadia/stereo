@@ -1,4 +1,4 @@
-package utils.node;
+package util.node;
 
 public class BooleanNode extends Node {
     public final boolean value;

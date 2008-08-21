@@ -1,4 +1,4 @@
-package utils.node;
+package util.node;
 
 public class LongLongNode extends Node {
     public final long value;

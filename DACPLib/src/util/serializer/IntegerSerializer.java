@@ -1,14 +1,12 @@
-package utils.serializer;
+package util.serializer;
 
 import java.io.OutputStream;
 
-
-public class ByteSerializer implements TypeSerializer {
+public class IntegerSerializer implements TypeSerializer{
 
 	public void serialize(Object obj, OutputStream out) {
 		// TODO Auto-generated method stub
+
 	}
-	
-	
 
 }
