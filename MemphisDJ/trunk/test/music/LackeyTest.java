@@ -22,11 +22,7 @@ public class LackeyTest {
 		try {
 			DAAPClient client = new DAAPClient("majoribanks.mcs.vuw.ac.nz", 3689);
 			Lackey lackey = new Lackey(null);
-			try {
-				lackey.newConnection(client);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			lackey.newConnection(client);
 			List<Track> tracks = lackey.getAllTracks();
 			assertTrue(tracks.size() > 1600);
 			
@@ -49,8 +45,8 @@ public class LackeyTest {
 		Playlist p = new Playlist();
 		try {
 			p.addTrack(new Track(new HashMap<Integer, Object>(), new DAAPClient("majoribanks.mcs.vuw.ac.nz", 3689)));
-			Playlist newP = l.checkPlaylist(p);
-			assertEquals(0, newP.size());
+			l.checkPlaylist(p);
+			assertEquals(0, p.size());
 		} catch (IOException e) {
 			fail();
 		}
