@@ -79,7 +79,7 @@ public class DACPRequestParser {
 			return setProperty(parameters);
 		case skip:
 			return new DACPSkip();
-		case playlist:
+		case requestplaylist:
 			return new DACPRequestPlaylist();
 		default:
 			throw new IllegalArgumentException("command is not recognised");
@@ -119,6 +119,6 @@ public class DACPRequestParser {
 	}
 
 	private enum COMMAND {
-		pause, playpause, setproperty, skip, playlist;
+		pause, playpause, setproperty, skip, requestplaylist;
 	}
 }
