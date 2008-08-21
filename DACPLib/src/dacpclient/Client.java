@@ -1,4 +1,4 @@
-package daccpclient;
+package dacpclient;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

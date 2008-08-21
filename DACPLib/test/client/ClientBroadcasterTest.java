@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import daccpclient.DACPClientBroadcaster;
+import dacpclient.DACPClientBroadcaster;
 
 public class ClientBroadcasterTest {
 
