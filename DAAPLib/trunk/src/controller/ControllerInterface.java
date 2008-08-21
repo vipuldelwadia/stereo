@@ -27,9 +27,9 @@ public interface ControllerInterface {
 	 * change the volume to the stated value
 	 * 
 	 * @param newVolume
-	 *            int between 0 and 10
+	 *            int between 0 and 255
 	 * @throws IllegalArgumentException
-	 *             if newVolume is < 0 or > 10
+	 *             if newVolume is < 0 or > 255
 	 */
 	public abstract void changeVolume(int newVolume);
 

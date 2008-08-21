@@ -183,14 +183,14 @@ public class DJ implements PlaybackListener{
 		playlist.addAll(toAppend);
 	}
 
-	public void setVolume(double volume) {
+	public void setVolume(int volume) {
 		currentVolume = volume;
 		URL url = DJ.class.getResource("setvolume.sh");
 
 		try {
 			System.out.println("setting volume to " + volume);
 			Process p = Runtime.getRuntime().exec(
-					"bash " + url.getFile() + " " + (int) volume);
+					"bash " + url.getFile() + " " + volume);
 //			 for (Scanner sc = new Scanner(p.getErrorStream());
 //			 sc.hasNextLine();) {
 //			 System.err.println(sc.nextLine());

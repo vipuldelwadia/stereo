@@ -4,9 +4,9 @@ import music.DJ;
 
 public class SetVolume implements Command {
 
-	private double volume;
+	private int volume;
 	
-	public SetVolume(double volume){
+	public SetVolume(int volume){
 		this.volume = volume;
 	}
 	

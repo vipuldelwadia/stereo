@@ -20,15 +20,15 @@ public class ControllerTest {
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void volumeSetGreaterThanTen(){
-		c.changeVolume(110);
+	public void volumeSetGreaterThan255(){
+		c.changeVolume(256);
 	}
 	
 	@Test
 	public void volumeAcceptableValue(){
 		c.changeVolume(0);
 		c.changeVolume(40);
-		c.changeVolume(100);
+		c.changeVolume(255);
 	}
 	
 	@Test

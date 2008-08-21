@@ -43,30 +43,27 @@ public class ServerParserTest {
 		assertTrue(DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=0&felix=cool HTTP/1.1") instanceof DACPSetVolume);
 		assertTrue(DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=100&felix=cool HTTP/1.1") instanceof DACPSetVolume);
 		assertTrue(DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=255&felix=cool HTTP/1.1") instanceof DACPSetVolume);
-		assertTrue(DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=0.1&felix=cool HTTP/1.1") instanceof DACPSetVolume);
-		assertTrue(DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=254.9&felix=cool HTTP/1.1") instanceof DACPSetVolume);
-		assertTrue(DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=100.100&felix=cool HTTP/1.1") instanceof DACPSetVolume);
 		
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testInvalidNumberVolume1() {
-		DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=-0.1&felix=cool HTTP/1.1");
+		DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=-1&felix=cool HTTP/1.1");
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testInvalidNumberVolume2() {
-		DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=-100.50&felix=cool HTTP/1.1");
+		DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=-100&felix=cool HTTP/1.1");
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testInvalidNumberVolume3() {
-		DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=255.001&felix=cool HTTP/1.1");
+		DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=256&felix=cool HTTP/1.1");
 	}
 	
 	@Test (expected = IllegalArgumentException.class)
 	public void testInvalidNumberVolume4() {
-		DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=10000.00&felix=cool HTTP/1.1");
+		DACPRequestParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=10000&felix=cool HTTP/1.1");
 	}
 	
 	@Test (expected = IllegalArgumentException.class)

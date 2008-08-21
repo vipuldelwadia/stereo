@@ -79,10 +79,10 @@ public class Controller implements ControllerInterface{
 	 * @see player.ControllerInterface#changeVolume(int)
 	 */
     public void changeVolume(int newVolume) {
-        if (newVolume < 0 || newVolume > 100)
-            throw new IllegalArgumentException("volume must be between 0-100");
+        if (newVolume < 0 || newVolume > 255)
+            throw new IllegalArgumentException("volume must be between 0-255");
         if (this.connect())
-            this.dacp.setVolume(newVolume*2.55);
+            this.dacp.setVolume(newVolume);
     }
     
     /* (non-Javadoc)

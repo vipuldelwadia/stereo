@@ -18,7 +18,8 @@ public class CLITest {
     @Test
     public void testinput() {
         cli.input("set volume 0");
-        cli.input("set volume 10");
+        cli.input("set volume 150");
+        cli.input("set volume 255");
     }
     
     @Test
@@ -28,7 +29,7 @@ public class CLITest {
     
     @Test
     public void testTooHighVolume() {
-        cli.input("set volume 11");
+        cli.input("set volume 256");
     }
     
     @Test

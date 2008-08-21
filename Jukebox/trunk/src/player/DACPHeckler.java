@@ -198,7 +198,7 @@ public class DACPHeckler {
     	send(DACPRequestGenerator.skip());
     }
     
-	public void setVolume(double newVolume) {
+	public void setVolume(int newVolume) {
 		send(DACPRequestGenerator.changeVolume(newVolume));
 	}
 	

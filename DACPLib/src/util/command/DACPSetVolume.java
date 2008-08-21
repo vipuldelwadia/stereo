@@ -3,9 +3,9 @@ package util.command;
 
 public class DACPSetVolume implements DACPCommand {
 
-	private final double volume;
+	private final int volume;
 	
-	public DACPSetVolume(double volume) {
+	public DACPSetVolume(int volume) {
 		this.volume = volume;
 	}
 
@@ -14,7 +14,7 @@ public class DACPSetVolume implements DACPCommand {
 		return "setvolume=" + volume;
 	}
 	
-	public double getVolume(){
+	public int getVolume(){
 		return volume;
 	}
 

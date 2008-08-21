@@ -29,7 +29,7 @@ public class ServerSideController implements ControllerInterface {
 	}
 
 	public void changeVolume(int newVolume) {
-		dj.setVolume((double)newVolume);
+		dj.setVolume(newVolume);
 	}
 
 	public List<Track> getPlaylist() {
