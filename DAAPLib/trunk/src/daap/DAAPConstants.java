@@ -4,7 +4,7 @@ public class DAAPConstants {
 	
 	public static final int ITEM_KIND = parseInt("mikd");
 	public static final int TRACK_ID = parseInt("miid");
-	public static final int ITEM_NAME = parseInt("minm");
+	public static final int NAME = parseInt("minm");
 	public static final int ARTIST = parseInt("asar");
 	public static final int PERSISTENT_ID = parseInt("mper");
 	public static final int ALBUM = parseInt("asal");
