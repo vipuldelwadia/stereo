@@ -127,6 +127,9 @@ public class DJ implements PlaybackListener{
 		List<Track> returned = new ArrayList<Track>();
 		List<Track> allTracks = lackey.getAllTracks();
 
+		System.out.println("DAAPConstants.ALBUM="+DAAPConstants.ARTIST+" "+c);
+		
+		
 		//Search through every criteria for potential matches
 		for(int i=0; i<allTracks.size(); i++){
 
@@ -134,7 +137,8 @@ public class DJ implements PlaybackListener{
 			boolean fitCrit=true;
 
 			for(int s : c.keySet()){
-				if (!(c.get(s)).toLowerCase().equals(((String)currentTrack.getTag(s)).toLowerCase()))	 {
+				
+				if (!c.get(s).equalsIgnoreCase((String)currentTrack.getTag(s)))	{
 					fitCrit=false;
 					break;
 				}
@@ -155,7 +159,7 @@ public class DJ implements PlaybackListener{
 	public void setPlaylistWithFilter(Map<Integer, String> c){
 		stop();
 		playlist=getPlaylistWithFilter(c);
-
+/*
 		if (!playlist.isEmpty()) {
 			current = playlist.remove(0);
 			System.out.println("Polled playlist.");
@@ -170,6 +174,8 @@ public class DJ implements PlaybackListener{
 				e.printStackTrace();
 			}
 		}
+		*/
+		start();
 	}
 	
 	public void appendTracks(Map<Integer, String> c){
@@ -207,19 +213,7 @@ public class DJ implements PlaybackListener{
 		if(getPlaylist().isEmpty()){
 
 			fillPlaylist();
-			if (getPlaylist().isEmpty()) return;
-
-			current = getPlaylist().remove(0);
-			recentlyPlayedTracks.add(current);
-			if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
-				recentlyPlayedTracks.poll();
-			System.out.println("Polled playlist.");
-			try {
-				player.setInputStream(current.getStream());
-			} catch (IOException e) {
-				System.out.println("Failed to send stream to player.");
-				e.printStackTrace();
-			}
+			start();
 		}
 		
 		if (getPlaylist().size() < playlistSize){
@@ -244,7 +238,7 @@ public class DJ implements PlaybackListener{
 	/*
 	 * Modify DJ state
 	 */
-	public void play() {
+	public void unpause() {
 		player.start();
 		paused=false;
 	}
@@ -253,6 +247,7 @@ public class DJ implements PlaybackListener{
 		player.pause();
 		paused=true;
 	}
+	
 
 	public void stop(){
 		player.stop();
@@ -262,6 +257,22 @@ public class DJ implements PlaybackListener{
 	public void skip() {
 		player.stop();
 		playbackFinished();
+	}
+	
+	public void start(){
+		if (getPlaylist().isEmpty()) return;
+
+		current = getPlaylist().remove(0);
+		recentlyPlayedTracks.add(current);
+		if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
+			recentlyPlayedTracks.poll();
+		System.out.println("Polled playlist.");
+		try {
+			player.setInputStream(current.getStream());
+		} catch (IOException e) {
+			System.out.println("Failed to send stream to player.");
+			e.printStackTrace();
+		}
 	}
 	
 	public void setPlaylist(List<Track> playlist) {
@@ -339,6 +350,7 @@ public class DJ implements PlaybackListener{
 	
 	public void playbackStarted() {
 		System.out.println("Playback started");
+
 	}
 
 	

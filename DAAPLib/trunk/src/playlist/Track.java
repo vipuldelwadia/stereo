@@ -49,7 +49,7 @@ public class Track {
 	}
 	
 	public String toString(){
-		 return String.format("%-25s %-25s %-25s",getTag(DAAPConstants.ARTIST),getTag(DAAPConstants.ALBUM),getTag(DAAPConstants.NAME));
+		 return String.format("%s - %s - %s\n",getTag(DAAPConstants.NAME),getTag(DAAPConstants.ARTIST),getTag(DAAPConstants.ALBUM));
 	}
 	
 }

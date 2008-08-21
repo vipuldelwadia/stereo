@@ -57,7 +57,7 @@ public class ServerSideController implements ControllerInterface {
 	}
 
 	public void playTrack() {
-		dj.play();
+		dj.unpause();
 	}
 
 	public void setPlaylist(List<Track> p) {
