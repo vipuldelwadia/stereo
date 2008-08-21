@@ -49,7 +49,7 @@ public class DJ implements PlaybackListener{
 		player.addPlaybackListener(this);
 
 		try {
-			DACPDJ s = new DACPDJ(3689);
+			DACPDJ s = new DACPDJ(3689, this);
 			//TODO
 			//s.addServerListener(this);
 		} catch (IOException e) {

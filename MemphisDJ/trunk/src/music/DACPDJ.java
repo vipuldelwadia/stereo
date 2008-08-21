@@ -1,5 +1,6 @@
 package music;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -7,7 +8,15 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 import reader.DACPRequestParser;
+import util.command.Command;
 import util.command.DACPCommand;
+import util.command.DACPPause;
+import util.command.DACPPlay;
+import util.command.DACPSetVolume;
+import util.command.Pause;
+import util.command.Play;
+import util.command.SetVolume;
+import util.command.Skip;
 
 
 
@@ -17,8 +26,11 @@ public class DACPDJ {
 
 	private final ServerSocket SERVER_SOCK;
 	
-	public DACPDJ(int port) throws IOException {
+	private final DJ dj;
+	
+	public DACPDJ(int port, DJ dj) throws IOException {
 		this.PORT = port;
+		this.dj = dj;
 		SERVER_SOCK = new ServerSocket(PORT);
 		System.out.println("Server starting.\n--------\n");
 		listen();
@@ -37,18 +49,27 @@ public class DACPDJ {
 			}
 		}.start();
 	}
-
-	public static void main(String[] args) throws IOException {
-
-		DACPDJ s;
-
-		s = new DACPDJ(51234);
-		//s.listen();
+	
+	private Command convertCommand(DACPCommand s) {
+		if(s instanceof DACPPause) return new Pause();
+		if(s instanceof DACPPlay) return new Play();
+		if(s instanceof DACPPlay) return new SetVolume(((DACPSetVolume)s).getVolume());
+		if(s instanceof DACPPlay) return new Skip();
+		return null;
 	}
+
+//	public static void main(String[] args) throws IOException {
+//
+//		DACPDJ s;
+//
+//		s = new DACPDJ(51234);
+//		//s.listen();
+//	}
 
 	private class ServerRunnable implements Runnable {
 
 		private final Socket SOCK;
+		private final String responseOK = "HTTP/1.1 204 OK";
 
 		public void run() {
 			try {
@@ -68,8 +89,13 @@ public class DACPDJ {
 								}
 								// TODO deal with malformed requests
 								DACPCommand s = DACPRequestParser.parse(parseText);
-								// TODO do something with this
 								
+								Command c = convertCommand(s);
+								
+								if(c != null) c.doAction(dj);
+								
+								//send response
+								p.println(responseOK);
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -79,6 +105,7 @@ public class DACPDJ {
 						}
 
 					}
+
 				}.start(); //Override the run method.
 
 				
