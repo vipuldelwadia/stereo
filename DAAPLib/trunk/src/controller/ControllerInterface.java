@@ -35,6 +35,7 @@ public interface ControllerInterface {
 	 * skips to the next track
 	 * 
 	 */
+	
 	public abstract void skipTrack();
 
 	public abstract int getVolume();
