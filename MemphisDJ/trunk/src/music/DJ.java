@@ -102,6 +102,7 @@ public class DJ implements PlaybackListener{
 			System.out.println("Library empty: stopped playback.");
 		}
 	}
+	
 	private Map<DAAPClient, Set<Track>> libraryToOwnerMap(){
 		List<Track> lib = lackey.getAllTracks();
 		Map<DAAPClient, Set<Track>> clientsTracks=new HashMap<DAAPClient, Set<Track>>();
@@ -169,6 +170,12 @@ public class DJ implements PlaybackListener{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void appendTracks(Map<Integer, String> c){
+		List<Track> toAppend = getPlaylistWithFilter(c);
+		
+		playlist.addAll(toAppend);
 	}
 
 	public void setVolume(double volume) {
