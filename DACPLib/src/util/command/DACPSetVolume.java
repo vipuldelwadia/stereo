@@ -13,5 +13,9 @@ public class DACPSetVolume implements DACPCommand {
 		
 		return "setvolume=" + volume;
 	}
+	
+	public double getVolume(){
+		return volume;
+	}
 
 }
