@@ -248,6 +248,6 @@ public class DACPHeckler {
 	}
 
 	private void send(String command) {
-		p.println("GET /ctrl-int/" + command + " HTTP/1.1\r\n");
+		p.println("GET /ctrl-int/1/" + command + " HTTP/1.1\r\n");
 	}
 }
