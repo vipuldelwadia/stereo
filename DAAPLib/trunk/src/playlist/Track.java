@@ -39,7 +39,10 @@ public class Track {
 	 * @return
 	 */
 	public Object getTag(int tagID){
-		return tags.get(tagID);
+		if (tags.containsKey(tagID)) {
+			return tags.get(tagID);			
+		}
+		else return null;
 	}
 
 	public int getTrackId() {
