@@ -11,6 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Scanner;
 import java.util.Set;
 
 import player.PlaybackListener;
@@ -159,7 +160,7 @@ public class DJ implements PlaybackListener{
 	public void setPlaylistWithFilter(Map<Integer, String> c){
 		stop();
 		playlist=getPlaylistWithFilter(c);
-/*
+
 		if (!playlist.isEmpty()) {
 			current = playlist.remove(0);
 			System.out.println("Polled playlist.");
@@ -174,8 +175,6 @@ public class DJ implements PlaybackListener{
 				e.printStackTrace();
 			}
 		}
-		*/
-		start();
 	}
 	
 	public void appendTracks(Map<Integer, String> c){
@@ -192,10 +191,14 @@ public class DJ implements PlaybackListener{
 			System.out.println("setting volume to " + volume);
 			Process p = Runtime.getRuntime().exec(
 					"bash " + url.getFile() + " " + (int) volume);
-			// for (Scanner sc = new Scanner(p.getErrorStream());
-			// sc.hasNextLine();) {
-			// System.out.println(sc.nextLine());
-			// }
+//			 for (Scanner sc = new Scanner(p.getErrorStream());
+//			 sc.hasNextLine();) {
+//			 System.err.println(sc.nextLine());
+//			 }
+//			 for (Scanner sc = new Scanner(p.getInputStream());
+//			 sc.hasNextLine();) {
+//			 System.out.println(sc.nextLine());
+//			 }
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -213,7 +216,19 @@ public class DJ implements PlaybackListener{
 		if(getPlaylist().isEmpty()){
 
 			fillPlaylist();
-			start();
+			if (getPlaylist().isEmpty()) return;
+
+			current = getPlaylist().remove(0);
+			recentlyPlayedTracks.add(current);
+			if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
+				recentlyPlayedTracks.poll();
+			System.out.println("Polled playlist.");
+			try {
+				player.setInputStream(current.getStream());
+			} catch (IOException e) {
+				System.out.println("Failed to send stream to player.");
+				e.printStackTrace();
+			}
 		}
 		
 		if (getPlaylist().size() < playlistSize){

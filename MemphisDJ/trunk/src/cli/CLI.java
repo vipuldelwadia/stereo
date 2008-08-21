@@ -21,6 +21,12 @@ public class CLI {
         run();
     }
     
+    public CLI(ControllerInterface controller, String args) {
+        scan = new Scanner(System.in);
+        this.controller = controller;
+        input(args);
+    }
+    
     public void run() {
         while (true) {
             System.out.print("> ");
@@ -75,9 +81,12 @@ public class CLI {
             controller.skipTrack();
             status(null);
         }
-        public Object set(String dummy) {
+        public void set(String command) {
+        	command = command.toLowerCase().trim();
+        	if (command.startsWith("volume ")) {
+        		new Set().volume(command.substring("volume ".length()));
+        	}
             System.out.println("set");
-            return new Set();
         }
         public void stop(String dummy){
         	System.out.println("Stopped");
@@ -142,7 +151,18 @@ public class CLI {
     }
     
     public static void main(String[] args) {
-        new CLI(new ServerSideController());
+    	if (args.length == 0) {
+    		new CLI(new ServerSideController());
+    	}
+    	else {
+    		String combinedArgs = "";
+    		for(String s : args) {
+    			combinedArgs += " " + s;
+    		}
+    		combinedArgs = combinedArgs.trim();
+    		System.out.println(combinedArgs);
+    		new CLI(new ServerSideController(), combinedArgs);
+    	}
     }
     
 }
