@@ -1,11 +1,13 @@
 package server;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
 import reader.DACPServerParser;
-import utils.command.*;
+import util.command.DACPPause;
+import util.command.DACPPlay;
+import util.command.DACPSetVolume;
 
 
 
@@ -13,7 +15,7 @@ public class ServerParserTest {
 
 	@Test
 	public void testParsePlay() {
-		assertTrue(DACPServerParser.parse("GET ctrl-int/1/playpause HTTP/1.1") instanceof Play);
+		assertTrue(DACPServerParser.parse("GET ctrl-int/1/playpause HTTP/1.1") instanceof DACPPlay);
 	}
 	
 	@Test
@@ -38,12 +40,12 @@ public class ServerParserTest {
 	
 	@Test 
 	public void testVolume(){
-		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=0&felix=cool HTTP/1.1") instanceof SetVolume);
-		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=100&felix=cool HTTP/1.1") instanceof SetVolume);
-		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=255&felix=cool HTTP/1.1") instanceof SetVolume);
-		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=0.1&felix=cool HTTP/1.1") instanceof SetVolume);
-		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=254.9&felix=cool HTTP/1.1") instanceof SetVolume);
-		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=100.100&felix=cool HTTP/1.1") instanceof SetVolume);
+		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=0&felix=cool HTTP/1.1") instanceof DACPSetVolume);
+		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=100&felix=cool HTTP/1.1") instanceof DACPSetVolume);
+		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=255&felix=cool HTTP/1.1") instanceof DACPSetVolume);
+		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=0.1&felix=cool HTTP/1.1") instanceof DACPSetVolume);
+		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=254.9&felix=cool HTTP/1.1") instanceof DACPSetVolume);
+		assertTrue(DACPServerParser.parse("GET ctrl-int/1/setproperty?dmcp.volume=100.100&felix=cool HTTP/1.1") instanceof DACPSetVolume);
 		
 	}
 	
