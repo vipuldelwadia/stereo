@@ -1,10 +1,8 @@
 package util.serializer;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
@@ -12,8 +10,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import daap.DAAPUtilities;
-
+import reader.DACPResponseParser;
+import util.DACPConstants;
 import util.node.BooleanNode;
 import util.node.ByteNode;
 import util.node.Composite;
@@ -111,6 +109,41 @@ public class WriteVisitorTest {
 		in.read(read);
 		
 		assertTrue(compare(read, check));
+	}
+	
+	@Test
+	public void testJorisVisit() throws Exception {
+
+		Composite parent4 = new Composite(DACPConstants.apso);
+
+		Composite parent3 = new Composite(DACPConstants.mlcl);
+		
+		Composite parent1 = new Composite(DACPConstants.mlit);
+		parent1.append(new StringNode(DACPConstants.ARTIST, "Joris"));
+		parent1.append(new StringNode(DACPConstants.NAME, "Cool"));
+		
+		Composite parent2 = new Composite(DACPConstants.mlit);
+		parent2.append(new StringNode(DACPConstants.ARTIST, "William"));
+		parent2.append(new StringNode(DACPConstants.NAME, "Extreme"));
+		
+		parent3.append(parent1);
+		parent3.append(parent2);
+		
+		parent4.append(parent3);
+		
+		System.out.println(parent4);
+		
+		visitor.visit(parent4);
+		int length = 100;		
+		byte[] read = new byte[length];
+		in.read(read);
+		
+		
+		DACPResponseParser drg = new DACPResponseParser();
+		Composite tree = drg.parse(new ByteArrayInputStream(read));
+		
+		System.out.println(tree);
+
 	}
 
 	@Test
