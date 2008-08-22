@@ -20,7 +20,7 @@ import daap.DAAPConstants;
 
 public class DACPHeckler {
 
-	private static final boolean DEBUG = true;
+	private static final boolean DEBUG = false;
 	
 	private final String HOST;
 	private final int PORT;
