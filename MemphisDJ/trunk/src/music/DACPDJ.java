@@ -1,23 +1,34 @@
 package music;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import playlist.Track;
 import reader.DACPRequestParser;
-import util.command.Command;
+import util.DACPConstants;
 import util.command.DACPCommand;
 import util.command.DACPPause;
 import util.command.DACPPlay;
+import util.command.DACPRequestCurrentSong;
+import util.command.DACPRequestPlaylist;
 import util.command.DACPSetVolume;
+
 import util.command.DACPSkip;
-import util.command.Pause;
-import util.command.Play;
-import util.command.SetVolume;
-import util.command.Skip;
+import util.node.BooleanNode;
+import util.node.ByteNode;
+import util.node.Composite;
+import util.node.IntegerNode;
+import util.node.LongNode;
+import util.node.Node;
+import util.node.StringNode;
+import util.serializer.DACPWriter;
+
 
 
 
@@ -51,26 +62,25 @@ public class DACPDJ {
 		}.start();
 	}
 	
-	private Command convertCommand(DACPCommand s) {
-		if(s instanceof DACPPause) return new Pause();
-		if(s instanceof DACPPlay) return new Play();
-		if(s instanceof DACPSetVolume) return new SetVolume(((DACPSetVolume)s).getVolume());
-		if(s instanceof DACPSkip) return new Skip();
-		return null;
-	}
 
-//	public static void main(String[] args) throws IOException {
 //
 //		DACPDJ s;
 //
 //		s = new DACPDJ(51234);
 //		//s.listen();
 //	}
+	
+	
 
 	private class ServerRunnable implements Runnable {
 
 		private final Socket SOCK;
-		private final String responseOK = "HTTP/1.1 204 OK\r\n\r\n";
+
+		private final String responseOKNoBody = "HTTP/1.1 204 OK\r\n\r\n";
+		private final String responseOK = "HTTP/1.1 200 OK\r\n\r\n";
+		
+
+
 
 		public void run() {
 			try {
@@ -91,13 +101,10 @@ public class DACPDJ {
 								// TODO deal with malformed requests
 								DACPCommand s = DACPRequestParser.parse(parseText);
 								
-								Command c = convertCommand(s);
+								runCommand(s);
 								System.out.println();
 								
-								if(c != null) c.doAction(dj);
-								
-								//send response
-								p.print(responseOK);
+
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -107,6 +114,91 @@ public class DACPDJ {
 						}
 
 					}
+					
+					private void runCommand(DACPCommand s) {
+						System.out.println(s);
+						if(s instanceof DACPPause){
+							dj.pause();
+							p.print(responseOKNoBody);
+						}else if(s instanceof DACPPlay){
+							dj.unpause();
+							p.print(responseOKNoBody);
+						}else if(s instanceof DACPSkip){
+							dj.skip();
+							p.print(responseOKNoBody);
+						}else if(s instanceof DACPSetVolume){
+							dj.setVolume(((DACPSetVolume)s).getVolume());
+							p.print(responseOKNoBody);
+						}else if(s instanceof DACPRequestCurrentSong){
+							Track t = dj.getCurrentTrack();
+							//TODO send it
+						}else if(s instanceof DACPRequestPlaylist){
+							List<Track> pl = dj.getPlaylist();
+							Node tree = buildTree(pl);
+							
+							p.print(responseOK);
+							new DACPWriter(tree, p);
+						}
+				
+					}
+
+					private Node buildTree(List<Track> pl) {
+						List<Node> tracks = new ArrayList<Node>();
+						for(Track t:pl){
+							List<Node> tags = new ArrayList<Node>();
+							for(Map.Entry<Integer, Object> tag:t.getAllTags()){
+								Object tagValue = tag.getValue();
+								if(tagValue instanceof Byte){
+									tags.add(new ByteNode(tag.getKey(), (Byte)tagValue));
+								}else if(tagValue instanceof Boolean){
+									tags.add(new BooleanNode(tag.getKey(), (Boolean)tagValue));
+								}else if(tagValue instanceof Integer){
+									tags.add(new IntegerNode(tag.getKey(), (Integer)tagValue));
+								}else if(tagValue instanceof Long){
+									tags.add(new LongNode(tag.getKey(), (Long)tagValue));
+								}else if(tagValue instanceof String){
+									tags.add(new StringNode(tag.getKey(), (String)tagValue));
+								}
+							}
+							Composite trackNode = new Composite(DACPConstants.mlit);
+							
+							for(Node tag:tags){
+								trackNode.append(tag);
+							}
+							
+							tracks.add(trackNode);
+						}
+						
+						Composite mlclNode = new Composite(DACPConstants.mlcl);
+						
+						for(Node n:tracks){
+							mlclNode.append(n);
+						}
+						
+						
+						Node msttNode = new IntegerNode(DACPConstants.mstt, 200);
+						Node mutyNode = new IntegerNode(DACPConstants.muty, 0);
+						Node mtcoNode = new IntegerNode(DACPConstants.mtco, tracks.size());
+						Node mrcoNode = new IntegerNode(DACPConstants.mrco, tracks.size());
+						
+						List<Node> subRootNodes = new ArrayList<Node>();
+						subRootNodes.add(msttNode);
+						subRootNodes.add(mutyNode);
+						subRootNodes.add(mtcoNode);
+						subRootNodes.add(mrcoNode);
+						subRootNodes.add(mlclNode);
+						
+						Composite apsoNode = new Composite(DACPConstants.apso);
+						
+						for(Node n:subRootNodes){
+							apsoNode.append(n);
+						}
+						
+						return apsoNode;
+					}
+
+					
+					
 
 				}.start(); //Override the run method.
 
