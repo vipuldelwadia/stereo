@@ -59,18 +59,18 @@ public class DJ implements PlaybackListener{
 	}
 
 	private void fillPlaylist() {
-		System.out.println("Attempting to fill playlist of size " + getPlaylist().size());
+		System.out.println("Attempting to fill playlist of size " + playlist.size());
 		List<Track> lib = lackey.getAllTracks();
 		if (lib != null && !lib.isEmpty()) {
 			Collections.shuffle(lib);
-			for (int i = 0; getPlaylist().size() < playlistSize && i < lib.size(); i++) {
+			for (int i = 0; playlist.size() < playlistSize && i < lib.size(); i++) {
 				Track t = lib.get(i);
 				// unnecessary?
 				if (t != null) {
-					getPlaylist().add(t);
+					playlist.add(t);
 				}
 			}
-			System.out.println("Playlist size: " + getPlaylist().size());
+			System.out.println("Playlist size: " + playlist.size());
 
 		} else {
 			stop();
@@ -91,7 +91,7 @@ public class DJ implements PlaybackListener{
 			Set<DAAPClient> clients=clientsTracks.keySet();
 			while(playlist.size()<playlistSize){
 			for(DAAPClient c: clients){
-				if(!(getPlaylist().size() < playlistSize)||playlist.size()<tracks.size())break;
+				if(!(playlist.size() < playlistSize)||playlist.size()<tracks.size())break;
 				System.out.println("client " + c);
 				Set<Track> clientTracks =clientsTracks.get(c);
 				List<Track> orderedClientTracks=new ArrayList<Track>(clientTracks);
@@ -222,13 +222,13 @@ public void setVolume(double volume) {
 public void tracksAdded(){
 	System.out.println("tracks added");
 
-	if(getPlaylist().isEmpty()){
+	if(playlist.isEmpty()){
 
 		fillPlaylist();
 		start();
 	}
 
-	if (getPlaylist().size() < playlistSize){
+	if (playlist.size() < playlistSize){
 		fillPlaylist();	
 	}
 
@@ -240,7 +240,7 @@ public void tracksAdded(){
  */
 public void libraryChanged(){
 	lackey.checkPlaylist(playlist);
-	if (getPlaylist().size() < playlistSize){
+	if (playlist.size() < playlistSize){
 		fillPlaylist();	
 	}
 	System.out.println("Library changed: playlist updated");
@@ -274,9 +274,9 @@ public void skip() {
 }
 
 public void start(){
-	if (getPlaylist().isEmpty()) return;
+	if (playlist.isEmpty()) return;
 
-	current = getPlaylist().remove(0);
+	current = playlist.remove(0);
 	recentlyPlayedTracks.add(current);
 	if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
 		recentlyPlayedTracks.poll();
@@ -306,7 +306,7 @@ public boolean isPaused(){
 }
 
 public List<Track> getPlaylist() {
-	return playlist;
+	return new ArrayList<Track>(playlist);
 }
 
 public Track getCurrentTrack(){
