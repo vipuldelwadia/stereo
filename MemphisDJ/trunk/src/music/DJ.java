@@ -32,7 +32,7 @@ public class DJ implements PlaybackListener{
 	private Track current;
 
 	private double currentVolume;
-	private Queue<Track> recentlyPlayedTracks=new LinkedList<Track>();
+	private List<Track> recentlyPlayedTracks=new ArrayList<Track>();
 	private int recentlyPlayedTracksSize=30;
 	private boolean paused;
 
@@ -71,7 +71,6 @@ public class DJ implements PlaybackListener{
 				}
 			}
 			System.out.println("Playlist size: " + playlist.size());
-
 		} else {
 			stop();
 			System.out.println("Library empty: stopped playback.");
@@ -139,7 +138,7 @@ public List<Track> getPlaylistWithFilter(Map<Integer, String> c){
 	List<Track> returned = new ArrayList<Track>();
 	List<Track> allTracks = lackey.getAllTracks();
 
-	System.out.println("DAAPConstants.ALBUM="+DAAPConstants.ARTIST+" "+c);
+	//System.out.println("DAAPConstants.ALBUM="+DAAPConstants.ARTIST+" "+c);
 
 
 	//Search through every criteria for potential matches
@@ -279,8 +278,9 @@ public void start(){
 
 	current = playlist.remove(0);
 	recentlyPlayedTracks.add(current);
-	if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize)
-		recentlyPlayedTracks.poll();
+	if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize){
+		recentlyPlayedTracks.remove(0);
+	}
 	System.out.println("Polled playlist.");
 	try {
 		player.setInputStream(current.getStream());
@@ -314,7 +314,7 @@ public Track getCurrentTrack(){
 	return current;
 }
 
-public Queue<Track> getRecentlyPlayedTracks() {
+public List<Track> getRecentlyPlayedTracks() {
 	return recentlyPlayedTracks;
 }
 
@@ -340,7 +340,7 @@ public void playbackFinished() {
 			current = playlist.remove(0); 
 			recentlyPlayedTracks.add(current);
 			if(recentlyPlayedTracks.size() > recentlyPlayedTracksSize)
-				recentlyPlayedTracks.poll();
+				recentlyPlayedTracks.remove(0);
 
 
 			if (((String) current.getTag(DAAPConstants.NAME)).endsWith(".ogg")

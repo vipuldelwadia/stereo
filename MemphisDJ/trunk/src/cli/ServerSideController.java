@@ -118,11 +118,12 @@ public class ServerSideController implements ControllerInterface {
 	}
 	
 	public void queryRecentlyPlayed(){
-		Queue<Track> recent=dj.getRecentlyPlayedTracks();
+		List<Track> recent=dj.getRecentlyPlayedTracks();
 		
 		System.out.println("Recently played Music\n-------------------");
-		while(!recent.isEmpty())
-			System.out.print(recent.poll());
+		for (Track t : recent){
+			System.out.println(t);
+		}
 	}
 	
 	public void status(){
