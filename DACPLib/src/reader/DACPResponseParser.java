@@ -33,6 +33,7 @@ public class DACPResponseParser {
     	addStatusUpdate(reply);
     	addPlaylistRequest(reply);
     	
+    	len = new LengthVisitor();
     }
     
     private InputStream stream;
@@ -44,14 +45,7 @@ public class DACPResponseParser {
         int b = readInteger(stream);
         Node tree = this.reply.visit(c, b);
         
-        
-        
         return (Composite) tree;
-        
-//        System.out.println(tree.length);
-//        for (Node n : ((Composite) tree).nodes) {
-//        	System.out.println(n);
-//        }
     }
     
     public void addStatusUpdate(Handler reply) {
@@ -113,7 +107,12 @@ public class DACPResponseParser {
                 if (handlers.get(c) == null) {
                 	System.err.println("unexpected " + Node.intToCode(c));
                 	read += b;
-//                    throw new Error("unexpected " + Node.intToCode(c));
+                	try {
+						stream.skip(b);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
                 }
 
                 else {
