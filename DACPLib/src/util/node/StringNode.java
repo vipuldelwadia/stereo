@@ -3,8 +3,8 @@ package util.node;
 public class StringNode extends Node {
     private final String value;
     
-    public StringNode(int code, int length, String value) {
-        super(code, length);
+    public StringNode(int code, String value) {
+        super(code);
         this.value = value;
     }
     
@@ -14,5 +14,10 @@ public class StringNode extends Node {
 
 	public String getValue() {
 		return value;
+	}
+
+	@Override
+	public int visit(Visitor visitor) {
+		return visitor.visitStringNode(this);
 	}
 }

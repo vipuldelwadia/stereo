@@ -1,12 +1,10 @@
 package util.node;
 
-public class Node {
+public abstract class Node {
     public final int code;
-    public final int length;
     
-    public Node(int code, int length) {
+    public Node(int code) {
         this.code = code;
-        this.length = length;
     }
     
     public static String intToCode(int code) {
@@ -16,4 +14,7 @@ public class Node {
     public String toString() {
         return intToCode(code);
     }
+    
+    public abstract int visit(Visitor visitor);
+    
 }

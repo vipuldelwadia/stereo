@@ -28,6 +28,8 @@ public class DACPConstants extends DAAPConstants{
 	public static final int mlcl = parseInt("mlcl");
 	public static final int mlit = parseInt("mlit");
 	
+	public static final int apso = parseInt("apso");
+	
 
 
 }

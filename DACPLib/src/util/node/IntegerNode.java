@@ -3,8 +3,8 @@ package util.node;
 public class IntegerNode extends Node {
     private final int value;
     
-    public IntegerNode(int code, int length, int value) {
-        super(code, length);
+    public IntegerNode(int code, int value) {
+        super(code);
         this.value = value;
     }
     
@@ -14,5 +14,10 @@ public class IntegerNode extends Node {
 
 	public int getValue() {
 		return value;
+	}
+
+	@Override
+	public int visit(Visitor visitor) {
+		return visitor.visitIntegerNode(this);
 	}
 }

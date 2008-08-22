@@ -15,6 +15,7 @@ import util.node.BooleanNode;
 import util.node.ByteNode;
 import util.node.Composite;
 import util.node.IntegerNode;
+import util.node.LengthVisitor;
 import util.node.LongLongNode;
 import util.node.LongNode;
 import util.node.Node;
@@ -24,6 +25,7 @@ import daap.DAAPConstants;
 
 public class DACPResponseParser {
    private Handler reply;
+   private LengthVisitor len;
     
     public DACPResponseParser() {    	
     	reply = new Handler();
@@ -100,7 +102,7 @@ public class DACPResponseParser {
     private class Handler {
         public Node visit(int code, int bytes) {
             
-            Composite node = new Composite(code, bytes);
+            Composite node = new Composite(code);
             
             int read = 0;
             while (read < bytes) {
@@ -113,11 +115,13 @@ public class DACPResponseParser {
                 	read += b;
 //                    throw new Error("unexpected " + Node.intToCode(c));
                 }
+
                 else {
-                    Node n = handlers.get(c).visit(c, b);
-                    read += n.length;
-                    node.append(n);
+                	 Node n = handlers.get(c).visit(c, b);
+                     read += len.visit(n);
+                     node.append(n);
                 }
+
             }
             
             return node;
@@ -141,7 +145,7 @@ public class DACPResponseParser {
                 ex.printStackTrace();
             }
             String value = new Scanner(new ByteArrayInputStream(b)).next();
-            StringNode node = new StringNode(code, bytes, value);
+            StringNode node = new StringNode(code,value);
             
             return node;
         }
@@ -151,7 +155,7 @@ public class DACPResponseParser {
         public Node visit(int code, int bytes) {
             
             int value = readInteger(stream);
-            Node node = new IntegerNode(code, bytes, value);
+            Node node = new IntegerNode(code, value);
             
             return node;
         }
@@ -161,7 +165,7 @@ public class DACPResponseParser {
         public Node visit(int code, int bytes) {
             
             int value = readShort(stream);
-            Node node = new IntegerNode(code, bytes, value);
+            Node node = new IntegerNode(code, value);
             
             return node;
         }
@@ -171,7 +175,7 @@ public class DACPResponseParser {
         public Node visit(int code, int bytes) {
             
             boolean value = readBoolean(stream) == 1;
-            Node node = new BooleanNode(code, bytes, value);
+            Node node = new BooleanNode(code, value);
             
             return node;
         }
@@ -181,7 +185,7 @@ public class DACPResponseParser {
         public Node visit(int code, int bytes) {
             
             byte value = readByte(stream);
-            Node node = new ByteNode(code, bytes, value);
+            Node node = new ByteNode(code, value);
             
             return node;
         }
@@ -191,7 +195,7 @@ public class DACPResponseParser {
         public Node visit(int code, int bytes) {
             
             long value = readLong(stream);
-            Node node = new LongNode(code, bytes, value);
+            Node node = new LongNode(code, value);
             
             return node;
         }
@@ -202,7 +206,7 @@ public class DACPResponseParser {
             
             long value = readLong(stream);
             long value2 = readLong(stream);
-            Node node = new LongLongNode(code, bytes, value, value2);
+            Node node = new LongLongNode(code, value, value2);
             
             return node;
         }

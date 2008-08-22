@@ -4,8 +4,8 @@ public class LongLongNode extends Node {
     private final long value;
     private final long value2;
     
-    public LongLongNode(int code, int length, long value, long value2) {
-        super(code, length);
+    public LongLongNode(int code, long value, long value2) {
+        super(code);
         this.value = value;
         this.value2 = value2;
     }
@@ -20,5 +20,10 @@ public class LongLongNode extends Node {
 
 	public long getValue2() {
 		return value2;
+	}
+
+	@Override
+	public int visit(Visitor visitor) {
+		return visitor.visitLongLongNode(this);
 	}
 }

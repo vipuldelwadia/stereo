@@ -3,8 +3,8 @@ package util.node;
 public class ByteNode extends Node {
     private final byte value;
     
-    public ByteNode(int code, int length, byte value) {
-        super(code, length);
+    public ByteNode(int code, byte value) {
+        super(code);
         this.value = value;
     }
     
@@ -14,6 +14,11 @@ public class ByteNode extends Node {
 
 	public byte getValue() {
 		return value;
+	}
+
+	@Override
+	public int visit(Visitor visitor) {
+		return visitor.visitByteNode(this);
 	}
 }
 

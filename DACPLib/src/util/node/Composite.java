@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Composite extends Node {
-    public Composite(int code, int length) {
-        super(code, length);
+    public Composite(int code) {
+        super(code);
     }
     
     public void append(Node node) {
@@ -21,4 +21,9 @@ public class Composite extends Node {
     }
     
     public List<Node> nodes = new ArrayList<Node>();
+
+	@Override
+	public int visit(Visitor visitor) {
+		return visitor.visitComposite(this);
+	}
 }
