@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import daap.DAAPClient;
 import daap.DAAPConstants;
@@ -50,6 +51,10 @@ public class Track {
 	
 	public String toString(){
 		 return String.format("%s - %s - %s\n",getTag(DAAPConstants.NAME),getTag(DAAPConstants.ARTIST),getTag(DAAPConstants.ALBUM));
+	}
+
+	public Set<Map.Entry<Integer, Object>> getAllTags() {
+		return tags.entrySet();
 	}
 	
 }
