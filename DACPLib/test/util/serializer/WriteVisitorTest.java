@@ -87,22 +87,26 @@ public class WriteVisitorTest {
 		Composite node = new Composite(5);
 		
 		node.append(new ByteNode(1, (byte)'a'));
-		node.append(new ByteNode(2, (byte)'b'));
-		node.append(new ByteNode(3, (byte)'c'));
-		node.append(new ByteNode(4, (byte)'d'));
+		node.append(new IntegerNode(2, 2));
+		node.append(new StringNode(3, "hello"));
+		node.append(new BooleanNode(4, true));
+		node.append(new LongNode(5, 1l));
 		
 		visitor.visit(node);
 		
-		int length = 44;
+		int length = 67;
+		
+		System.out.println(in.available());
 		
 		assertTrue(in.available() == length);
 		
 		byte[] read = new byte[length];
-		byte[] check = new byte[] { 0, 0, 0, 5, 0, 0, 0, 36, 
+		byte[] check = new byte[] { 0, 0, 0, 5, 0, 0, 0, 59, 
 				0, 0, 0, 1, 0, 0, 0, 1, 'a',
-				0, 0, 0, 2, 0, 0, 0, 1, 'b',
-				0, 0, 0, 3, 0, 0, 0, 1, 'c',
-				0, 0, 0, 4, 0, 0, 0, 1, 'd'
+				0, 0, 0, 2, 0, 0, 0, 4, 0, 0, 0, 2,
+				0, 0, 0, 3, 0, 0, 0, 5, 'h', 'e', 'l', 'l', 'o',
+				0, 0, 0, 4, 0, 0, 0, 1, 1,
+				0, 0, 0, 5, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 1
 				};
 		in.read(read);
 		
