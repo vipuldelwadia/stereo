@@ -58,7 +58,7 @@ public class DJ implements PlaybackListener{
 		lackey = new Lackey(this);
 	}
 
-	private void fillPlaylistA() {
+	private void fillPlaylist() {
 		System.out.println("Attempting to fill playlist of size " + getPlaylist().size());
 		List<Track> lib = lackey.getAllTracks();
 		if (lib != null && !lib.isEmpty()) {
@@ -82,7 +82,7 @@ public class DJ implements PlaybackListener{
 	 * get there music played evenly. It also makes sure that the tracks have not been recently played
 	 *
 	 */
-	private void fillPlaylist(){
+	private void fillPlaylistB(){
 		Map<DAAPClient, Set<Track>> clientsTracks=libraryToOwnerMap();
 		List<Track> tracks=lackey.getAllTracks();
 
