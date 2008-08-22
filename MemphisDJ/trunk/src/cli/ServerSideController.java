@@ -6,6 +6,7 @@ package cli;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import music.DJ;
 import playlist.Track;
@@ -36,17 +37,39 @@ public class ServerSideController implements ControllerInterface {
 		return dj.getPlaylist();
 	}
 	
+	
+	/**
+	 * Returns a filtered playlist without replacing the current one.
+	 * @param type
+	 * @param criteria
+	 */
+	private Map<Integer,String> fillFilter(String type,String criteria,Map<Integer,String> playList){
+		if (type.equalsIgnoreCase("artist"))
+			playList.put(DAAPConstants.ARTIST, criteria);
+		 else if (type.equalsIgnoreCase("album"))
+			playList.put(DAAPConstants.ALBUM, criteria);
+		
+		return playList;
+	}
+	
+	/**
+	 * Do a filter on the playlist and replace the current playlist with the new filtered one.
+	 */
 	public void filter(String type, String criteria){
 		Map<Integer,String> filter=new HashMap<Integer, String>();
-
-		if (type.equalsIgnoreCase("artist")){
-			filter.put(DAAPConstants.ARTIST, criteria);
-		} else if (type.equalsIgnoreCase("album")){
-			filter.put(DAAPConstants.ALBUM, criteria);
-		}
-		
+		filter=fillFilter(type,criteria,filter);
 		dj.setPlaylistWithFilter(filter);
 	}
+	
+	/**
+	 * Do a filter on the playlist and replace the current playlist with the new LIST of tracks.
+	 */
+	public List<Track> filterToList(String type, String criteria){
+		Map<Integer,String> filter=new HashMap<Integer, String>();
+		filter=fillFilter(type,criteria,filter);
+		return dj.getPlaylistWithFilter(filter);
+	}
+	
 	
 	public int getVolume() {
 		return (int)dj.getVolume();
@@ -70,6 +93,14 @@ public class ServerSideController implements ControllerInterface {
 
 	public void stop() {
 		dj.stop();
+	}
+	
+	public void recentlyPlayed(){
+		Queue<Track> recent=dj.getRecentlyPlayedTracks();
+		
+		System.out.println("Recently played Music\n-------------------");
+		while(!recent.isEmpty())
+			System.out.println(recent.poll());
 	}
 	
 	public void status(){

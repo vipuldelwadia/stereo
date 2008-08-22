@@ -9,19 +9,19 @@ import controller.ControllerInterface;
 
 import playlist.Track;
 
-public class CLI {
+public class ServerCLI {
     private Scanner    scan;
     private ControllerInterface controller;
     
 
-    public CLI(ControllerInterface controller) {
+    public ServerCLI(ControllerInterface controller) {
 
         scan = new Scanner(System.in);
         this.controller = controller;
         run();
     }
     
-    public CLI(ControllerInterface controller, String args) {
+    public ServerCLI(ControllerInterface controller, String args) {
         scan = new Scanner(System.in);
         this.controller = controller;
         input(args);
@@ -51,14 +51,31 @@ public class CLI {
         	status(null);
         }
         
+        public void append(String dummy) {
+        	//TODO:Do append
+            System.out.println("Doesn't do anything Yet.");
+        	status(null);
+        }
+        
+        public void recent(String dummy) {
+            controller.recentlyPlayed();
+        }
+    
+        public List<Track> getFilter(String param) {
+        	System.out.println(param);
+        	Scanner s = new Scanner(param);
+        	String type,crit;
+        	type=s.hasNext()? s.next().trim(): "";
+        	crit=s.hasNextLine()? s.nextLine().trim():"";
+        	System.out.println("Type: "+type+"|"+crit+"|");
+            return controller.filterToList(type, crit);
+        }
+        
         public void status(String dummy){
         	controller.status();
         }
         
         public void filter(String param) {
-        	//TODO FIX THIS HORRIBLE THING
-        	//s=s.replace("_", " ");
-        	//String crit = "";
         	System.out.println(param);
         	Scanner s = new Scanner(param);
         	String type,crit;
@@ -70,7 +87,9 @@ public class CLI {
         }
         
         public void tracklist(String dummy) {
-        	System.out.println(controller.getPlaylist().toString());
+        	
+        	for(Track currentTrack: controller.getPlaylist())
+        	System.out.println(currentTrack.toString());
         }
         
         public void pause(String dummy) { 
@@ -152,7 +171,7 @@ public class CLI {
     
     public static void main(String[] args) {
     	if (args.length == 0) {
-    		new CLI(new ServerSideController());
+    		new ServerCLI(new ServerSideController());
     	}
     	else {
     		String combinedArgs = "";
@@ -161,7 +180,7 @@ public class CLI {
     		}
     		combinedArgs = combinedArgs.trim();
     		System.out.println(combinedArgs);
-    		new CLI(new ServerSideController(), combinedArgs);
+    		new ServerCLI(new ServerSideController(), combinedArgs);
     	}
     }
     
