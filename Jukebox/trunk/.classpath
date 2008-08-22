@@ -16,7 +16,6 @@
 	<classpathentry kind="var" path="ECLIPSE_HOME/plugins/org.eclipse.ui.workbench_3.2.2.M20070119-0800.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DACPLib"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/MemphisDJ"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DAAPLib"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
