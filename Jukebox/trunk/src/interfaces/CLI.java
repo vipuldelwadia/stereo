@@ -85,10 +85,8 @@ public class CLI {
         	if (command.startsWith("volume ")) {
         		new Set().volume(command.substring("volume ".length()));
         	}
-            System.out.println("set");
         }
         public void stop(String dummy){
-        	System.out.println("Stopped");
         	controller.stop();
         }
     }
@@ -101,6 +99,8 @@ public class CLI {
             }
             catch (NumberFormatException ex) {
                 System.out.println("You were supposed to give me a volume dumbass!");
+            }catch(IllegalArgumentException ex){
+            	System.out.println(ex.getMessage());
             }
         }
     }
