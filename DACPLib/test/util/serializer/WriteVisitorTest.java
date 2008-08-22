@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 import java.io.ByteArrayInputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -94,7 +96,7 @@ public class WriteVisitorTest {
 		
 		int length = 67;
 		
-		System.out.println(in.available());
+		//System.out.println(in.available());
 		
 		assertTrue(in.available() == length);
 		
@@ -110,7 +112,94 @@ public class WriteVisitorTest {
 		
 		assertTrue(compare(read, check));
 	}
+
 	
+	@Test
+	public void complexCompositeTest() throws Exception{
+		Composite node = new Composite(5);
+		Composite node2 = new Composite(2);
+		Composite node3 = new Composite(3);
+		
+		node2.append(new BooleanNode(6, true));
+		node2.append(new BooleanNode(7, true));
+		node3.append(new BooleanNode(8, true));
+		node3.append(new BooleanNode(9, true));
+		
+		node.append(node2);	
+		node.append(node3);
+		
+		visitor.visit(node);
+		
+		int length = 60;
+		
+		assertTrue(in.available() == length);
+		
+		byte[] read = new byte[length];
+		byte[] check = new byte[] { 0, 0, 0, 5, 0, 0, 0, 52, 
+				0, 0, 0, 2, 0, 0, 0, 18,
+				0, 0, 0, 6, 0, 0, 0, 1, 1,
+				0, 0, 0, 7, 0, 0, 0, 1, 1,
+				0, 0, 0, 3, 0, 0, 0, 18,
+				0, 0, 0, 8, 0, 0, 0, 1, 1, 
+				0, 0, 0, 9, 0, 0, 0, 1, 1, 
+				};
+		in.read(read);
+		
+		assertTrue(compare(read, check));
+	}
+
+	@Test
+	public void complexCompositeTestWithLists() throws Exception{
+		
+		List<Node> bools1 = new ArrayList<Node>();
+		bools1.add(new BooleanNode(6, true));
+		bools1.add(new BooleanNode(7, true));
+ 
+		List<Node> bools2 = new ArrayList<Node>();
+		bools2.add(new BooleanNode(8, true));
+		bools2.add(new BooleanNode(9, true));
+		
+		List<Node> comps = new ArrayList<Node>();
+		
+		Composite node2 = new Composite(2);
+		for(Node n: bools1){
+			node2.append(n);
+		}
+
+		Composite node3 = new Composite(3);
+		for(Node n: bools2){
+			node3.append(n);
+		}
+		
+		comps.add(node2);
+		comps.add(node3);
+		
+		Composite node = new Composite(5);
+		for(Node n:comps){
+			node.append(n);
+		}
+		
+		
+		visitor.visit(node);
+		
+		int length = 60;
+		
+		assertTrue(in.available() == length);
+		
+		byte[] read = new byte[length];
+		byte[] check = new byte[] { 0, 0, 0, 5, 0, 0, 0, 52, 
+				0, 0, 0, 2, 0, 0, 0, 18,
+				0, 0, 0, 6, 0, 0, 0, 1, 1,
+				0, 0, 0, 7, 0, 0, 0, 1, 1,
+				0, 0, 0, 3, 0, 0, 0, 18,
+				0, 0, 0, 8, 0, 0, 0, 1, 1, 
+				0, 0, 0, 9, 0, 0, 0, 1, 1, 
+		};
+		in.read(read);
+		
+		assertTrue(compare(read, check));
+	}
+
 	@Test
 	public void testJorisVisit() throws Exception {
 
@@ -145,6 +234,7 @@ public class WriteVisitorTest {
 		System.out.println(tree);
 
 	}
+
 
 	@Test
 	public void testVisitIntegerNode() throws Exception {
@@ -217,9 +307,19 @@ public class WriteVisitorTest {
 		for (int i = 0; i < from.length; i++) {
 			if (from[i] != to[i]) {
 				System.out.println(from[i] + " != " + to[i] + " at " + i);
+				System.out.println(printOut(from));
+				System.out.println(printOut(to));
 				return false;
 			}
 		}
 		return true;
+	}
+
+	private static String printOut(byte[] byteArray) {
+		String ret = "";
+		for(byte b:byteArray){
+			ret+=b+" ";
+		}
+		return ret;
 	}
 }

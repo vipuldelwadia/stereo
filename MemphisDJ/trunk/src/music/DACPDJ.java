@@ -1,9 +1,12 @@
 package music;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -24,6 +27,7 @@ import util.node.BooleanNode;
 import util.node.ByteNode;
 import util.node.Composite;
 import util.node.IntegerNode;
+import util.node.LengthVisitor;
 import util.node.LongNode;
 import util.node.Node;
 import util.node.StringNode;
@@ -77,14 +81,14 @@ public class DACPDJ {
 		private final Socket SOCK;
 
 		private final String responseOKNoBody = "HTTP/1.1 204 OK\r\n\r\n";
-		private final String responseOK = "HTTP/1.1 200 OK\r\n\r\n";
+		private final String responseOK = "HTTP/1.1 200 OK\r\n";
 		
 
 
 
 		public void run() {
 			try {
-				final PrintStream p = new PrintStream(SOCK.getOutputStream());
+				final PrintStream p = new PrintStream(new BufferedOutputStream(SOCK.getOutputStream()));
 				
 				new Thread() {
 					public void run() {
@@ -102,9 +106,6 @@ public class DACPDJ {
 								DACPCommand s = DACPRequestParser.parse(parseText);
 								
 								runCommand(s);
-								System.out.println();
-								
-
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
@@ -137,9 +138,20 @@ public class DACPDJ {
 							Node tree = buildTree(pl);
 							
 							p.print(responseOK);
+							
+							int length = new LengthVisitor().visit(tree);
+							p.print("Content-Type: application/x-dmap-tagged\r\n");
+							p.print("Content-Length: "+length+"\r\n");
+							p.print("DAAP-Server: memphis-dj-0.1\r\n");
+							p.print("Date: "+new Date().toLocaleString()+"\r\n");
+							
+							p.print("\r\n");
+							
 							new DACPWriter(tree, p);
 						}
-				
+						
+						p.flush();
+						p.close();
 					}
 
 					private Node buildTree(List<Track> pl) {
@@ -148,6 +160,7 @@ public class DACPDJ {
 							List<Node> tags = new ArrayList<Node>();
 							for(Map.Entry<Integer, Object> tag:t.getAllTags()){
 								Object tagValue = tag.getValue();
+								
 								if(tagValue instanceof Byte){
 									tags.add(new ByteNode(tag.getKey(), (Byte)tagValue));
 								}else if(tagValue instanceof Boolean){

@@ -7,36 +7,36 @@ public class LengthVisitor implements Visitor {
 	}
 
 	public int visitBooleanNode(BooleanNode node) {
-		return 1;
+		return 9;
 	}
 
 	public int visitByteNode(ByteNode node) {
-		return 1;
+		return 9;
 	}
 
 	
 	
 	public int visitComposite(Composite node) {
-		int length = 0;
+		int length = 8;
 		for (Node n: node.nodes) {
-			length += 8 + this.visit(n);
+			length += this.visit(n);
 		}
 		return length;
 	}
 
 	public int visitIntegerNode(IntegerNode node) {
-		return 4;
+		return 12;
 	}
 
 	public int visitLongLongNode(LongLongNode node) {
-		return 16;
+		return 24;
 	}
 
 	public int visitLongNode(LongNode node) {
-		return 8;
+		return 16;
 	}
 
 	public int visitStringNode(StringNode node) {
-		return node.getValue().length();
+		return 8+node.getValue().length();
 	}
 }

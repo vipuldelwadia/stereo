@@ -3,6 +3,8 @@ package util.serializer;
 import java.io.IOException;
 import java.io.OutputStream;
 
+import daap.DAAPUtilities;
+
 import util.node.BooleanNode;
 import util.node.ByteNode;
 import util.node.Composite;
@@ -38,7 +40,7 @@ public class WriteVisitor implements Visitor {
 			System.err.println("Failed to write boolean");
 			//e.printStackTrace();
 		}
-		return length+8;
+		return length;
 	}
 
 	public int visitByteNode(ByteNode node) {
@@ -50,24 +52,25 @@ public class WriteVisitor implements Visitor {
 			System.err.println("error writing to output stream");
 			//e.printStackTrace();
 		}
-		return length+8;
+		return length;
 	}
 
 	public int visitComposite(Composite node) {
 		int length = len.visit(node);
 		DACPWriter.writeCode(node.code, output);
-		DACPWriter.writeInt(length, output);
+		DACPWriter.writeInt(length-8, output);
+		System.out.println("sending composite " + DAAPUtilities.intToString(node.code) + " length " + length);
 		for (Node n: node.nodes) {
 			this.visit(n);
 		}
-		return length+8;
+		return length;
 	}
 
 	public int visitIntegerNode(IntegerNode node) {
 		int length = len.visit(node);
 		DACPWriter.writeNodeHeader(node, length, output);
 		DACPWriter.writeInt(node.getValue(), output);
-		return length+8;
+		return length;
 	}
 
 	public int visitLongLongNode(LongLongNode node) {
@@ -75,21 +78,21 @@ public class WriteVisitor implements Visitor {
 		DACPWriter.writeNodeHeader(node, length, output);
 		DACPWriter.writeLong(node.getValue(), output);
 		DACPWriter.writeLong(node.getValue2(), output);
-		return length+8;
+		return length;
 	}
 
 	public int visitLongNode(LongNode node) {
 		int length = len.visit(node);
 		DACPWriter.writeNodeHeader(node, length, output);
 		DACPWriter.writeLong(node.getValue(), output);
-		return length+8;
+		return length;
 	}
 
 	public int visitStringNode(StringNode node) {
 		int length = len.visit(node);
 		DACPWriter.writeNodeHeader(node, length, output);
 		DACPWriter.writeString(node.getValue(), output);
-		return length+8;
+		return length;
 	}
 
 }

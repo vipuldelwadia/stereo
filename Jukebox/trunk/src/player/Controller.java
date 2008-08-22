@@ -17,6 +17,7 @@ import daap.DAAPConstants;
  * @author coxdyla This class interfaces the User interfaces with the servers
  *         playlist TODO make it recieve and interpret DACP requests
  */
+
 public class Controller implements ControllerInterface {
 
 	private final static boolean DEBUG = false;
@@ -29,6 +30,7 @@ public class Controller implements ControllerInterface {
 		this.location = _location;
 		this.connect();
 	}
+
 
 	private boolean connect() {
 		// TODO

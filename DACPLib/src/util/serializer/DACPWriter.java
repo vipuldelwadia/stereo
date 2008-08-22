@@ -59,6 +59,6 @@ public class DACPWriter {
 	
 	public static void writeNodeHeader(Node node, int length, OutputStream out){
 		writeCode(node.code, out);
-		writeInt(length, out);
+		writeInt(length-8, out);
 	}
 }
