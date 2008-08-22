@@ -47,9 +47,8 @@ public interface ControllerInterface {
 	public abstract void status();
 	
 	public abstract void filter(String type, String criteria);
-	
+
 	public abstract void recentlyPlayed();
 
 	public abstract void displayQuery(String type, String crit);
-
 }
