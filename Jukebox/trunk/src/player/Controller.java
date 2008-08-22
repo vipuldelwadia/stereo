@@ -5,12 +5,16 @@ package player;
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Queue;
 
 import clinterface.CLI;
 
 import playlist.Track;
 import controller.ControllerInterface;
+import daap.DAAPConstants;
 
 
 /**
@@ -103,6 +107,11 @@ public class Controller implements ControllerInterface{
     	return this.dacp.getVolume();
     }
 
+    
+    
+    /*
+     * 
+     */
 	public void setPlaylist(List<Track> p) {
 		ArrayList<Track> tracks = new ArrayList<Track>();
 		for(Track t : tracks) tracks.add(t);
@@ -113,27 +122,60 @@ public class Controller implements ControllerInterface{
 		this.dacp.stop();
 	}
 
-	public void filter(String type, String criteria) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	public void status() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void displayQuery(String type, String crit) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void recentlyPlayed() {
-		// TODO Auto-generated method stub
+		Track t = this.dacp.queryCurrentTrack();
+		if (t != null) //TODO print this better? What about paused/unpause?
+			System.out.println(t.toString());
 		
 	}
 	
+	public void createPlaylistWithFilter(String type, String criteria) {
+		Map<Integer,String> filter=new HashMap<Integer, String>();
+		filter=fillFilter(type,criteria,filter);
+		this.dacp.setPlaylistWithFilter(filter);
+	}
+
+	public void queryLibrary(String type, String crit) {
+		Map<Integer,String> filter=new HashMap<Integer, String>();
+		filter=fillFilter(type,crit,filter);
+		for (Track currentTrack : this.dacp.getPlaylistWithFilter(filter))
+			System.out.print(currentTrack);
+	}
 	
+	//helper method
+	/**
+	 * Returns a filtered playlist without replacing the current one.
+	 * @param type
+	 * @param criteria
+	 */
+	private Map<Integer,String> fillFilter(String type,String criteria,Map<Integer,String> playList){
+		if (type.equalsIgnoreCase("artist"))
+			playList.put(DAAPConstants.ARTIST, criteria);
+		 else if (type.equalsIgnoreCase("album"))
+			playList.put(DAAPConstants.ALBUM, criteria);
+		
+		return playList;
+	}
+
+	public void queryRecentlyPlayed() {
+		List<Track> recent=this.dacp.getRecentlyPlayedTracks();
+		
+		System.out.println("Recently played Music\n-------------------");
+		while(!recent.isEmpty())
+			System.out.print(recent.remove(0));
+	}
+
+	public void append(String type, String crit) {
+		//TODO
+	}
+
+	public void displayLibrary() {
+		System.out.println("The Library Contents\n-------------------");
+		for(Track currentTrack : this.dacp.getLibrary())
+			System.out.print(currentTrack.toString());
+		
+	}
 	
     
     public static void main(String[] args) {
@@ -150,15 +192,5 @@ public class Controller implements ControllerInterface{
     		new CLI(new Controller(), combinedArgs);
     	}
     }
-
-	public void append(String type, String crit) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public void displayLibrary() {
-		// TODO Auto-generated method stub
-		
-	}
     
 }

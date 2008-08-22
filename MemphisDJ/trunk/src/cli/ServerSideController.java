@@ -54,7 +54,7 @@ public class ServerSideController implements ControllerInterface {
 	/**
 	 * Do a filter on the playlist and replace the current playlist with the new filtered one.
 	 */
-	public void filter(String type, String criteria){
+	public void createPlaylistWithFilter(String type, String criteria){
 		Map<Integer,String> filter=new HashMap<Integer, String>();
 		filter=fillFilter(type,criteria,filter);
 		dj.setPlaylistWithFilter(filter);
@@ -63,7 +63,7 @@ public class ServerSideController implements ControllerInterface {
 	/**
 	 * Do a filter on the playlist and display it without replacing the current playlist with the new LIST of tracks.
 	 */
-	public void displayQuery(String type, String criteria){
+	public void queryLibrary(String type, String criteria){
 		Map<Integer,String> filter=new HashMap<Integer, String>();
 		filter=fillFilter(type,criteria,filter);
 		for (Track currentTrack : dj.getPlaylistWithFilter(filter))
@@ -117,7 +117,7 @@ public class ServerSideController implements ControllerInterface {
 			System.out.print(currentTrack.toString());
 	}
 	
-	public void recentlyPlayed(){
+	public void queryRecentlyPlayed(){
 		Queue<Track> recent=dj.getRecentlyPlayedTracks();
 		
 		System.out.println("Recently played Music\n-------------------");

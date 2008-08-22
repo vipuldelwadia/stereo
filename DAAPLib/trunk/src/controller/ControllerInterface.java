@@ -46,11 +46,11 @@ public interface ControllerInterface {
 	
 	public abstract void status();
 	
-	public abstract void filter(String type, String criteria);
+	public abstract void createPlaylistWithFilter(String type, String criteria);
 
-	public abstract void recentlyPlayed();
+	public abstract void queryRecentlyPlayed();
 
-	public abstract void displayQuery(String type, String crit);
+	public abstract void queryLibrary(String type, String crit);
 	public abstract void displayLibrary();
 
 	public abstract void append(String type, String crit);

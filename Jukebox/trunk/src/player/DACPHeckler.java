@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Scanner;
 
 import playlist.Track;
@@ -263,5 +264,35 @@ public class DACPHeckler {
 
 	private void send(String command) {
 		p.println("GET /ctrl-int/1/" + command + " HTTP/1.1\r\n");
+	}
+
+	
+	/*
+	 * 
+	 */
+	
+	public List<Track> getLibrary() {
+		// TODO Auto-generated method stub
+		return new ArrayList<Track>(); //empty for now
+	}
+
+	public List<Track> getRecentlyPlayedTracks() {
+		// TODO Auto-generated method stub
+		return new ArrayList<Track>(); //empty for now
+	}
+
+	public Track queryCurrentTrack() {
+		// TODO Auto-generated method stub
+		return null; //empty for now
+	}
+
+	public void setPlaylistWithFilter(Map<Integer, String> filter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<Track> getPlaylistWithFilter(Map<Integer, String> filter) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

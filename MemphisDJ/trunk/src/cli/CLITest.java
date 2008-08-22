@@ -49,7 +49,7 @@ public class CLITest {
 
         
         public void recent(String dummy) {
-            controller.recentlyPlayed();
+            controller.queryRecentlyPlayed();
         }
     
         public void query(String param) {
@@ -59,7 +59,7 @@ public class CLITest {
         	type=s.hasNext()? s.next().trim(): "";
         	crit=s.hasNextLine()? s.nextLine().trim():"";
         	System.out.println("Query Type: "+type+" with the Criteria of:"+crit+"");
-        	controller.displayQuery(type,crit);
+        	controller.queryLibrary(type,crit);
         }
         
         public void status(String dummy){
@@ -76,7 +76,7 @@ public class CLITest {
         	type=s.hasNext()? s.next().trim(): "";
         	crit=s.hasNextLine()? s.nextLine().trim():"";
         	System.out.println("Filter Type: "+type+" with the Criteria of:"+crit+"");
-            controller.filter(type, crit);
+            controller.createPlaylistWithFilter(type, crit);
             status(null);
         }
         
