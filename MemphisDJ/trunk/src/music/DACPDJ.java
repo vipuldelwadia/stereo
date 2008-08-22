@@ -69,7 +69,7 @@ public class DACPDJ {
 	private class ServerRunnable implements Runnable {
 
 		private final Socket SOCK;
-		private final String responseOK = "HTTP/1.1 204 OK";
+		private final String responseOK = "HTTP/1.1 204 OK\r\n\r\n";
 
 		public void run() {
 			try {
@@ -95,7 +95,7 @@ public class DACPDJ {
 								if(c != null) c.doAction(dj);
 								
 								//send response
-								p.println(responseOK);
+								p.print(responseOK);
 							}
 						} catch (IOException e) {
 							e.printStackTrace();
