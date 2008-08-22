@@ -49,27 +49,54 @@ public class CLI {
             controller.playTrack();
         	status(null);
         }
+
         
-        public void status(String dummy){
-        	controller.status();
+        public void recent(String dummy) {
+            controller.recentlyPlayed();
         }
-        
-        public void filter(String param) {
-        	//TODO FIX THIS HORRIBLE THING
-        	//s=s.replace("_", " ");
-        	//String crit = "";
+    
+        public void query(String param) {
         	System.out.println(param);
         	Scanner s = new Scanner(param);
         	String type,crit;
         	type=s.hasNext()? s.next().trim(): "";
         	crit=s.hasNextLine()? s.nextLine().trim():"";
-        	System.out.println("Type: "+type+"|"+crit+"|");
+        	System.out.println("Query Type: "+type+" with the Criteria of:"+crit+"");
+        	controller.displayQuery(type,crit);
+        }
+        
+        public void status(String dummy){
+        	controller.status();
+        }
+        
+        public void library(String dummy){
+        	controller.displayLibrary();
+        }
+        
+        public void filter(String param) {
+        	Scanner s = new Scanner(param);
+        	String type,crit;
+        	type=s.hasNext()? s.next().trim(): "";
+        	crit=s.hasNextLine()? s.nextLine().trim():"";
+        	System.out.println("Filter Type: "+type+" with the Criteria of:"+crit+"");
             controller.filter(type, crit);
             status(null);
         }
         
+        public void append(String param) {
+        	Scanner s = new Scanner(param);
+        	String type,crit;
+        	type=s.hasNext()? s.next().trim(): "";
+        	crit=s.hasNextLine()? s.nextLine().trim():"";
+        	System.out.println("Appended with a new list with Type: "+type+" with the Criteria of:"+crit+"");
+            controller.append(type, crit);
+            status(null);
+        }
+        
         public void tracklist(String dummy) {
-        	System.out.println(controller.getPlaylist().toString());
+        	
+        	for(Track currentTrack: controller.getPlaylist())
+        	System.out.print(currentTrack.toString());
         }
         
         public void pause(String dummy) { 
@@ -85,8 +112,10 @@ public class CLI {
         	if (command.startsWith("volume ")) {
         		new Set().volume(command.substring("volume ".length()));
         	}
+            System.out.println("set");
         }
         public void stop(String dummy){
+        	System.out.println("Stopped");
         	controller.stop();
         }
     }
@@ -99,8 +128,6 @@ public class CLI {
             }
             catch (NumberFormatException ex) {
                 System.out.println("You were supposed to give me a volume dumbass!");
-            }catch(IllegalArgumentException ex){
-            	System.out.println(ex.getMessage());
             }
         }
     }
@@ -148,4 +175,20 @@ public class CLI {
         
         return;        
     }
+    
+    public static void main(String[] args) {
+    	if (args.length == 0) {
+    		new CLI(new Controller());
+    	}
+    	else {
+    		String combinedArgs = "";
+    		for(String s : args) {
+    			combinedArgs += " " + s;
+    		}
+    		combinedArgs = combinedArgs.trim();
+    		System.out.println(combinedArgs);
+    		new CLI(new Controller(), combinedArgs);
+    	}
+    }
+    
 }
