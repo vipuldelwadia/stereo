@@ -162,13 +162,13 @@ public class CLI {
                     }
                 }
                 if (found == false) {
-                    System.out.println("method not found");
+                    System.out.println("command not found");
                     return;
                 }
             }
             catch (Exception ex) {
                 System.err.println("error calling method");
-                //ex.printStackTrace();
+//                ex.printStackTrace();
             }
         }
         
