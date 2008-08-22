@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
 import java.util.Scanner;
 
 import playlist.Track;
@@ -21,6 +20,8 @@ import daap.DAAPConstants;
 
 public class DACPHeckler {
 
+	private static final boolean DEBUG = true;
+	
 	private final String HOST;
 	private final int PORT;
 	private final PrintStream p;
@@ -30,32 +31,12 @@ public class DACPHeckler {
 		this.HOST = host;
 		this.PORT = port;
 		connect();
-//		listen();
 		this.p = new PrintStream(sock.getOutputStream());
 	}
 
 	private void connect() throws UnknownHostException, IOException {
 		sock = new Socket(HOST, PORT);
 	}
-	
-//	private void listen() {
-//		new Thread() {
-//			public void run() {
-//				while(true) {
-//				try {
-//					InputStream in = response();
-//					if (in != null) {
-//						DACPResponseParser r = new DACPResponseParser();
-//						Composite c = r.parse(in);
-//						translateResponse(c);
-//					}
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//			}
-//		}.start();
-//	}
 	
 	private Object translateResponse(Composite c) {
 		String code = Node.intToCode(c.code);
@@ -75,6 +56,188 @@ public class DACPHeckler {
 		else return null;
 	}
 
+    private InputStream response() throws IOException, UnknownHostException {
+        
+        InputStream in = sock.getInputStream();
+        
+        String buffer = "";
+        while (true) {
+            char c = (char) in.read();
+            buffer += c;
+            if (c == '\n' && buffer.endsWith("\r\n\r\n"))
+                break;
+        }
+        
+        Scanner sc = new Scanner(buffer);
+        
+        String protocol = sc.next();
+        int status = sc.nextInt();
+        String code = sc.next();
+        
+        if (!protocol.equals("HTTP/1.1"))
+            throw new IOException("Unsupported Protocol: " + protocol);
+        if (status != 200 && status != 204 && code.equals("OK"))
+            throw new IOException("Error connecting to server: " + status + " " + code);
+        
+        if (!sc.nextLine().equals(""))
+            throw new IOException("Expected empty line after header");
+        
+        String contentType = null, date = null, version = null;
+        int contentLength = 0;
+        String line;
+        
+        while (sc.hasNextLine()) {
+            line = sc.nextLine();
+            if (line.equals(""))
+                break;
+            
+            Scanner lineScanner = new Scanner(line);
+            String token = lineScanner.next();
+            if (token.equals("Content-Type:")) {
+                contentType = lineScanner.next();
+            }
+            else if (token.equals("Content-Length:")) {
+                contentLength = lineScanner.nextInt();
+            }
+            else if (token.equals("DAAP-Server:")) {
+                version = lineScanner.next();
+            }
+            else if (token.equals("Date:")) {
+                date = lineScanner.next();
+            }
+        }
+        
+        if (DEBUG){
+        	System.out.println("Code:" + code);
+        	System.out.println("Status:" + status);
+        	System.out.println("Content Type:" + contentType);
+        	System.out.println("Content Length:" + contentLength);
+        	System.out.println("Date:" + date);
+        	System.out.println("Version:" + version);
+        }
+        
+        if (status == 204)
+        	return null;
+        else
+        	return in;
+    }
+	
+	
+	/*
+	 * 
+	 */
+	
+	public List<Track> getLibrary() {
+		// TODO Auto-generated method stub
+		return new ArrayList<Track>(); //empty for now
+	}
+
+	public List<Track> getRecentlyPlayedTracks() {
+		// TODO Auto-generated method stub
+		return new ArrayList<Track>(); //empty for now
+	}
+
+	public Track queryCurrentTrack() {
+		// TODO Auto-generated method stub
+		return null; //empty for now
+	}
+
+	public void setPlaylistWithFilter(Map<Integer, String> filter) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void play() {
+		send(DACPRequestGenerator.play());
+		GetResponse();
+	}
+	public void pause() {
+		send(DACPRequestGenerator.pause());
+		GetResponse();
+	}
+    
+    public void skip(){
+    	send(DACPRequestGenerator.skip());
+    	GetResponse();
+    }
+    
+	public void setVolume(int newVolume) {
+		send(DACPRequestGenerator.changeVolume(newVolume));
+		GetResponse();
+	}
+	
+	public int getVolume(){
+		//TODO
+		GetResponse();
+		return 0;
+	}
+	
+	public void setTracks(List<Track> l){
+		//TODO
+	}
+	
+	public void stop() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public List<Track> getPlaylistWithFilter(Map<Integer, String> filter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Track> getTracks(){
+		List<Track> tracks = new ArrayList<Track>();
+		try {
+			//TODO
+			Map<String, String> emptyParamters = new HashMap<String, String>();
+			send(DACPRequestGenerator.getTracks(emptyParamters));
+			InputStream in = response();
+			if (in != null) {
+				DACPResponseParser r = new DACPResponseParser();
+				Composite c = r.parse(in);
+				Object o = translateResponse(c);
+				if (o != null){
+					if (o instanceof List){
+						for (Object e : (List)o){
+							if (e instanceof Track)
+								tracks.add((Track)e);
+						}
+					}
+					else if (o instanceof Track){
+						tracks.add((Track)o);
+					}
+				}
+			}
+			
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		
+		for (Track t : tracks){
+			System.out.println(t);
+		}
+		
+		return tracks;
+	}
+	
+	private void GetResponse(){
+		try {
+			response();
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void send(String command) {
+		p.print("GET /ctrl-int/1/" + command + " HTTP/1.1\r\n\r\n");
+	}
+
+	
 	private Track buildTrack(Composite c) {
 		Map<Integer, Object> fields = new HashMap<Integer, Object>();
 		
@@ -111,188 +274,5 @@ public class DACPHeckler {
 		}
 		
 		return new Track(fields, null);
-	}
-    
-
-//  String host = null;// "127.0.0.1";
-//  int port = 3689;
-//  
-//  try {
-//      new Client().getContentCodes(host, port);
-//  }
-//  catch (UnknownHostException e) {
-//      System.err.println(host + " is not known");
-//  }
-    
-    public InputStream 	response() throws IOException, UnknownHostException {
-        
-//        Socket socket = new Socket(host, port);
-//        PrintStream out = new PrintStream(socket.getOutputStream());
-//        out.print("GET " + request + " HTTP/1.1\r\n\r\n");
-        InputStream in = sock.getInputStream();
-        
-        String buffer = "";
-        while (true) {
-            char c = (char) in.read();
-            buffer += c;
-            if (c == '\n' && buffer.endsWith("\r\n\r\n"))
-                break;
-        }
-        
-        Scanner sc = new Scanner(buffer);
-        
-        String protocol = sc.next();
-        int status = sc.nextInt();
-        String code = sc.next();
-        
-        if (!protocol.equals("HTTP/1.1"))
-            throw new IOException("Unsupported Protocol: " + protocol);
-        if (status != 200 && status != 204 && code.equals("OK"))
-            throw new IOException("Error connecting to server: " + status + " " + code);
-        
-        if (!sc.nextLine().equals(""))
-            throw new IOException("Expected empty line after header");
-        
-        if (status == 204) return null;
-        
-        String contentType, date, version = null;
-        int contentLength = 0;
-        String line;
-        
-        while (sc.hasNextLine()) {
-            line = sc.nextLine();
-            if (line.equals(""))
-                break;
-            
-            Scanner lineScanner = new Scanner(line);
-            String token = lineScanner.next();
-            if (token.equals("Content-Type:")) {
-                contentType = lineScanner.next();
-            }
-            else if (token.equals("Content-Length:")) {
-                contentLength = lineScanner.nextInt();
-            }
-            else if (token.equals("DAAP-Server:")) {
-                version = lineScanner.next();
-            }
-            else if (token.equals("Date:")) {
-                date = lineScanner.next();
-            }
-        }
-        
-        return in;
-    }
-	
-	public void play() {
-		send(DACPRequestGenerator.play());
-		printResponse();
-	}
-	public void pause() {
-		send(DACPRequestGenerator.pause());
-		printResponse();
-	}
-    
-    public void skip(){
-    	send(DACPRequestGenerator.skip());
-		printResponse();
-    }
-    
-	public void setVolume(int newVolume) {
-		send(DACPRequestGenerator.changeVolume(newVolume));
-		printResponse();
-	}
-	
-	public int getVolume(){
-		//TODO
-		printResponse();
-		return 0;
-	}
-	
-	public List<Track> getTracks(){
-		List<Track> tracks = new ArrayList<Track>();
-		try {
-			send(DACPRequestGenerator.getTracks());
-			InputStream in = response();
-			if (in != null) {
-				DACPResponseParser r = new DACPResponseParser();
-				Composite c = r.parse(in);
-				Object o = translateResponse(c);
-				if (o != null){
-					if (o instanceof List){
-						for (Object e : (List)o){
-							if (e instanceof Track)
-								tracks.add((Track)e);
-						}
-					}
-					else if (o instanceof Track){
-						tracks.add((Track)o);
-					}
-				}
-			}
-			
-		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		return tracks;
-	}
-	
-	private void printResponse(){
-		try {
-			InputStream in = response();
-			if (in == null)
-				System.out.println("OK");
-			else
-				System.out.println(in);
-				
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public void setTracks(List<Track> l){
-		//TODO
-	}
-	
-	public void stop() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void send(String command) {
-		p.println("GET /ctrl-int/1/" + command + " HTTP/1.1\r\n");
-	}
-
-	
-	/*
-	 * 
-	 */
-	
-	public List<Track> getLibrary() {
-		// TODO Auto-generated method stub
-		return new ArrayList<Track>(); //empty for now
-	}
-
-	public List<Track> getRecentlyPlayedTracks() {
-		// TODO Auto-generated method stub
-		return new ArrayList<Track>(); //empty for now
-	}
-
-	public Track queryCurrentTrack() {
-		// TODO Auto-generated method stub
-		return null; //empty for now
-	}
-
-	public void setPlaylistWithFilter(Map<Integer, String> filter) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	public List<Track> getPlaylistWithFilter(Map<Integer, String> filter) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
