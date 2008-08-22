@@ -329,7 +329,8 @@ public class DAAPEntry implements Iterable<DAAPEntry> {
 				}
 			}
 			catch (IOException ex) {
-				ex.printStackTrace();
+				//ex.printStackTrace();
+				System.err.println("Failed to get DAAP stream");
 				return null;
 			}
 			

@@ -40,7 +40,7 @@ public class Lackey {
 			hs.start();
 		} catch (IOException e) {
 			System.out.println("server socket failed to initialise");
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.exit(1);
 		}
 		

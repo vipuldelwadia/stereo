@@ -64,7 +64,7 @@ public class DAAPUtilities {
 
 	    } catch (HttpException e) {
 	        System.err.println("Fatal protocol violation: " + e.getMessage());
-	        e.printStackTrace();
+	        //e.printStackTrace();
 	    }
 
 	    return null;

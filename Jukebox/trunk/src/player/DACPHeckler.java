@@ -211,9 +211,10 @@ public class DACPHeckler {
 			}
 			
 		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
+			System.err.println("Unkown host");
+			//e1.printStackTrace();
 		} catch (IOException e1) {
-			e1.printStackTrace();
+			//e1.printStackTrace();
 		}
 		
 		for (Track t : tracks){
@@ -227,9 +228,10 @@ public class DACPHeckler {
 		try {
 			response();
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			System.err.println("unkown host");
+			//e.printStackTrace();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 	

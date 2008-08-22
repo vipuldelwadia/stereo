@@ -36,7 +36,7 @@ public class WriteVisitor implements Visitor {
 			output.write(b);
 		} catch (IOException e) {
 			System.err.println("Failed to write boolean");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return length+8;
 	}
@@ -48,7 +48,7 @@ public class WriteVisitor implements Visitor {
 			output.write(node.getValue());
 		} catch (IOException e) {
 			System.err.println("error writing to output stream");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		return length+8;
 	}

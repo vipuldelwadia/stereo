@@ -49,7 +49,7 @@ public class DJ implements PlaybackListener{
 			//s.addServerListener(this);
 		} catch (IOException e) {
 			System.out.println("DACP Server initialisation failed.");
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 
@@ -209,7 +209,8 @@ public void setVolume(double volume) {
 		// System.out.println(sc.nextLine());
 		// }
 	} catch (IOException e) {
-		e.printStackTrace();
+		System.err.println("set volume failed");
+		//e.printStackTrace();
 	}
 
 
@@ -285,7 +286,7 @@ public void start(){
 		player.setInputStream(current.getStream());
 	} catch (IOException e) {
 		System.out.println("Failed to send stream to player.");
-		e.printStackTrace();
+		//e.printStackTrace();
 	}
 }
 
@@ -353,7 +354,8 @@ public void playbackFinished() {
 
 		}
 		catch (IOException ex) {
-			ex.printStackTrace();
+			System.err.println("DJ: Failed to find a playable track.");
+			//ex.printStackTrace();
 		}
 	}
 

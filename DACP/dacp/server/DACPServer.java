@@ -53,10 +53,11 @@ public class DACPServer {
 								String current=scan.nextLine();
 								System.out.println(current);
 								ServerParser.parse(current);
-//								p.println("echo: "+ current);
+								//p.println("echo: "+ current);
 							}
 						} catch (IOException e) {
-							e.printStackTrace();
+							//e.printStackTrace();
+							System.err.println("Probably lost connection with DACPClient");
 						}
 
 					}
@@ -64,7 +65,7 @@ public class DACPServer {
 
 				
 			}catch (IOException e){
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 		}
 

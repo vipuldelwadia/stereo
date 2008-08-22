@@ -166,7 +166,7 @@ public class CLITest {
             }
             catch (Exception ex) {
                 System.err.println("error calling method");
-                ex.printStackTrace();
+                //ex.printStackTrace();
             }
         }
         

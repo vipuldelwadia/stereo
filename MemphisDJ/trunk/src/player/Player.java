@@ -90,12 +90,13 @@ public class Player implements music.Player {
 				player = new javazoom.jl.player.Player(stream);
 			}
 			catch (JavaLayerException ex) {
-				ex.printStackTrace();
+				System.err.println("Funky error with JavaLayer - could not create Player");
+				//ex.printStackTrace();
 				player.close();
 				try {
 					in.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 				player = null;
 				
@@ -116,7 +117,7 @@ public class Player implements music.Player {
 			try {
 				in.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				//e.printStackTrace();
 			}
 			if (!stopped) trackFinished();
 		}

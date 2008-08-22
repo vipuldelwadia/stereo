@@ -30,7 +30,7 @@ public class DACPWriter {
 		}
 		catch (IOException ex) {
 			System.err.println("error writing to output stream");
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		}
 	}
 	
@@ -53,7 +53,7 @@ public class DACPWriter {
 		}
 		catch (IOException ex) {
 			System.err.println("error writing to output stream");
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		}
 	}
 	

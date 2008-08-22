@@ -25,7 +25,8 @@ public class DACPClient {
 					Scanner scan = new Scanner(sock.getInputStream());
 					while(scan.hasNext()) System.out.println(scan.next());
 				} catch (IOException e) {
-					e.printStackTrace();
+					System.err.println("Probably lost connection with DACP server");
+					//e.printStackTrace();
 				}	
 			}
 		}.start();

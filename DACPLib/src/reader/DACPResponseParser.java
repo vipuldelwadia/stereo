@@ -111,7 +111,7 @@ public class DACPResponseParser {
 						stream.skip(b);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
+						//e.printStackTrace();
 					}
                 }
 
@@ -141,7 +141,8 @@ public class DACPResponseParser {
                 stream.read(b);
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+            	System.err.println("Error reading DACPResponse");
+                //ex.printStackTrace();
             }
             String value = new Scanner(new ByteArrayInputStream(b)).next();
             StringNode node = new StringNode(code,value);
@@ -277,7 +278,8 @@ public class DACPResponseParser {
             stream.read(b);
         }
         catch (IOException e) {
-            e.printStackTrace();
+        	System.err.println("Error reading integer from DACPResponse");
+            //e.printStackTrace();
         }
         return readInteger(b);
     }
@@ -288,7 +290,8 @@ public class DACPResponseParser {
             stream.read(b);
         }
         catch (IOException e) {
-            e.printStackTrace();
+        	System.err.println("Error reading short from DACPResponse");
+            //e.printStackTrace();
         }
         return ((b[0] & 255) << 8) + (b[1] & 255);
     }
@@ -299,7 +302,8 @@ public class DACPResponseParser {
     		stream.read(b);
     	}
         catch (IOException e) {
-            e.printStackTrace();
+        	System.err.println("Error reading boolean from DACPResponse");
+            //e.printStackTrace();
         }
         return ((b[0] & 255));
     }
@@ -310,7 +314,8 @@ public class DACPResponseParser {
     		stream.read(b);
     	}
         catch (IOException e) {
-            e.printStackTrace();
+        	System.err.println("Error reading byte from DACPResponse");
+            //e.printStackTrace();
         }
         return b[0];
     }
@@ -321,7 +326,8 @@ public class DACPResponseParser {
             stream.read(b);
         }
         catch (IOException e) {
-            e.printStackTrace();
+        	System.err.println("Error reading reading long from DACPResponse");
+            //e.printStackTrace();
         }
         return readLong(b);
     }
