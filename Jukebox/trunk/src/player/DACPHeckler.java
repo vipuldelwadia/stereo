@@ -129,7 +129,6 @@ public class DACPHeckler {
 //        PrintStream out = new PrintStream(socket.getOutputStream());
 //        out.print("GET " + request + " HTTP/1.1\r\n\r\n");
         InputStream in = sock.getInputStream();
-        System.out.println(in);
         
         String buffer = "";
         while (true) {
@@ -241,7 +240,11 @@ public class DACPHeckler {
 	private void printResponse(){
 		try {
 			InputStream in = response();
-			System.out.println(in);
+			if (in == null)
+				System.out.println("OK");
+			else
+				System.out.println(in);
+				
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
