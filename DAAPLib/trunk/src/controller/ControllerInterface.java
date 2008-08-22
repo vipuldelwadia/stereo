@@ -51,4 +51,10 @@ public interface ControllerInterface {
 	public abstract void recentlyPlayed();
 
 	public abstract void displayQuery(String type, String crit);
+	public abstract void displayLibrary();
+
+	public abstract void append(String type, String crit);
+	
+	
+
 }

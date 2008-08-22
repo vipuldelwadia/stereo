@@ -1,9 +1,8 @@
+package cli;
+
 /**
  * 
  */
-package cli;
-
-import interfaces.CLI;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,8 +10,8 @@ import java.util.Map;
 import java.util.Queue;
 
 import music.DJ;
-import player.Controller;
 import playlist.Track;
+import clinterface.CLI;
 import controller.ControllerInterface;
 import daap.DAAPConstants;
 
@@ -23,10 +22,7 @@ import daap.DAAPConstants;
 public class ServerSideController implements ControllerInterface {
 	
 	private DJ dj;
-
-	/**
-	 * 
-	 */
+	
 	
 	public ServerSideController() {
 		dj = new DJ();
@@ -74,6 +70,22 @@ public class ServerSideController implements ControllerInterface {
 			System.out.print(currentTrack);
 	}
 	
+	/**
+	 * Append a new filtered playlist on the bottom of the old playlist.
+	 * @param type 
+	 * @param criteria
+	 * @param oldPL
+	 * @return
+	 */
+	public void append(String type, String criteria){
+		Map<Integer, String> filter = new HashMap<Integer, String>();
+		filter = fillFilter(type, criteria, filter);
+
+		dj.getPlaylist().addAll(dj.getPlaylistWithFilter(filter));
+	}
+	
+	
+	
 	
 	public int getVolume() {
 		return (int)dj.getVolume();
@@ -99,12 +111,18 @@ public class ServerSideController implements ControllerInterface {
 		dj.stop();
 	}
 	
+	public void displayLibrary(){
+		System.out.println("The Library Contents\n-------------------");
+		for(Track currentTrack : dj.getLibrary())
+			System.out.print(currentTrack.toString());
+	}
+	
 	public void recentlyPlayed(){
 		Queue<Track> recent=dj.getRecentlyPlayedTracks();
 		
 		System.out.println("Recently played Music\n-------------------");
 		while(!recent.isEmpty())
-			System.out.println(recent.poll());
+			System.out.print(recent.poll());
 	}
 	
 	public void status(){

@@ -1,11 +1,13 @@
 package player;
 
-import interfaces.CLI;
+
 
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
+
+import clinterface.CLI;
 
 import playlist.Track;
 import controller.ControllerInterface;
@@ -148,5 +150,15 @@ public class Controller implements ControllerInterface{
     		new CLI(new Controller(), combinedArgs);
     	}
     }
+
+	public void append(String type, String crit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void displayLibrary() {
+		// TODO Auto-generated method stub
+		
+	}
     
 }
