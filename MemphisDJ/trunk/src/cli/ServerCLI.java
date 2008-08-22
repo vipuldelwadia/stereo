@@ -61,14 +61,14 @@ public class ServerCLI {
             controller.recentlyPlayed();
         }
     
-        public List<Track> getFilter(String param) {
+        public void query(String param) {
         	System.out.println(param);
         	Scanner s = new Scanner(param);
         	String type,crit;
         	type=s.hasNext()? s.next().trim(): "";
         	crit=s.hasNextLine()? s.nextLine().trim():"";
-        	System.out.println("Type: "+type+"|"+crit+"|");
-            return controller.filterToList(type, crit);
+        	System.out.println("Query Type: "+type+" with the Criteria of:"+crit+"");
+        	controller.displayQuery(type,crit);
         }
         
         public void status(String dummy){
@@ -89,7 +89,7 @@ public class ServerCLI {
         public void tracklist(String dummy) {
         	
         	for(Track currentTrack: controller.getPlaylist())
-        	System.out.println(currentTrack.toString());
+        	System.out.print(currentTrack.toString());
         }
         
         public void pause(String dummy) { 

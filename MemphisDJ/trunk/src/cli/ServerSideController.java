@@ -62,12 +62,13 @@ public class ServerSideController implements ControllerInterface {
 	}
 	
 	/**
-	 * Do a filter on the playlist and replace the current playlist with the new LIST of tracks.
+	 * Do a filter on the playlist and display it without replacing the current playlist with the new LIST of tracks.
 	 */
-	public List<Track> filterToList(String type, String criteria){
+	public void displayQuery(String type, String criteria){
 		Map<Integer,String> filter=new HashMap<Integer, String>();
 		filter=fillFilter(type,criteria,filter);
-		return dj.getPlaylistWithFilter(filter);
+		for (Track currentTrack : dj.getPlaylistWithFilter(filter))
+			System.out.print(currentTrack);
 	}
 	
 	
