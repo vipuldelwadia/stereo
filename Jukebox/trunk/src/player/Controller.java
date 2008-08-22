@@ -118,4 +118,14 @@ public class Controller implements ControllerInterface{
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void displayQuery(String type, String crit) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void recentlyPlayed() {
+		// TODO Auto-generated method stub
+		
+	}
 }
