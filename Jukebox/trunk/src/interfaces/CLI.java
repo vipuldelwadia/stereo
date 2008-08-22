@@ -148,20 +148,4 @@ public class CLI {
         
         return;        
     }
-    
-    public static void main(String[] args) {
-    	if (args.length == 0) {
-    		new CLI(new Controller());
-    	}
-    	else {
-    		String combinedArgs = "";
-    		for(String s : args) {
-    			combinedArgs += " " + s;
-    		}
-    		combinedArgs = combinedArgs.trim();
-    		System.out.println(combinedArgs);
-    		new CLI(new Controller(), combinedArgs);
-    	}
-    }
-    
 }

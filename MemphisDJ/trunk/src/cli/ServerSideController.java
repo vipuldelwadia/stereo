@@ -3,12 +3,15 @@
  */
 package cli;
 
+import interfaces.CLI;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 
 import music.DJ;
+import player.Controller;
 import playlist.Track;
 import controller.ControllerInterface;
 import daap.DAAPConstants;
@@ -112,4 +115,22 @@ public class ServerSideController implements ControllerInterface {
 		else
 			System.out.println("No track loaded.");
 	}
+	
+	
+    
+    public static void main(String[] args) {
+    	if (args.length == 0) {
+    		new CLI(new ServerSideController());
+    	}
+    	else {
+    		String combinedArgs = "";
+    		for(String s : args) {
+    			combinedArgs += " " + s;
+    		}
+    		combinedArgs = combinedArgs.trim();
+    		System.out.println(combinedArgs);
+    		new CLI(new ServerSideController(), combinedArgs);
+    	}
+    }
+    
 }
