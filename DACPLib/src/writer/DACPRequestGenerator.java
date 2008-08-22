@@ -1,5 +1,7 @@
 package writer;
 
+import java.util.Map;
+
 public class DACPRequestGenerator {
 	
 	public static String play() {
@@ -14,7 +16,7 @@ public class DACPRequestGenerator {
 		return "skip";
 	}
 
-	public static String getTracks() {
+	public static String getTracks(Map<String, String> parameters) {
 		return "requestplaylist";
 	}
 
