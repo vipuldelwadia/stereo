@@ -129,11 +129,7 @@ public class DACPHeckler {
 //        PrintStream out = new PrintStream(socket.getOutputStream());
 //        out.print("GET " + request + " HTTP/1.1\r\n\r\n");
         InputStream in = sock.getInputStream();
-        
-        Scanner s = new Scanner(in);
-        while(s.hasNext()) System.out.println(s.next());
-        
-        if(true) return null;
+        System.out.println(in);
         
         String buffer = "";
         while (true) {
@@ -189,21 +185,26 @@ public class DACPHeckler {
 	
 	public void play() {
 		send(DACPRequestGenerator.play());
+		printResponse();
 	}
 	public void pause() {
 		send(DACPRequestGenerator.pause());
+		printResponse();
 	}
     
     public void skip(){
     	send(DACPRequestGenerator.skip());
+		printResponse();
     }
     
-	public void setVolume(int newVolume) {
+	public void setVolume(double newVolume) {
 		send(DACPRequestGenerator.changeVolume(newVolume));
+		printResponse();
 	}
 	
 	public int getVolume(){
 		//TODO
+		printResponse();
 		return 0;
 	}
 	
@@ -211,8 +212,7 @@ public class DACPHeckler {
 		List<Track> tracks = new ArrayList<Track>();
 		try {
 			send(DACPRequestGenerator.getTracks());
-			InputStream in;
-			in = response();
+			InputStream in = response();
 			if (in != null) {
 				DACPResponseParser r = new DACPResponseParser();
 				Composite c = r.parse(in);
@@ -236,6 +236,17 @@ public class DACPHeckler {
 			e1.printStackTrace();
 		}
 		return tracks;
+	}
+	
+	private void printResponse(){
+		try {
+			InputStream in = response();
+			System.out.println(in);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void setTracks(List<Track> l){
