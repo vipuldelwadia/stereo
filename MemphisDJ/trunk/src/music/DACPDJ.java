@@ -13,6 +13,7 @@ import util.command.DACPCommand;
 import util.command.DACPPause;
 import util.command.DACPPlay;
 import util.command.DACPSetVolume;
+import util.command.DACPSkip;
 import util.command.Pause;
 import util.command.Play;
 import util.command.SetVolume;
@@ -53,8 +54,8 @@ public class DACPDJ {
 	private Command convertCommand(DACPCommand s) {
 		if(s instanceof DACPPause) return new Pause();
 		if(s instanceof DACPPlay) return new Play();
-		if(s instanceof DACPPlay) return new SetVolume(((DACPSetVolume)s).getVolume());
-		if(s instanceof DACPPlay) return new Skip();
+		if(s instanceof DACPSetVolume) return new SetVolume(((DACPSetVolume)s).getVolume());
+		if(s instanceof DACPSkip) return new Skip();
 		return null;
 	}
 
@@ -91,6 +92,7 @@ public class DACPDJ {
 								DACPCommand s = DACPRequestParser.parse(parseText);
 								
 								Command c = convertCommand(s);
+								System.out.println();
 								
 								if(c != null) c.doAction(dj);
 								

@@ -13,7 +13,7 @@ public class Track {
 	private Map<Integer, Object> tags;
 	private DAAPClient publisher;
 	
-	public Track(Map<Integer, Object> values,DAAPClient parent){
+	public Track(Map<Integer, Object> values, DAAPClient parent){
 		tags = new HashMap<Integer, Object>();
 		
 		for (Integer key: values.keySet()) {
@@ -29,10 +29,10 @@ public class Track {
 	 * @return
 	 */
 	public Object getTag(int tagID){
-		if (tags.containsKey(tagID)) {
+//		if (tags.containsKey(tagID)) {
 			return tags.get(tagID);			
-		}
-		else return null;
+//		}
+//		else return null;
 	}
 
 	public int getTrackId() {
