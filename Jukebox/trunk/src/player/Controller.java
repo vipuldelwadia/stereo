@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-
-import clinterface.CLI;
 
 import playlist.Track;
+import clinterface.CLI;
 import controller.ControllerInterface;
 import daap.DAAPConstants;
 
@@ -25,7 +23,10 @@ public class Controller implements ControllerInterface {
 
 	private DACPHeckler dacp;
 
-	public Controller() {
+	private String location;
+
+	public Controller(String _location) {
+		this.location = _location;
 		this.connect();
 	}
 
@@ -35,7 +36,7 @@ public class Controller implements ControllerInterface {
 
 		if (this.dacp == null) {
 			try {
-				this.dacp = new DACPHeckler("cafe-bodega", 3689);
+				this.dacp = new DACPHeckler(this.location, 3689);
 				return true;
 			} catch (UnknownHostException e) {
 				if (DEBUG)
@@ -198,21 +199,25 @@ public class Controller implements ControllerInterface {
 			for (Track currentTrack : this.dacp.getLibrary())
 				System.out.print(currentTrack.toString());
 		}
-
 	}
 
 	public static void main(String[] args) {
 		if (args.length == 0) {
-			new CLI(new Controller());
+			// TODO Bad arguments message
+			new CLI(new Controller("cafe-bodega"));
+		} else if (args.length == 1) {
+			String location = args[0];
+			new CLI(new Controller(location));
 		} else {
+			String location = args[0];
 			String combinedArgs = "";
-			for (String s : args) {
+			for (int i = 1; i < args.length; i++) {
+				String s = args[i];
 				combinedArgs += " " + s;
 			}
 			combinedArgs = combinedArgs.trim();
 			System.out.println(combinedArgs);
-			new CLI(new Controller(), combinedArgs);
+			new CLI(new Controller(location), combinedArgs);
 		}
 	}
-
 }

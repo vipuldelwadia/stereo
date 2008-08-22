@@ -11,7 +11,7 @@ public class ControllerTest {
 
 	@Before
 	public void testInstantiation(){
-		c = new Controller();
+		c = new Controller("fiebigs");
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
