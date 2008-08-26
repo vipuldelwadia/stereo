@@ -4,10 +4,15 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Scanner;
 
+import player.Controller;
 import playlist.Track;
 import controller.ControllerInterface;
 
 public class CLI {
+
+	private final static int defaultDJPort = 3689;
+	private final static boolean DEBUG = false;
+
     private Scanner    scan;
     private ControllerInterface controller;
     
@@ -159,6 +164,8 @@ public class CLI {
                         String params = sc.hasNextLine() ? sc.nextLine() : "";
                         
                         m.invoke(o, params);
+
+                        break;
                     }
                 }
                 if (found == false) {
@@ -175,6 +182,61 @@ public class CLI {
         return;        
     }
     
+	public static void main(String[] args) {
+		// TODO consider getopt
+		String location = null;
+		Integer port = defaultDJPort;
+		String combinedArgs = null;
+		try {
+			if (args.length >= 1) {
+				location = args[0];
+			}
 
+			if (args.length >= 2) {
+				String portStr = args[1];
+				if (!portStr.equals("--")) {
+					try {
+						port = Integer.parseInt(portStr);
+					} catch (NumberFormatException e) {
+						System.out.println("Failed parsing port number: " + portStr);
+						throw e;
+					}
+				}
+			}
+
+			if (args.length >= 3) {
+				combinedArgs = "";
+				for (int i = 2; i < args.length; i++) {
+					String s = args[i];
+					combinedArgs += " " + s;
+				}
+				combinedArgs = combinedArgs.trim();
+
+				if (DEBUG) {
+					System.out.println(combinedArgs);
+				}
+			}
+		} catch (Exception e) {
+			usage();
+			e.printStackTrace();
+			System.exit(-1);
+		}
+
+		if (location != null) {
+			if (combinedArgs != null) {
+				new CLI(new Controller(location, port), combinedArgs);
+			} else {
+				new CLI(new Controller(location, port));
+			}
+		} else {
+			usage();
+		}
+	}
+
+	public static void usage() {
+		// TODO find a better version of argv[0]
+		String appName = "Controller";
+		System.out.println("Usage: " + appName + " HOST (PORT | --) [COMMANDS]");
+	}
     
 }

@@ -20,7 +20,7 @@ public class DAAPUtilities {
 	private HttpClient  client;	
 	private HttpClient  clientSong;	
 	
-	protected DAAPUtilities(final String hostname, final Log log) throws IOException {
+	protected DAAPUtilities(final String hostname, final int port, final Log log) throws IOException {
 		
 		client = new HttpClient();
 		clientSong = new HttpClient();
@@ -32,14 +32,15 @@ public class DAAPUtilities {
 		
 		DAAPUtilities.initContentCodes(this.names, this.types);
 		
-		this.retrieveContentCodes(hostname, log);
+		this.retrieveContentCodes(hostname, port, log);
 	}
 	
-	private  InputStream request(HttpClient client, String hostname, String request, Log log) throws IOException {
-		log.debug("daap client: request for http://" + hostname + ":3689/" + request);
+	private  InputStream request(HttpClient client, String hostname, int port, String request, Log log) throws IOException {
+		String requestURI = "http://" + hostname + ":" + port + "/" + request;
+		log.debug("daap client: requestURI = " + requestURI);
 		
 		
-		HttpMethod method = new GetMethod("http://" + hostname + ":3689/" + request);
+		HttpMethod method = new GetMethod(requestURI);
 		
 		InputStream responseBody = null;
 		
@@ -70,12 +71,12 @@ public class DAAPUtilities {
 	    return null;
 	}
 	
-	protected InputStream request(String hostname, String request, Log log) throws IOException {
-		return request(client, hostname, request, log);
+	protected InputStream request(String hostname, int port, String request, Log log) throws IOException {
+		return request(client, hostname, port, request, log);
 	}
 	
-	protected InputStream songRequest(String hostname, String request, Log log) throws IOException {
-		return request(clientSong, hostname, request, log);
+	protected InputStream songRequest(String hostname, int port, String request, Log log) throws IOException {
+		return request(clientSong, hostname, port, request, log);
 	}
 	
 	protected void release(InputStream request) {
@@ -90,9 +91,9 @@ public class DAAPUtilities {
 		}
 	}
 	
-	private void retrieveContentCodes(final String hostname, final Log log) throws IOException {
+	private void retrieveContentCodes(final String hostname, int port, final Log log) throws IOException {
 		
-		InputStream response = this.request(hostname, "content-codes", log);
+		InputStream response = this.request(hostname, port, "content-codes", log);
 		
 		if (response == null) {
 			throw new NullPointerException();

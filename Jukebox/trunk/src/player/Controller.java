@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 import playlist.Track;
-import clinterface.CLI;
 import controller.ControllerInterface;
 import daap.DAAPConstants;
 
@@ -25,10 +24,15 @@ public class Controller implements ControllerInterface {
 	private DACPHeckler dacp;
 
 	private String location;
+	private int port;
 
-	public Controller(String _location) {
+	public Controller(String _location, int _port) {
 		this.location = _location;
-		this.connect();
+		this.port = _port;
+		boolean success = this.connect();
+		if (!success) {
+			throw new RuntimeException("Controller failed to connect");
+		}
 	}
 
 
@@ -38,7 +42,7 @@ public class Controller implements ControllerInterface {
 
 		if (this.dacp == null) {
 			try {
-				this.dacp = new DACPHeckler(this.location, 3689);
+				this.dacp = new DACPHeckler(this.location, this.port);
 				return true;
 			} catch (UnknownHostException e) {
 				if (DEBUG)
@@ -203,23 +207,5 @@ public class Controller implements ControllerInterface {
 		}
 	}
 
-	public static void main(String[] args) {
-		if (args.length == 0) {
-			// TODO Bad arguments message
-			new CLI(new Controller("cafe-bodega"));
-		} else if (args.length == 1) {
-			String location = args[0];
-			new CLI(new Controller(location));
-		} else {
-			String location = args[0];
-			String combinedArgs = "";
-			for (int i = 1; i < args.length; i++) {
-				String s = args[i];
-				combinedArgs += " " + s;
-			}
-			combinedArgs = combinedArgs.trim();
-			System.out.println(combinedArgs);
-			new CLI(new Controller(location), combinedArgs);
-		}
-	}
+
 }

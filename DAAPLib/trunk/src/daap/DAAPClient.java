@@ -59,7 +59,7 @@ public class DAAPClient {
 		log = new SimpleLog("Log");
 
 		try {
-			helper = new DAAPUtilities(hostname, log);
+			helper = new DAAPUtilities(hostname, port, log);
 		} catch (IOException e) {
 			System.err.println("*Probably* an invalid host");
 			//e.printStackTrace();
@@ -84,7 +84,7 @@ public class DAAPClient {
 		InputStream in = null;
 		
 		try {
-			in = helper.request(hostname, request, log);
+			in = helper.request(hostname, port, request, log);
 			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
 			if ((entry == null)
@@ -118,7 +118,7 @@ public class DAAPClient {
 
 	public InputStream getStream(Track track) throws IOException {
 		int song = track.getTrackId();
-		return helper.songRequest(hostname, "databases/" + dbid + "/items/" + song
+		return helper.songRequest(hostname, port, "databases/" + dbid + "/items/" + song
 				+ ".mp3?session-id=" + sessionID, log);
 	}
 
@@ -138,7 +138,7 @@ public class DAAPClient {
 		InputStream in = null;
 
 		try {
-			in = helper.request(hostname, loginRequest, log);
+			in = helper.request(hostname, port, loginRequest, log);
 			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
 			for (DAAPEntry e : entry) {
@@ -164,7 +164,7 @@ public class DAAPClient {
 		String request = "update?session-id=" + sessionID;
 
 		try {
-			in = helper.request(hostname, request, log);
+			in = helper.request(hostname, port, request, log);
 			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
 			for (DAAPEntry e : entry) {
@@ -191,7 +191,7 @@ public class DAAPClient {
 
 
 		try {
-			in = helper.request(hostname, request, log);
+			in = helper.request(hostname, port, request, log);
 			DAAPEntry entry = DAAPEntry.parseStream(in, helper.types);
 
 			for (DAAPEntry e : entry) {
