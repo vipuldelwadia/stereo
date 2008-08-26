@@ -158,21 +158,26 @@ public class Lackey {
 
 		
 		private DAAPClient createConnection() throws IOException {
-			Socket client = connection.accept();
-			netInput = new BufferedReader(new InputStreamReader(client
-					.getInputStream()));
+			Socket client = null;
+			try {
+				client = connection.accept();
+				netInput = new BufferedReader(new InputStreamReader(client
+						.getInputStream()));
 
-			if (netInput.readLine().equals("GET /")) {
-				// getInetAddress appends "/" to the start of a string
-				String DAAPServer = client.getInetAddress().toString()
-						.substring(1);
-				client.close();
-				return new DAAPClient(DAAPServer, DAAPPORT);
+				String line = netInput.readLine();
+				if (line.startsWith("GET /")) {
+					// TODO consider allowing the client to specify the address
+					// TODO allow the client to specify a port
+					String DAAPServer = client.getInetAddress().getHostAddress();
+					return new DAAPClient(DAAPServer, DAAPPORT);
+				} else {
+					return null;
+				}
+			} finally {
+				if (client != null) {
+					client.close();
+				}
 			}
-
-			client.close();
-			// Fails if wrong message from client
-			return null;
 		}
 
 		public void run() {
