@@ -186,6 +186,7 @@ public class DACPHeckler {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Track> getTracks(){
 		List<Track> tracks = new ArrayList<Track>();
 		try {
@@ -199,7 +200,7 @@ public class DACPHeckler {
 				Object o = translateResponse(c);
 				if (o != null){
 					if (o instanceof List){
-						for (Object e : (List)o){
+						for (Object e : (List<Object>)o){
 							if (e instanceof Track)
 								tracks.add((Track)e);
 						}
