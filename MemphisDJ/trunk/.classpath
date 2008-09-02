@@ -4,15 +4,6 @@
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="/vol/projects/week-of-code/stereo/libs/jl1.0.jar"/>
-	<classpathentry kind="lib" path="/vol/projects/week-of-code/stereo/libs/mp3spi1.9.4.jar"/>
-	<classpathentry kind="lib" path="/vol/projects/week-of-code/stereo/libs/vorbisspi1.0.3.jar"/>
-	<classpathentry kind="lib" path="/vol/projects/week-of-code/stereo/libs/commons-httpclient-3.1.jar"/>
-	<classpathentry kind="lib" path="/vol/projects/week-of-code/stereo/libs/commons-codec-1.3.jar"/>
-	<classpathentry kind="lib" path="/vol/projects/week-of-code/stereo/libs/commons-logging-1.1.1.jar"/>
-	<classpathentry kind="lib" path="/vol/projects/week-of-code/stereo/libs/commons-logging-adapters-1.1.1.jar"/>
-	<classpathentry kind="lib" path="/vol/projects/week-of-code/stereo/libs/commons-logging-api-1.1.1.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/DAAPLib"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/CLI"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
