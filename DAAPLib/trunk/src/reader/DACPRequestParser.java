@@ -15,10 +15,11 @@ public class DACPRequestParser {
 	public static DACPCommand parse(String p) {
 
 		try {
-			Scanner request = new Scanner(p);
-			String type = request.next();
-			String URI = request.next();
-			String protocol = request.next();
+			final Scanner request = new Scanner(p);
+			
+			final String type = request.next();
+			final String URI = request.next();
+			final String protocol = request.next();
 
 			Scanner uri = new Scanner(URI);
 			uri.useDelimiter("/");

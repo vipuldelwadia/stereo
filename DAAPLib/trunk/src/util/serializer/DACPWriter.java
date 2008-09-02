@@ -8,14 +8,11 @@ import util.node.Node;
 
 public class DACPWriter {
 
-	private final OutputStream output;
 	private final LengthVisitor len;
 	
 	public DACPWriter(Node tree, OutputStream output) {
 		
 		len = new LengthVisitor();
-		this.output = output;
-		
 		new WriteVisitor(len, output).visit(tree);
 	}	
 	
