@@ -1,6 +1,5 @@
 package reader;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -91,6 +90,8 @@ public class DACPResponseParser {
         trackHandler.register(DAAPConstants.START_TIME, new IntegerNodeHandler());
         trackHandler.register(DAAPConstants.STOP_TIME, new IntegerNodeHandler());
         
+        trackHandler.register(DACPConstants.assr, new IntegerNodeHandler());
+        
     }
     
     private class Handler {
@@ -102,27 +103,25 @@ public class DACPResponseParser {
             while (read < bytes) {
                 int c = readInteger(stream);
                 int b = readInteger(stream);
-                read += 8;
                 
                 if (handlers.get(c) == null) {
-                	System.err.println("unexpected " + Node.intToCode(c));
-                	read += b;
+                	System.err.println("unexpected " + Node.intToCode(c) + " (" + c + ") in " + Node.intToCode(code) + " block");
+                	read += 8 + b;
                 	try {
 						stream.skip(b);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						//e.printStackTrace();
+						System.err.println("Error skipping unknown in DACP response");
+						e.printStackTrace();
 					}
                 }
 
                 else {
                 	 Node n = handlers.get(c).visit(c, b);
-                     read += len.visit(n);
+                     read += 8 + b;
                      node.append(n);
                 }
 
             }
-            
             return node;
         }
         
@@ -136,18 +135,19 @@ public class DACPResponseParser {
     private class StringNodeHandler extends Handler {
         public Node visit(int code, int bytes) {
             
-            byte[] b = new byte[bytes];
+            byte[] in = new byte[bytes];
             try {
-                stream.read(b);
+                stream.read(in);
             }
             catch (IOException ex) {
             	System.err.println("Error reading DACPResponse");
-                //ex.printStackTrace();
+                ex.printStackTrace();
             }
-            String value = new Scanner(new ByteArrayInputStream(b)).next();
-            StringNode node = new StringNode(code,value);
-            
-            return node;
+            String value = "";
+            for (byte b: in) {
+            	value += (char)b;
+            }
+            return new StringNode(code,value);
         }
     }
     
@@ -279,7 +279,7 @@ public class DACPResponseParser {
         }
         catch (IOException e) {
         	System.err.println("Error reading integer from DACPResponse");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return readInteger(b);
     }
@@ -291,7 +291,7 @@ public class DACPResponseParser {
         }
         catch (IOException e) {
         	System.err.println("Error reading short from DACPResponse");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return ((b[0] & 255) << 8) + (b[1] & 255);
     }
@@ -303,7 +303,7 @@ public class DACPResponseParser {
     	}
         catch (IOException e) {
         	System.err.println("Error reading boolean from DACPResponse");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return ((b[0] & 255));
     }
@@ -315,7 +315,7 @@ public class DACPResponseParser {
     	}
         catch (IOException e) {
         	System.err.println("Error reading byte from DACPResponse");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return b[0];
     }
@@ -327,7 +327,7 @@ public class DACPResponseParser {
         }
         catch (IOException e) {
         	System.err.println("Error reading reading long from DACPResponse");
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return readLong(b);
     }

@@ -1,8 +1,10 @@
 package clinterface;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import player.Controller;
 import playlist.Track;
@@ -13,175 +15,196 @@ public class CLI {
 	private final static int defaultDJPort = 3689;
 	private final static boolean DEBUG = false;
 
-    private Scanner    scan;
-    private ControllerInterface controller;
-    
+	private Scanner    scan;
+	private ControllerInterface controller;
 
-    public CLI(ControllerInterface controller) {
 
-        scan = new Scanner(System.in);
-        this.controller = controller;
-        run();
-    }
-    
-    public CLI(ControllerInterface controller, String args) {
-        scan = new Scanner(System.in);
-        this.controller = controller;
-        input(args);
-    }
-    
-    public void run() {
-        while (true) {
-            System.out.print("> ");
-            String input = scan.nextLine().toLowerCase();
-            if (input.equals("exit")) {
-                scan.close();
-                break;
-            }
-            input(input);
-        }
-    }
-    
-    private class Top {
-        public void list(String dummy) {
-            List<Track> p = controller.getPlaylist();
-            for(Track t:p){
-                System.out.println(t.toString());
-            }
-        }
-        public void play(String dummy) {
-            controller.playTrack();
-        	status(null);
-        }
+	public CLI(ControllerInterface controller) {
 
-        
-        public void recent(String dummy) {
-            controller.queryRecentlyPlayed();
-        }
-    
-        public void query(String param) {
-        	System.out.println(param);
-        	Scanner s = new Scanner(param);
-        	String type,crit;
-        	type=s.hasNext()? s.next().trim(): "";
-        	crit=s.hasNextLine()? s.nextLine().trim():"";
-        	System.out.println("Query Type: "+type+" with the Criteria of:"+crit+"");
-        	controller.queryLibrary(type,crit);
-        }
-        
-        public void status(String dummy){
-        	controller.status();
-        }
-        
-        public void library(String dummy){
-        	controller.displayLibrary();
-        }
-        
-        public void filter(String param) {
-        	Scanner s = new Scanner(param);
-        	String type,crit;
-        	type=s.hasNext()? s.next().trim(): "";
-        	crit=s.hasNextLine()? s.nextLine().trim():"";
-        	System.out.println("Filter Type: "+type+" with the Criteria of:"+crit+"");
-            controller.createPlaylistWithFilter(type, crit);
-            status(null);
-        }
-        
-        public void append(String param) {
-        	Scanner s = new Scanner(param);
-        	String type,crit;
-        	type=s.hasNext()? s.next().trim(): "";
-        	crit=s.hasNextLine()? s.nextLine().trim():"";
-        	System.out.println("Appended with a new list with Type: "+type+" with the Criteria of:"+crit+"");
-            controller.append(type, crit);
-            status(null);
-        }
-        
-        public void tracklist(String dummy) {
-        	
-        	for(Track currentTrack: controller.getPlaylist())
-        	System.out.print(currentTrack.toString());
-        }
-        
-        public void pause(String dummy) { 
-            controller.pauseTrack();
-            status(null);
-        }
-        public void skip(String dummy) {
-            controller.skipTrack();
-            status(null);
-        }
-        public void set(String command) {
-        	command = command.toLowerCase().trim();
-        	if (command.startsWith("volume ")) {
-        		new Set().volume(command.substring("volume ".length()));
-        	}
-            System.out.println("set");
-        }
-        public void stop(String dummy){
-        	System.out.println("Stopped");
-        	controller.stop();
-        }
-    }
-    
-    private class Set {
-        public void volume(String volume) {
-            try {
-                Integer value = Integer.parseInt(volume);
-                controller.changeVolume(value);
-            }
-            catch (NumberFormatException ex) {
-                System.out.println("You were supposed to give me a volume dumbass!");
-            }
-        }
-    }
-    
-    public void input(String input){
-        
-        Scanner sc = new Scanner(input);
-        
-        Object o = new Top();
-        while (sc.hasNext()) {
-            try {
-                Method[] methods = o.getClass().getMethods();
-                String name = sc.next();
-                boolean found = false;
-                for (Method m: methods) {
-                    if (m.getName().equals(name)) {
-                        found = true;
-                        //System.out.println(sc.delimiter());
-                        //sc.useDelimiter("[\\p{javaWhitespace}\"]+");
-                        //System.out.println(sc.delimiter());
-                        //String[] params = new String[m.getParameterTypes().length];
-                        //for (int i = 0; i < params.length; i++) {
-                        //    if (sc.hasNext()) {
-                        //        params[i] = sc.next();
-                        //    }
-                        //    else {
-                        //        System.out.println("wrong parameters");
-                        //        return;
-                        //    }
-                        String params = sc.hasNextLine() ? sc.nextLine() : "";
-                        
-                        m.invoke(o, params);
+		scan = new Scanner(System.in);
+		this.controller = controller;
+		run();
+	}
 
-                        break;
-                    }
-                }
-                if (found == false) {
-                    System.out.println("command not found");
-                    return;
-                }
-            }
-            catch (Exception ex) {
-                System.err.println("error calling method");
-//                ex.printStackTrace();
-            }
-        }
-        
-        return;        
-    }
-    
+	public CLI(ControllerInterface controller, String args) {
+		scan = new Scanner(System.in);
+		this.controller = controller;
+		input(args);
+	}
+
+	public void run() {
+		System.out.print("> ");
+		while (scan.hasNextLine()) {
+			String input = scan.nextLine();
+			if (input.equals("exit")) {
+				scan.close();
+				break;
+			}
+			input(input);
+			System.out.print("> ");
+		}
+	}
+
+	private class Top {
+		public void list() {
+			List<Track> p = controller.getPlaylist();
+			for(Track t:p){
+				System.out.println(t.toString());
+			}
+		}
+		public void play() {
+			controller.playTrack();
+		}
+		public void recent() {
+			controller.queryRecentlyPlayed();
+		}
+		public void query(String param) {
+			System.out.println(param);
+			Scanner s = new Scanner(param);
+			String type,crit;
+			type=s.hasNext()? s.next().trim(): "";
+			crit=s.hasNextLine()? s.nextLine().trim():"";
+			System.out.println("Query Type: "+type+" with the Criteria of:"+crit+"");
+			controller.queryLibrary(type,crit);
+		}
+
+		public void status(){
+			controller.status();
+		}
+
+		public void library(){
+			controller.displayLibrary();
+		}
+
+		public void filter(String param) {
+			Scanner s = new Scanner(param);
+			String type,crit;
+			type=s.hasNext()? s.next().trim(): "";
+			crit=s.hasNextLine()? s.nextLine().trim():"";
+			System.out.println("Filter Type: "+type+" with the Criteria of:"+crit+"");
+			controller.createPlaylistWithFilter(type, crit);
+		}
+
+		public void append(String param) {
+			Scanner s = new Scanner(param);
+			String type,crit;
+			type=s.hasNext()? s.next().trim(): "";
+			crit=s.hasNextLine()? s.nextLine().trim():"";
+			System.out.println("Appended with a new list with Type: "+type+" with the Criteria of:"+crit+"");
+			controller.append(type, crit);
+		}
+
+		public void tracklist() {
+			for(Track currentTrack: controller.getPlaylist()) {
+				System.out.print(currentTrack.toString());
+			}
+		}
+		public void pause() { 
+			controller.pauseTrack();
+		}
+		public void skip() {
+			controller.skipTrack();
+		}
+		public void next() {
+			skip();
+		}
+		public void set(String command) {
+			command = command.toLowerCase().trim();
+			if (command.startsWith("volume ")) {
+				new Set().volume(command.substring("volume ".length()));
+			}
+		}
+		public void stop(){
+			controller.stop();
+		}
+	}
+
+	private class Set {
+		public void volume(String volume) {
+			try {
+				Integer value = Integer.parseInt(volume);
+				controller.changeVolume(value);
+			}
+			catch (NumberFormatException ex) {
+				System.out.println("You were supposed to give me a volume dumbass!");
+			}
+		}
+	}
+
+	public void input(final String input){
+		
+		final Scanner sc = new Scanner(input);
+
+		if (!sc.hasNext()) return; //no command
+
+		Object o = new Top();
+		
+		while (o != null) {
+			final String command = parseCommand(sc);
+
+			try {
+				Method[] methods = o.getClass().getMethods();
+
+				boolean found = false;
+				for (Method m: methods) {
+					if (m.getName().equals(command)) {
+						found = true;
+						Object[] params = new Object[m.getParameterTypes().length];
+						for (int i = 0; i < params.length; i++) {
+							if (sc.hasNext()) {
+								params[i] = parseArgument(sc);
+							}
+							else {
+								System.out.println("wrong parameters for command: ");
+								return;
+							}
+						}
+
+						o = m.invoke(o, params);
+
+						break;
+					}
+				}
+				if (found == false) {
+					System.out.println("command not found");
+					return;
+				}
+			}
+			catch (InvocationTargetException ex) {
+				//this exception may be caught if an unchecked exception is thrown while
+				//executing a method
+				System.err.println("Exception when executing command: " + input);
+				ex.getCause().printStackTrace();
+			}
+			catch (IllegalAccessException ex) {
+				//this exception should not be thrown - the menu object should be accessible
+				//if this happens, someone may be trying something nasty
+				System.err.println("Illegal access to menu object for input: " + input);
+				ex.printStackTrace();
+			}
+			catch (IllegalArgumentException ex) {
+				//this exception should never be called - if it is then there is a bug
+				System.err.println("Bad arguments passed to method for input: " + input);
+				ex.printStackTrace();
+			}
+		}
+	}
+
+	private static String parseCommand(Scanner sc) {
+		return sc.next();
+	}
+
+	private static String parseArgument(Scanner sc) {
+		final Pattern quotedString = Pattern.compile("[\"](([\\\\][\"])|([\\\\][\\\\])|[^\"\\\\])*[\"]");
+
+		if (sc.hasNext(quotedString)) {
+			return sc.next(quotedString);
+		}
+		else {
+			return sc.next();
+		}
+	}
+
 	public static void main(String[] args) {
 		// TODO consider getopt
 		String location = null;
@@ -238,5 +261,5 @@ public class CLI {
 		String appName = "Controller";
 		System.out.println("Usage: " + appName + " HOST (PORT | --) [COMMANDS]");
 	}
-    
+
 }

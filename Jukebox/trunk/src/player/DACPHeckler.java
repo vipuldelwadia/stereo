@@ -12,6 +12,7 @@ import java.util.Scanner;
 
 import playlist.Track;
 import reader.DACPResponseParser;
+import util.DACPConstants;
 import util.node.Composite;
 import util.node.Node;
 import util.node.StringNode;
@@ -38,22 +39,30 @@ public class DACPHeckler {
 		sock = new Socket(HOST, PORT);
 	}
 	
-	private Object translateResponse(Composite c) {
-		String code = Node.intToCode(c.code);
-		if ("cmst".equals(code)) {
-			Track t = buildTrack(c);
-			return t;
-		}
-		else if ("apso".equals(code)) {
-			List<Track> tracks = new ArrayList<Track>();
+	private List<Track> extractTracksFromResponse(Composite c) {
+		
+		List<Track> response = new ArrayList<Track>();
+		
+		switch (c.code) {
+		case DACPConstants.cmst:
+		case DACPConstants.mlit:
+			response.add(buildTrack(c));
+			break;
+		case DACPConstants.apso:
 			for (Node n : c.nodes) {
-				if (n instanceof Composite) {
-					tracks.add(buildTrack((Composite) n));
+				if (n.code == DACPConstants.mlcl) {
+					response = extractTracksFromResponse((Composite)n);
 				}
 			}
-			return tracks;
+			break;
+		case DACPConstants.mlcl:
+			for (Node n : c.nodes) {
+				response.addAll(extractTracksFromResponse((Composite)n));
+			}
+			break;
 		}
-		else return null;
+		
+		return response;
 	}
 
     private InputStream response() throws IOException, UnknownHostException {
@@ -197,7 +206,7 @@ public class DACPHeckler {
 			if (in != null) {
 				DACPResponseParser r = new DACPResponseParser();
 				Composite c = r.parse(in);
-				Object o = translateResponse(c);
+				Object o = extractTracksFromResponse(c);
 				if (o != null){
 					if (o instanceof List){
 						for (Object e : (List<Object>)o){
@@ -211,15 +220,12 @@ public class DACPHeckler {
 				}
 			}
 			
-		} catch (UnknownHostException e1) {
+		} catch (UnknownHostException ex) {
 			System.err.println("Unkown host");
-			//e1.printStackTrace();
-		} catch (IOException e1) {
-			//e1.printStackTrace();
-		}
-		
-		for (Track t : tracks){
-			System.out.println(t);
+			//ex.printStackTrace();
+		} catch (IOException ex) {
+			System.err.println("Error reading DACP input for getting tracks");
+			ex.printStackTrace();
 		}
 		
 		return tracks;

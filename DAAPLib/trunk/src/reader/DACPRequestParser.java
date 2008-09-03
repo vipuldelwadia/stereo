@@ -39,10 +39,10 @@ public class DACPRequestParser {
 			default: break;
 			}
 
-			throw new IllegalArgumentException("invalid string");
+			throw new IllegalArgumentException("invalid handshake: " + p);
 		}	
 		catch (NoSuchElementException e) {
-			throw new IllegalArgumentException("invalid string");
+			throw new IllegalArgumentException("invalid handshake: " + p);
 		}
 	}
 
