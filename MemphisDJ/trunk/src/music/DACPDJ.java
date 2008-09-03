@@ -151,7 +151,7 @@ public class DACPDJ {
 						}
 						
 						p.flush();
-						p.close();
+						//p.close(); TODO waiting for connection to close
 					}
 
 					private Node buildTree(List<Track> pl) {

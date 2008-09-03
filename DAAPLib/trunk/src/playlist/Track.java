@@ -50,7 +50,7 @@ public class Track {
 	}
 	
 	public String toString(){
-		 return String.format("%s - %s - %s\n",getTag(DAAPConstants.NAME),getTag(DAAPConstants.ARTIST),getTag(DAAPConstants.ALBUM));
+		 return String.format("%s - %s - %s",getTag(DAAPConstants.NAME),getTag(DAAPConstants.ARTIST),getTag(DAAPConstants.ALBUM));
 	}
 
 	public Set<Map.Entry<Integer, Object>> getAllTags() {

@@ -147,6 +147,7 @@ public class CLI {
 
 				boolean found = false;
 				for (Method m: methods) {
+					if (m.getDeclaringClass() != o.getClass()) continue;
 					if (m.getName().equals(command)) {
 						found = true;
 						Object[] params = new Object[m.getParameterTypes().length];
@@ -166,8 +167,19 @@ public class CLI {
 					}
 				}
 				if (found == false) {
-					System.out.println("command not found");
-					return;
+					if (command.equals("help")) {
+						System.out.println("Available commands:");
+						for (Method m: o.getClass().getMethods()) {
+							if (m.getDeclaringClass() == o.getClass()) {
+								System.out.println("\t"+m.getName());
+							}
+						}
+						o = null;
+					}
+					else {
+						System.out.println("command not found");
+						o = null;
+					}
 				}
 			}
 			catch (InvocationTargetException ex) {
