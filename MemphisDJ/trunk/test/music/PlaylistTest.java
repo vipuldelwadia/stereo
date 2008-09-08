@@ -2,13 +2,15 @@ package music;
 
 import static org.junit.Assert.*;
 
+import interfaces.Track;
+
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import playlist.Track;
 
 
 public class PlaylistTest {
@@ -19,7 +21,12 @@ public class PlaylistTest {
 	@Before
 	public void setUp() throws Exception {
 		p = new ArrayList<Track>();
-		track = new Track(null, null);
+		track = new Track() {
+			public int getTrackId() { return 1; }
+			public Object getTag(int i) { return "value"; }
+			public Map<Integer, Object> getAllTags() { return null; }
+			public InputStream getStream() { return null; }
+		};
 	}
 	
 	@Test
@@ -32,7 +39,5 @@ public class PlaylistTest {
 		p.add(track);
 		assertTrue(p.remove(track));
 	}
-	
-	
 
 }

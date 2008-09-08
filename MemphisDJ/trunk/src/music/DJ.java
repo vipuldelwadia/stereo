@@ -1,5 +1,12 @@
 package music;
 
+import interfaces.ControlServerCreator;
+import interfaces.Lackey;
+import interfaces.LackeyClient;
+import interfaces.LackeyCreator;
+import interfaces.PlaybackController;
+import interfaces.Track;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -7,19 +14,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Queue;
+import java.util.Scanner;
 import java.util.Set;
 
 import player.PlaybackListener;
-import playlist.Track;
-import daap.DAAPClient;
-import daap.DAAPConstants;
 
-//public class DJ implements DACPServerListener, PlaybackListener{
-public class DJ implements PlaybackListener{
+public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 
 	private Lackey lackey;
 
@@ -31,31 +33,39 @@ public class DJ implements PlaybackListener{
 
 	private Track current;
 
-	private double currentVolume;
+	private int currentVolume;
 	private List<Track> recentlyPlayedTracks=new ArrayList<Track>();
 	private int recentlyPlayedTracksSize=30;
 	private boolean paused;
 
+	public static void registerServerCreator(ControlServerCreator creator) {
+		serverCreators.add(creator);
+	}
+	public static void removeServerCreator(ControlServerCreator creator) {
+		serverCreators.remove(creator);
+	}
+	private static Set<ControlServerCreator> serverCreators = new HashSet<ControlServerCreator>();
+	
+	public static void setLackeyCreator(LackeyCreator creator) {
+		lackeyCreator = creator;
+	}
+	private static LackeyCreator lackeyCreator;
 
 	public DJ() {
-		init();
 		playlist = new ArrayList<Track>();
 		player = new player.Player();
 		player.addPlaybackListener(this);
-
-		try {
-			DACPDJ s = new DACPDJ(3689, this);
-			//TODO
-			//s.addServerListener(this);
-		} catch (IOException e) {
-			System.out.println("DACP Server initialisation failed.");
-			//e.printStackTrace();
+		
+		if (lackeyCreator != null) {
+			lackey = lackeyCreator.create(this);
 		}
-	}
-
-
-	public void init() {
-		lackey = new Lackey(this);
+		else {
+			throw new NullPointerException("No LackeyCreator registered");
+		}
+		
+		for (ControlServerCreator s: DJ.serverCreators) {
+			s.create(this);
+		}
 	}
 
 	private void fillPlaylist() {
@@ -77,301 +87,307 @@ public class DJ implements PlaybackListener{
 		}
 	}
 
-	/** This method will attempt to create a playlist so that people with the most will still
-	 * get there music played evenly. It also makes sure that the tracks have not been recently played
-	 *
+	/**
+	 * 
+	 * @param c
+	 *            A map of filter criterias. The key will be the search category
+	 *            such as 'artist' or 'album, the value associated with the key
+	 *            is the word the filter will try to match with.
+	 * @return
 	 */
-	private void fillPlaylistB(){
-		Map<DAAPClient, Set<Track>> clientsTracks=libraryToOwnerMap();
-		List<Track> tracks=lackey.getAllTracks();
+	public List<Track> getPlaylistWithFilter(Map<Integer, String> c){
+		List<Track> returned = new ArrayList<Track>();
+		List<Track> allTracks = lackey.getAllTracks();
 
-		if (clientsTracks != null && !clientsTracks.isEmpty()){
-			System.out.println("in");
-			Set<DAAPClient> clients=clientsTracks.keySet();
-			while(playlist.size()<playlistSize){
-			for(DAAPClient c: clients){
-				if(!(playlist.size() < playlistSize)||playlist.size()<tracks.size())break;
-				System.out.println("client " + c);
-				Set<Track> clientTracks =clientsTracks.get(c);
-				List<Track> orderedClientTracks=new ArrayList<Track>(clientTracks);
-				//get a track see if it has been played before if it 
-				//for (int i = 0; i < 4; i++){
-					Track t = orderedClientTracks.get((int)Math.random() % orderedClientTracks.size());
-					
-					//if(!(recentlyPlayedTracks.contains(t))){
-						System.out.println("adding to playlist");
-						playlist.add(t);
-						//break;
-					//}
-				//}
+		//System.out.println("DAAPConstants.ALBUM="+DAAPConstants.ARTIST+" "+c);
+
+
+		//Search through every criteria for potential matches
+		for(int i=0; i<allTracks.size(); i++){
+
+			Track currentTrack=allTracks.get(i);
+			boolean fitCrit=true;
+
+			for(int s : c.keySet()){
+
+				if (!c.get(s).equalsIgnoreCase((String)currentTrack.getTag(s)))	{
+					fitCrit=false;
+					break;
+				}
 			}
-		}
-		}
 
-	else {
+			if (fitCrit)returned.add(currentTrack);
+
+		}
+		return returned;
+	}
+
+	/**
+	 * Takes a set of Track identifier (e.g Track.ALBUM) - value pairs
+	 * which will select from all songs the songs which meet
+	 * the criteria and then fill the playlist.
+	 * @param c
+	 */
+	public void setPlaylistWithFilter(Map<Integer, String> c){
 		stop();
-		System.out.println("Library empty: stopped playback.");
-	}
-}
-
-private Map<DAAPClient, Set<Track>> libraryToOwnerMap(){
-	List<Track> lib = lackey.getAllTracks();
-	Map<DAAPClient, Set<Track>> clientsTracks=new HashMap<DAAPClient, Set<Track>>();
-	for(Track t:lib){
-		if(!(clientsTracks.containsKey(t.getParent())))clientsTracks.put(t.getParent(), new HashSet<Track>());
-		Set<Track> clientTracks=clientsTracks.get(t.getParent());
-		clientTracks.add(t);
-	}	
-	return clientsTracks;
-}
-
-
-/**
- * 
- * @param c
- *            A map of filter criterias. The key will be the search category
- *            such as 'artist' or 'album, the value associated with the key
- *            is the word the filter will try to match with.
- * @return
- */
-public List<Track> getPlaylistWithFilter(Map<Integer, String> c){
-	List<Track> returned = new ArrayList<Track>();
-	List<Track> allTracks = lackey.getAllTracks();
-
-	//System.out.println("DAAPConstants.ALBUM="+DAAPConstants.ARTIST+" "+c);
-
-
-	//Search through every criteria for potential matches
-	for(int i=0; i<allTracks.size(); i++){
-
-		Track currentTrack=allTracks.get(i);
-		boolean fitCrit=true;
-
-		for(int s : c.keySet()){
-
-			if (!c.get(s).equalsIgnoreCase((String)currentTrack.getTag(s)))	{
-				fitCrit=false;
-				break;
-			}
-		}
-
-		if (fitCrit)returned.add(currentTrack);
-
-	}
-	return returned;
-}
-
-/**
- * Takes a set of Track identifier (e.g Track.ALBUM) - value pairs
- * which will select from all songs the songs which meet
- * the criteria and then fill the playlist.
- * @param c
- */
-public void setPlaylistWithFilter(Map<Integer, String> c){
-	stop();
-	playlist=getPlaylistWithFilter(c);
-	/*
-		if (!playlist.isEmpty()) {
-			current = playlist.remove(0);
-			System.out.println("Polled playlist.");
-
-			recentlyPlayedTracks.add(current);
-			if(recentlyPlayedTracks.size() > recentlyPlayedTracksSize)
-				recentlyPlayedTracks.poll();
-
-			try {
-				player.setInputStream(current.getStream());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-	 */
-	start();
-}
-
-public void appendTracks(Map<Integer, String> c){
-	List<Track> toAppend = getPlaylistWithFilter(c);
-
-	playlist.addAll(toAppend);
-}
-
-public void setVolume(double volume) {
-	currentVolume = volume;
-	URL url = DJ.class.getResource("setvolume.sh");
-
-	try {
-		System.out.println("setting volume to " + volume);
-		Process p = Runtime.getRuntime().exec(
-				"bash " + url.getFile() + " " + (int) volume);
-		// for (Scanner sc = new Scanner(p.getErrorStream());
-		// sc.hasNextLine();) {
-		// System.out.println(sc.nextLine());
-		// }
-	} catch (IOException e) {
-		System.err.println("set volume failed");
-		//e.printStackTrace();
-	}
-
-
-}
-
-
-/*
- * Lackey calls when 
- */
-public void tracksAdded(){
-	System.out.println("tracks added");
-
-	if(playlist.isEmpty()){
-
-		fillPlaylist();
+		playlist=getPlaylistWithFilter(c);
 		start();
 	}
 
-	if (playlist.size() < playlistSize){
-		fillPlaylist();	
+	public void appendTracks(Map<Integer, String> c){
+		List<Track> toAppend = getPlaylistWithFilter(c);
+
+		playlist.addAll(toAppend);
 	}
 
-}
+	public void changeVolume(int volume) {
+		currentVolume = volume;
+		URL url = DJ.class.getResource("setvolume.sh");
 
-/*
- * Lackey calls this when the library has changed (i.e DAAP server dropped).
- * Validates the current playlist.
- */
-public void libraryChanged(){
-	lackey.checkPlaylist(playlist);
-	if (playlist.size() < playlistSize){
-		fillPlaylist();	
-	}
-	System.out.println("Library changed: playlist updated");
-}
-
-
-/*
- * Modify DJ state
- */
-public void unpause() {
-	if(paused){
-		player.start();
-		paused=false;
-	}
-	else start();
-}
-
-public void pause(){
-	player.pause();
-	paused=true;
-}
-
-
-public void stop(){
-	player.stop();
-}
-
-public void skip() {
-	player.stop();
-	playbackFinished();
-}
-
-public void start(){
-	if (playlist.isEmpty()) return;
-
-	current = playlist.remove(0);
-	recentlyPlayedTracks.add(current);
-	if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize){
-		recentlyPlayedTracks.remove(0);
-	}
-	System.out.println("Polled playlist.");
-	try {
-		player.setInputStream(current.getStream());
-	} catch (IOException e) {
-		System.out.println("Failed to send stream to player.");
-		//e.printStackTrace();
-	}
-}
-
-public void setPlaylist(List<Track> playlist) {
-	this.playlist = playlist;
-}
-
-
-/*
- * Info about DJ state
- */
-public double getVolume(){
-	return currentVolume;
-}
-
-public boolean isPaused(){
-	return paused;
-}
-
-public List<Track> getPlaylist() {
-	return new ArrayList<Track>(playlist);
-}
-
-public Track getCurrentTrack(){
-	return current;
-}
-
-public List<Track> getRecentlyPlayedTracks() {
-	return recentlyPlayedTracks;
-}
-
-//TODO should this return a List or a playlist?
-public List<Track> getLibrary(){
-	return Collections.unmodifiableList(lackey.getAllTracks());
-}
-
-
-/*
- * Methods from PlaybackListener
- * 
- */
-public void playbackFinished() {
-	InputStream stream = null;
-	System.out.println("Playback finished.");
-	System.out.println("Size of Playlist: " + playlist.size());
-	while (stream == null) {
 		try {
-			if (playlist.isEmpty()) fillPlaylist();
-			if (playlist.isEmpty()) return;
-
-			current = playlist.remove(0); 
-			recentlyPlayedTracks.add(current);
-			if(recentlyPlayedTracks.size() > recentlyPlayedTracksSize)
-				recentlyPlayedTracks.remove(0);
-
-
-			if (((String) current.getTag(DAAPConstants.NAME)).endsWith(".ogg")
-					|| ((String) current.getTag(DAAPConstants.NAME))
-					.endsWith(".wav")) {
-				continue;
+			System.out.println("setting volume to " + volume);
+			Process p = Runtime.getRuntime().exec(
+					"bash " + url.getFile() + " " + volume);
+			for (Scanner sc = new Scanner(p.getErrorStream()); sc.hasNextLine();) {
+				System.out.println(sc.nextLine());
 			}
-			System.out.println("Polled playlist.");
-			stream = current.getStream();
-			fillPlaylist();
-
-		}
-		catch (IOException ex) {
-			System.err.println("DJ: Failed to find a playable track.");
-			//ex.printStackTrace();
+		} catch (IOException e) {
+			System.err.println("set volume failed");
+			e.printStackTrace();
 		}
 	}
 
 
+	/*
+	 * Lackey calls when 
+	 */
+	public void tracksAdded(){
+		System.out.println("tracks added");
 
-	player.setInputStream(stream);
-}
+		if(playlist.isEmpty()){
 
-public void playbackStarted() {
-	System.out.println("Playback started");
+			fillPlaylist();
+			start();
+		}
 
-}
+		if (playlist.size() < playlistSize){
+			fillPlaylist();	
+		}
+
+	}
+
+	/*
+	 * Lackey calls this when the library has changed (i.e DAAP server dropped).
+	 * Validates the current playlist.
+	 */
+	public void libraryChanged(){
+		lackey.checkPlaylist(playlist);
+		if (playlist.size() < playlistSize){
+			fillPlaylist();	
+		}
+		System.out.println("Library changed: playlist updated");
+	}
+
+
+	/*
+	 * Modify DJ state
+	 */
+	public void play() {
+		if(paused){
+			player.start();
+			paused=false;
+		}
+		else start();
+	}
+
+	public void pause(){
+		player.pause();
+		paused=true;
+	}
+
+
+	public void stop(){
+		player.stop();
+	}
+
+	public void next() {
+		player.stop();
+		playbackFinished();
+	}
+
+	public void start(){
+		if (playlist.isEmpty()) return;
+
+		current = playlist.remove(0);
+		recentlyPlayedTracks.add(current);
+		if(recentlyPlayedTracks.size()>recentlyPlayedTracksSize){
+			recentlyPlayedTracks.remove(0);
+		}
+		System.out.println("Polled playlist.");
+		try {
+			player.setInputStream(current.getStream());
+		} catch (IOException e) {
+			System.out.println("Failed to send stream to player.");
+			//e.printStackTrace();
+		}
+	}
+
+	public void setPlaylist(List<Track> playlist) {
+		this.playlist = playlist;
+	}
+
+
+	/*
+	 * Info about DJ state
+	 */
+	public int getVolume(){
+		return currentVolume;
+	}
+
+	public boolean isPaused(){
+		return paused;
+	}
+
+	public List<Track> getPlaylist() {
+		ArrayList<Track> list = new ArrayList<Track>(playlist);
+		if (current != null) list.add(0, current);
+		return list;
+	}
+
+	public Track getCurrentTrack(){
+		return current;
+	}
+
+	public List<Track> getRecentlyPlayedTracks() {
+		return recentlyPlayedTracks;
+	}
+
+	public List<Track> getLibrary(){
+		return Collections.unmodifiableList(lackey.getAllTracks());
+	}
+
+
+	/*
+	 * Methods from PlaybackListener
+	 * 
+	 */
+	public void playbackFinished() {
+		InputStream stream = null;
+		System.out.println("Playback finished.");
+		System.out.println("Size of Playlist: " + playlist.size());
+		while (stream == null) {
+			try {
+				if (playlist.isEmpty()) fillPlaylist();
+				if (playlist.isEmpty()) return;
+
+				current = playlist.remove(0); 
+				recentlyPlayedTracks.add(current);
+				if(recentlyPlayedTracks.size() > recentlyPlayedTracksSize)
+					recentlyPlayedTracks.remove(0);
+
+
+				if (((String) current.getTag(Constants.NAME)).endsWith(".ogg")
+						|| ((String) current.getTag(Constants.NAME))
+						.endsWith(".wav")) {
+					continue;
+				}
+				System.out.println("Polled playlist.");
+				stream = current.getStream();
+				fillPlaylist();
+
+			}
+			catch (IOException ex) {
+				System.err.println("DJ: Failed to find a playable track.");
+				//ex.printStackTrace();
+			}
+		}
 
 
 
-public static void main(String[] args){
-	DJ a = new DJ();
-}
+		player.setInputStream(stream);
+	}
+
+	public void playbackStarted() {
+		System.out.println("Playback started");
+	}
+
+	public static void main(String[] args){
+		new DJ();
+	}
+
+	/**
+	 * Do a filter on the playlist and replace the current playlist with the new filtered one.
+	 */
+	public void createPlaylistWithFilter(String type, String criteria){
+		Map<Integer,String> filter=new HashMap<Integer, String>();
+		try {
+			int code = getCode(type);
+			filter.put(code,criteria);
+			setPlaylistWithFilter(filter);
+		}
+		catch (Exception ex) {
+			System.err.println("unable to find type: " + type);
+			ex.printStackTrace();
+		}
+	}
+
+	/**
+	 * Do a filter on the playlist and display it without replacing the current playlist with the new LIST of tracks.
+	 */
+	public List<Track> queryLibrary(String type, String criteria){
+		Map<Integer,String> filter=new HashMap<Integer, String>();
+		try {
+			int code = getCode(type);
+			filter.put(code,criteria);
+			return getPlaylistWithFilter(filter);
+		}
+		catch (Exception ex) {
+			System.err.println("unable to find type: " + type);
+			ex.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * Append a new filtered playlist on the bottom of the old playlist.
+	 * @param type 
+	 * @param criteria
+	 * @param oldPL
+	 * @return
+	 */
+	public void append(String type, String criteria){
+		Map<Integer, String> filter = new HashMap<Integer, String>();
+		
+		try {
+			int code = getCode(type);
+			filter.put(code,criteria);
+			getPlaylist().addAll(getPlaylistWithFilter(filter));
+		}
+		catch (Exception ex) {
+			System.err.println("unable to find type: " + type);
+			ex.printStackTrace();
+		}
+	}
+
+	public List<Track> queryRecentlyPlayed(){
+		return getRecentlyPlayedTracks();
+	}
+
+	public String status(){
+		if(getCurrentTrack()!=null)
+			return " #Current Track: " + getCurrentTrack().toString()+" | Playback "+
+					(isPaused()? "Paused" : "Playing");
+		else
+			return "No track loaded";
+	}
+	
+	private static int getCode(String name) throws Exception {
+		if (name.equals("name")) {
+			return Constants.NAME;
+		}
+		if (name.equals("artist")) {
+			return Constants.ARTIST;
+		}
+		throw new Exception("Invalid for query: " + name);
+	}
 }

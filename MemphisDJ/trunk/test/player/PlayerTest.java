@@ -1,24 +1,14 @@
 package player;
 
-import java.io.IOException;
 import java.io.InputStream;
-
-
-import daap.DAAPClient;
 
 public class PlayerTest {
 
 	public static void main(String args[]) {
-		String hostname = "majoribanks.mcs.vuw.ac.nz";
-		int port = 3689;
 
-		try{
-			DAAPClient client = new DAAPClient(hostname,port);
-			testSkip(client.getStream(client.getTrackList().get(6)),client.getStream(client.getTrackList().get(8)));
-		}catch(IOException e){
-			System.out.println("FAILURE");
-			e.printStackTrace();
-		}
+		InputStream in1 = PlayerTest.class.getResourceAsStream("music.mp3");
+		InputStream in2 = PlayerTest.class.getResourceAsStream("music.mp3");
+		testSkip(in1, in2);
 //		try{
 //			DAAPClient client = new DAAPClient(hostname, port);
 //			testCompletePlay(client.getTrackList().get(1).getStream());
