@@ -6,13 +6,14 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Before;
 import org.junit.Test;
 
-import playlist.Track;
+import daap.DAAPTrack;
+
 
 
 
 public class SongTest {
 
-	private Track s;
+	private DAAPTrack s;
 	
 	@Before
 	public void createTrack() {

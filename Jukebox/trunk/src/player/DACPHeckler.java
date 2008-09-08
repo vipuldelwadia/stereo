@@ -1,4 +1,6 @@
 package player;
+import interfaces.Track;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
@@ -10,14 +12,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import playlist.Track;
+import daap.DAAPTrack;
+
+import music.Constants;
+
 import reader.DACPResponseParser;
 import util.DACPConstants;
 import util.node.Composite;
 import util.node.Node;
 import util.node.StringNode;
 import writer.DACPRequestGenerator;
-import daap.DAAPConstants;
 
 public class DACPHeckler {
 
@@ -210,12 +214,12 @@ public class DACPHeckler {
 				if (o != null){
 					if (o instanceof List){
 						for (Object e : (List<Object>)o){
-							if (e instanceof Track)
-								tracks.add((Track)e);
+							if (e instanceof DAAPTrack)
+								tracks.add((DAAPTrack)e);
 						}
 					}
-					else if (o instanceof Track){
-						tracks.add((Track)o);
+					else if (o instanceof DAAPTrack){
+						tracks.add((DAAPTrack)o);
 					}
 				}
 			}
@@ -247,41 +251,41 @@ public class DACPHeckler {
 	}
 
 	
-	private Track buildTrack(Composite c) {
+	private DAAPTrack buildTrack(Composite c) {
 		Map<Integer, Object> fields = new HashMap<Integer, Object>();
 		
 		for(Node node : c.nodes) {
 			int code = node.code;
 			
-			if (DAAPConstants.ALBUM == code && node instanceof StringNode) {
-				fields.put(new Integer(DAAPConstants.ALBUM), ((StringNode)node).getValue());
+			if (Constants.ALBUM == code && node instanceof StringNode) {
+				fields.put(new Integer(Constants.ALBUM), ((StringNode)node).getValue());
 			}
-			else if (DAAPConstants.ARTIST == code && node instanceof StringNode) {
-				fields.put(new Integer(DAAPConstants.ARTIST), ((StringNode)node).getValue());
+			else if (Constants.ARTIST == code && node instanceof StringNode) {
+				fields.put(new Integer(Constants.ARTIST), ((StringNode)node).getValue());
 			}
-			else if (DAAPConstants.BITRATE == code && node instanceof StringNode) {
-				fields.put(new Integer(DAAPConstants.BITRATE), ((StringNode)node).getValue());
+			else if (Constants.BITRATE == code && node instanceof StringNode) {
+				fields.put(new Integer(Constants.BITRATE), ((StringNode)node).getValue());
 			}
-			else if (DAAPConstants.COMPOSER == code && node instanceof StringNode) {
-				fields.put(new Integer(DAAPConstants.COMPOSER), ((StringNode)node).getValue());
+			else if (Constants.COMPOSER == code && node instanceof StringNode) {
+				fields.put(new Integer(Constants.COMPOSER), ((StringNode)node).getValue());
 			}
-			else if (DAAPConstants.GENRE == code && node instanceof StringNode) {
-				fields.put(new Integer(DAAPConstants.GENRE), ((StringNode)node).getValue());
+			else if (Constants.GENRE == code && node instanceof StringNode) {
+				fields.put(new Integer(Constants.GENRE), ((StringNode)node).getValue());
 			}
-			else if (DAAPConstants.NAME == code && node instanceof StringNode) {
-				fields.put(new Integer(DAAPConstants.NAME), ((StringNode)node).getValue());
+			else if (Constants.NAME == code && node instanceof StringNode) {
+				fields.put(new Integer(Constants.NAME), ((StringNode)node).getValue());
 			}
-			else if (DAAPConstants.SONG_TIME == code && node instanceof StringNode) {
-				fields.put(new Integer(DAAPConstants.SONG_TIME), ((StringNode)node).getValue());
+			else if (Constants.SONG_TIME == code && node instanceof StringNode) {
+				fields.put(new Integer(Constants.SONG_TIME), ((StringNode)node).getValue());
 			}
-			else if (DAAPConstants.START_TIME == code && node instanceof StringNode) {
-				fields.put(new Integer(DAAPConstants.START_TIME), ((StringNode)node).getValue());
+			else if (Constants.START_TIME == code && node instanceof StringNode) {
+				fields.put(new Integer(Constants.START_TIME), ((StringNode)node).getValue());
 			}
-			else if (DAAPConstants.STOP_TIME == code && node instanceof StringNode) {
-				fields.put(new Integer(DAAPConstants.STOP_TIME), ((StringNode)node).getValue());
+			else if (Constants.STOP_TIME == code && node instanceof StringNode) {
+				fields.put(new Integer(Constants.STOP_TIME), ((StringNode)node).getValue());
 			}
 		}
 		
-		return new Track(fields, null);
+		return new DAAPTrack(fields, null);
 	}
 }

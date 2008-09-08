@@ -1,5 +1,7 @@
 package controller;
 
+import interfaces.PlaybackController;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -7,7 +9,7 @@ import player.Controller;
 
 
 public class ControllerTest {
-	ControllerInterface c;
+	PlaybackController c;
 
 	@Before
 	public void testInstantiation(){
@@ -33,12 +35,12 @@ public class ControllerTest {
 	
 	@Test
 	public void trackPlayed() {
-		c.playTrack();
+		c.play();
 	}
 	
 	@Test
 	public void trackPaused() {
-		c.pauseTrack();
+		c.pause();
 	}
 	
 }

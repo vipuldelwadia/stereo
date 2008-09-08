@@ -1,5 +1,8 @@
 package player;
 
+import interfaces.PlaybackController;
+import interfaces.Track;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -7,9 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import playlist.Track;
-import controller.ControllerInterface;
-import daap.DAAPConstants;
+import music.Constants;
+
 
 /**
  * 
@@ -17,7 +19,7 @@ import daap.DAAPConstants;
  *         playlist TODO make it recieve and interpret DACP requests
  */
 
-public class Controller implements ControllerInterface {
+public class Controller implements PlaybackController {
 
 	private final static boolean DEBUG = false;
 
@@ -65,7 +67,7 @@ public class Controller implements ControllerInterface {
 	 * 
 	 * @see player.ControllerInterface#pauseTrack()
 	 */
-	public void pauseTrack() {
+	public void pause() {
 		if (this.connect())
 			this.dacp.pause();
 	}
@@ -75,7 +77,7 @@ public class Controller implements ControllerInterface {
 	 * 
 	 * @see player.ControllerInterface#playTrack()
 	 */
-	public void playTrack() {
+	public void play() {
 		if (this.connect())
 			this.dacp.play();
 	}
@@ -108,9 +110,8 @@ public class Controller implements ControllerInterface {
 	 * 
 	 * @see player.ControllerInterface#skipTrack()
 	 */
-	public void skipTrack() {
-		if (this.connect())
-			this.dacp.skip();
+	public void next() {
+		this.dacp.skip();
 	}
 
 	/*
@@ -119,9 +120,7 @@ public class Controller implements ControllerInterface {
 	 * @see player.ControllerInterface#getVolume()
 	 */
 	public int getVolume() {
-		if (this.connect())
-			return this.dacp.getVolume();
-		return 0;
+		return this.dacp.getVolume();
 	}
 
 	/*
@@ -140,31 +139,24 @@ public class Controller implements ControllerInterface {
 			this.dacp.stop();
 	}
 
-	public void status() {
-		if (this.connect()) {
+	public String status() {
 			Track t = this.dacp.queryCurrentTrack();
-			if (t != null) // TODO print this better? What about
-				// paused/unpause?
-				System.out.println(t.toString());
-		}
-
+			if (t != null) // TODO print this better? What about paused/unpause?
+				return t.toString();
+			else
+				return "";
 	}
 
 	public void createPlaylistWithFilter(String type, String criteria) {
-		if (this.connect()) {
-			Map<Integer, String> filter = new HashMap<Integer, String>();
-			filter = fillFilter(type, criteria, filter);
-			this.dacp.setPlaylistWithFilter(filter);
-		}
+		Map<Integer, String> filter = new HashMap<Integer, String>();
+		filter = fillFilter(type, criteria, filter);
+		this.dacp.setPlaylistWithFilter(filter);
 	}
 
-	public void queryLibrary(String type, String crit) {
-		if (this.connect()) {
-			Map<Integer, String> filter = new HashMap<Integer, String>();
-			filter = fillFilter(type, crit, filter);
-			for (Track currentTrack : this.dacp.getPlaylistWithFilter(filter))
-				System.out.print(currentTrack);
-		}
+	public List<Track> queryLibrary(String type, String crit) {
+		Map<Integer, String> filter = new HashMap<Integer, String>();
+		filter = fillFilter(type, crit, filter);
+		return this.dacp.getPlaylistWithFilter(filter);
 	}
 
 	// helper method
@@ -177,35 +169,27 @@ public class Controller implements ControllerInterface {
 	private Map<Integer, String> fillFilter(String type, String criteria,
 			Map<Integer, String> playList) {
 		if (type.equalsIgnoreCase("artist"))
-			playList.put(DAAPConstants.ARTIST, criteria);
+			playList.put(Constants.ARTIST, criteria);
 		else if (type.equalsIgnoreCase("album"))
-			playList.put(DAAPConstants.ALBUM, criteria);
+			playList.put(Constants.ALBUM, criteria);
 
 		return playList;
 	}
 
-	public void queryRecentlyPlayed() {
-		if (this.connect()) {
-			List<Track> recent = this.dacp.getRecentlyPlayedTracks();
-
-			System.out.println("Recently played Music\n-------------------");
-			while (!recent.isEmpty())
-				System.out.print(recent.remove(0));
+	public List<Track> queryRecentlyPlayed() {
+		List<Track> recent = new ArrayList<Track>();
+		for (Track t: this.dacp.getRecentlyPlayedTracks()) {
+			recent.add(0, t);
 		}
-
+		return recent;
 	}
 
 	public void append(String type, String crit) {
 		// TODO
 	}
 
-	public void displayLibrary() {
-		if (this.connect()) {
-			System.out.println("The Library Contents\n-------------------");
-			for (Track currentTrack : this.dacp.getLibrary())
-				System.out.print(currentTrack.toString());
-		}
+	public List<Track> getLibrary() {
+		return this.dacp.getLibrary();
 	}
-
 
 }
