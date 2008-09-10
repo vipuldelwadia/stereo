@@ -7,28 +7,27 @@ import java.util.HashMap;
 import org.junit.Before;
 import org.junit.Test;
 
-import playlist.Track;
 
 public class TrackTest {
 	
-	Track t;
+	DAAPTrack t;
 	
 	@Before
 	public void setUp() {
 		HashMap<Integer, Object> values = new HashMap<Integer, Object>();
 		values.put(DAAPConstants.ALBUM, "The album");
 		
-		t = new Track(values, null);
+		t = new DAAPTrack(values, null);
 	}
 	
 	@Test
 	public void testInitialise() {
-		new Track(new HashMap<Integer, Object>(), null);
+		new DAAPTrack(new HashMap<Integer, Object>(), null);
 	}
 	
 	@Test (expected = NullPointerException.class)
 	public void testNullValuesInitialise() {
-		new Track(null, null);
+		new DAAPTrack(null, null);
 	}
 
 	@Test

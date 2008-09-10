@@ -1,125 +1,120 @@
 package reader;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import util.command.*;
-
-
+import util.command.Command;
+import util.command.CtrlInt;
+import util.command.Databases;
+import util.command.Login;
+import util.command.Logout;
+import util.command.PathNode;
+import util.command.RequestNode;
+import util.command.ServerInfo;
+import util.command.Update;
 
 public class DACPRequestParser {
 
-
-	public static DACPCommand parse(String p) {
+	@SuppressWarnings("unused")
+	private static PathNode base = new PathNode() {
+		public RequestNode serverInfo() {
+			return new ServerInfo();
+		}
+		public RequestNode login() {
+			return new Login();
+		}
+		public RequestNode logout() {
+			return new Logout();
+		}
+		public PathNode ctrlInt() {
+			return new CtrlInt();
+		}
+		public PathNode databases() {
+			return new Databases();
+		}
+		public RequestNode update() {
+			return new Update();
+		}
+	};
+	
+	public static Command parse(String p) {
 
 		try {
 			final Scanner request = new Scanner(p);
-			
+
 			final String type = request.next();
 			final String URI = request.next();
 			final String protocol = request.next();
 
-			Scanner uri = new Scanner(URI);
-			uri.useDelimiter("/");
+			if (!URI.contains("playstatus") && !URI.contains("/update") && !URI.contains("dmcp.volume"))
+				System.out.println("Received request: " + URI + " (" + type + ", " + protocol + ")");
 
-			String root = uri.next();
-			if(root.equalsIgnoreCase("ctrl-int")) root = "ctrl_int";
-
-			//The following line is a more efficient version, but Clare won't let me do it :-(
-			//System.out.println(root = (root = uri.next()).equalsIgnoreCase("ctrl-int") ? "ctrl_int" : root);
-
-			switch(CONTROL.valueOf(root)){
-			case ctrl_int:
-				return parseControl(uri);
-			case login:break;
-			case databases:break;
-			case update:break;
-			default: break;
-			}
-
-			throw new IllegalArgumentException("invalid handshake: " + p);
-		}	
-		catch (NoSuchElementException e) {
-			throw new IllegalArgumentException("invalid handshake: " + p);
-		}
-	}
-
-	private static DACPCommand parseControl(Scanner uri){
-		String database = uri.next();
-		uri.useDelimiter("\\?"); /*Split the command from the rest of the variables*/
-		String command = uri.next().replaceAll("/", " ").trim();
-		Map<String,String> parameters = new HashMap<String,String>();
-		// got to check there are parameters
-		if (uri.hasNext()) {
-			String parameterString=uri.next();
-
-			parameterString = parameterString.replace('=', ' ').replace('&', ' ');
-
-			uri = new Scanner(parameterString);
-			while(uri.hasNext()){
-				try{
-					parameters.put(uri.next(), uri.next());
-				}catch(NoSuchElementException e){
-					throw new IllegalArgumentException("Invalid parameters.");
+			Scanner req = new Scanner(URI);
+			req.useDelimiter("[?]");
+			
+			Scanner cmd = new Scanner(req.next());
+			cmd.useDelimiter("[/]");
+			
+			Scanner args = new Scanner(req.hasNext()?req.next():"");
+			args.useDelimiter("[&]");
+			
+			Map<String, String> argsMap = null;
+			if (args.hasNext()) {
+				argsMap = new HashMap<String, String>();
+				while (args.hasNext()) {
+					Scanner param = new Scanner(args.next());
+					param.useDelimiter("[=]");
+					argsMap.put(param.next(), param.next());
 				}
 			}
-		}
-
-//		System.out.println("Command: "+command+"\nparameter: "+parameter);
-		/* Get all the commands before the question mark */
-		COMMAND c = COMMAND.valueOf(command);
-
-		switch(c) {
-		case pause:
-			return new DACPPause();
-		case playpause:
-			return new DACPPlay();
-		case setproperty:
-			return setProperty(parameters);
-		case skip:
-			return new DACPSkip();
-		case requestplaylist:
-			return new DACPRequestPlaylist();
-		default:
-			throw new IllegalArgumentException("command is not recognised");
-		}
-
-	}
-
-	private static DACPCommand setProperty(Map<String, String> arguments) {
-		if (arguments.containsKey("dmcp.volume")) {
-			String stringVolume = arguments.get("dmcp.volume");
-			try{
-				Integer volume = Integer.parseInt(stringVolume);	
-				
-				if(volume>255 || volume <0) throw new IllegalArgumentException("Volume must be between 0~255"); 
-				
-				return new DACPSetVolume(volume);
+			
+			RequestNode node = base;
+			while (cmd.hasNext()) {
+				if (node instanceof PathNode) {
+					String name = cmd.next();
+					if (name.charAt(0) >= '0' && name.charAt(0) <= '9') {
+						name = "_" + name;
+					}
+					while (name.indexOf('-') != -1) {
+						int i = name.indexOf('-');
+						name = name.substring(0, i) + name.substring(i+1,i+2).toUpperCase() + name.substring(i+2);
+					}
+					PathNode path = (PathNode)node;
+					Method m = path.methods().get(name);
+					if (m == null) {
+						throw new IllegalArgumentException("unexpected command '" + name + "' in request: " + URI);
+					}
+					try {
+						node = (RequestNode)m.invoke(path);
+					}
+					catch (IllegalAccessException e) {
+						e.printStackTrace();
+						throw new IllegalArgumentException("unable to access method: " + name);
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+						throw new IllegalArgumentException("exception while calling method: " + name);
+					}
+				}
+				else {
+					throw new IllegalArgumentException("invalid node: " + node);
+				}
 			}
-			catch(NumberFormatException e) {
-				throw new IllegalArgumentException("not a vtrl-intalid volume");
+			
+			if (node instanceof Command) {
+				Command c = (Command)node;
+				c.init(argsMap);
+				return c;
 			}
-		}
-		throw new IllegalArgumentException("not a valid parameter");
-	}
 
-	private enum CONTROL { 
-		login,databases,update,ctrl_int;
-
-		public String toString(){
-			switch(this){
-			case login: return "login";
-			case databases: return "databases";
-			case ctrl_int: return "ctrl-int";
-			case update: return "update";
-			default: return "";
-			} 
+			throw new IllegalArgumentException("invalid command string: " + URI);
+		}	
+		catch (NoSuchElementException e) {
+			throw new IllegalArgumentException("invalid command string");
 		}
 	}
-
-	private enum COMMAND {
-		pause, playpause, setproperty, skip, requestplaylist;
-	}
+	
 }

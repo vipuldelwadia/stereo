@@ -37,8 +37,7 @@ public class DJTest {
 
 	@Test
 	public void testTracksAdded() {
-		int numTrack=a.getPlaylist().size();
-		
+		a.getPlaylist().size();
 	}
 
 	@Test

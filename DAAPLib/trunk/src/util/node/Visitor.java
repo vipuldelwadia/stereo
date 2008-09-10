@@ -10,5 +10,5 @@ public interface Visitor {
 	public int visitLongNode(LongNode node);
 	public int visitLongLongNode(LongLongNode node);
 	public int visitStringNode(StringNode node);
-	
+	public int visitVersionNode(VersionNode node);
 }

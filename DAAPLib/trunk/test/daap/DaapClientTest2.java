@@ -7,6 +7,7 @@ import org.junit.BeforeClass;
 
 
 public class DaapClientTest2 {
+	@SuppressWarnings("unused")
 	private static DAAPClient client;
 
 	@BeforeClass

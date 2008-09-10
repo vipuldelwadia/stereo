@@ -1,23 +1,28 @@
 package cli;
 
+import interfaces.PlaybackController;
+import interfaces.Track;
+
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Scanner;
-import playlist.Track;
-import controller.ControllerInterface;
+
+import music.DJ;
+
+
 public class CLITest {
     private Scanner    scan;
-    private ControllerInterface controller;
+    private PlaybackController controller;
     
 
-    public CLITest(ControllerInterface controller) {
+    public CLITest(PlaybackController controller) {
 
         scan = new Scanner(System.in);
         this.controller = controller;
         run();
     }
     
-    public CLITest(ControllerInterface controller, String args) {
+    public CLITest(PlaybackController controller, String args) {
         scan = new Scanner(System.in);
         this.controller = controller;
         input(args);
@@ -43,7 +48,7 @@ public class CLITest {
             }
         }
         public void play(String dummy) {
-            controller.playTrack();
+            controller.play();
         	status(null);
         }
 
@@ -67,7 +72,7 @@ public class CLITest {
         }
         
         public void library(String dummy){
-        	controller.displayLibrary();
+        	controller.getLibrary();
         }
         
         public void filter(String param) {
@@ -97,11 +102,11 @@ public class CLITest {
         }
         
         public void pause(String dummy) { 
-            controller.pauseTrack();
+            controller.pause();
             status(null);
         }
         public void skip(String dummy) {
-            controller.skipTrack();
+            controller.next();
             status(null);
         }
         public void set(String command) {
@@ -175,7 +180,7 @@ public class CLITest {
     
     public static void main(String[] args) {
     	if (args.length == 0) {
-    		new CLITest(new ServerSideController());
+    		new CLITest(new DJ());
     	}
     	else {
     		String combinedArgs = "";
@@ -184,7 +189,7 @@ public class CLITest {
     		}
     		combinedArgs = combinedArgs.trim();
     		System.out.println(combinedArgs);
-    		new CLITest(new ServerSideController(), combinedArgs);
+    		new CLITest(new DJ(), combinedArgs);
     	}
     }
     

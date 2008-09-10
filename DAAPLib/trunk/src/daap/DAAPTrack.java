@@ -1,20 +1,18 @@
-package playlist;
+package daap;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
-import daap.DAAPClient;
-import daap.DAAPConstants;
+import music.Constants;
 
-public class Track {
+public class DAAPTrack implements interfaces.Track {
 	
 	private Map<Integer, Object> tags;
 	private DAAPClient publisher;
 	
-	public Track(Map<Integer, Object> values, DAAPClient parent){
+	public DAAPTrack(Map<Integer, Object> values, DAAPClient parent){
 		tags = new HashMap<Integer, Object>();
 		
 		for (Integer key: values.keySet()) {
@@ -25,19 +23,16 @@ public class Track {
 	}
 
 	/**
-	 * tagId should take a value from thos available in Track
+	 * tagId should take a value from those available in Track
 	 * @param tagID
 	 * @return
 	 */
 	public Object getTag(int tagID){
-//		if (tags.containsKey(tagID)) {
-			return tags.get(tagID);			
-//		}
-//		else return null;
+		return tags.get(tagID);
 	}
 
 	public int getTrackId() {
-		return (Integer)tags.get(DAAPConstants.TRACK_ID);
+		return (Integer)tags.get(Constants.TRACK_ID);
 	}
 	
 	public DAAPClient getParent(){
@@ -50,11 +45,11 @@ public class Track {
 	}
 	
 	public String toString(){
-		 return String.format("%s - %s - %s",getTag(DAAPConstants.NAME),getTag(DAAPConstants.ARTIST),getTag(DAAPConstants.ALBUM));
+		 return String.format("%s - %s - %s",getTag(Constants.NAME),getTag(Constants.ARTIST),getTag(Constants.ALBUM));
 	}
 
-	public Set<Map.Entry<Integer, Object>> getAllTags() {
-		return tags.entrySet();
+	public Map<Integer, Object> getAllTags() {
+		return tags;
 	}
 	
 }

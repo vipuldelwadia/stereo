@@ -1,5 +1,8 @@
 package clinterface;
 
+import interfaces.PlaybackController;
+import interfaces.Track;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
@@ -7,8 +10,6 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import player.Controller;
-import playlist.Track;
-import controller.ControllerInterface;
 
 public class CLI {
 
@@ -16,17 +17,17 @@ public class CLI {
 	private final static boolean DEBUG = false;
 
 	private Scanner    scan;
-	private ControllerInterface controller;
+	private PlaybackController controller;
 
 
-	public CLI(ControllerInterface controller) {
+	public CLI(PlaybackController controller) {
 
 		scan = new Scanner(System.in);
 		this.controller = controller;
 		run();
 	}
 
-	public CLI(ControllerInterface controller, String args) {
+	public CLI(PlaybackController controller, String args) {
 		scan = new Scanner(System.in);
 		this.controller = controller;
 		input(args);
@@ -53,7 +54,7 @@ public class CLI {
 			}
 		}
 		public void play() {
-			controller.playTrack();
+			controller.play();
 		}
 		public void recent() {
 			controller.queryRecentlyPlayed();
@@ -73,7 +74,7 @@ public class CLI {
 		}
 
 		public void library(){
-			controller.displayLibrary();
+			printTracks(controller.getLibrary());
 		}
 
 		public void filter(String param) {
@@ -100,13 +101,13 @@ public class CLI {
 			}
 		}
 		public void pause() { 
-			controller.pauseTrack();
+			controller.pause();
 		}
 		public void skip() {
-			controller.skipTrack();
+			next();
 		}
 		public void next() {
-			skip();
+			controller.next();
 		}
 		public void set(String command) {
 			command = command.toLowerCase().trim();
@@ -274,4 +275,9 @@ public class CLI {
 		System.out.println("Usage: " + appName + " HOST (PORT | --) [COMMANDS]");
 	}
 
+	private static void printTracks(List<Track> tracks) {
+		for (Track t: tracks) {
+			System.out.println(t);
+		}
+	}
 }

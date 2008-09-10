@@ -22,6 +22,8 @@ public interface PlaybackController {
 	public List<Track> queryRecentlyPlayed();
 	public List<Track> queryLibrary(String type, String crit);
 	public List<Track> getLibrary();
+	
+	public int libraryVersion();
 
 	public void append(String type, String crit);
 

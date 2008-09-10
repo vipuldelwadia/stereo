@@ -265,6 +265,10 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 	public List<Track> getLibrary(){
 		return Collections.unmodifiableList(lackey.getAllTracks());
 	}
+	
+	public int libraryVersion() {
+		return lackey.version();
+	}
 
 
 	/*

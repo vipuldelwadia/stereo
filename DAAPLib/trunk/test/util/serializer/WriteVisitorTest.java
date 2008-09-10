@@ -13,24 +13,25 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import reader.DACPResponseParser;
+
 import util.DACPConstants;
 import util.node.BooleanNode;
 import util.node.ByteNode;
 import util.node.Composite;
 import util.node.IntegerNode;
-import util.node.LengthVisitor;
 import util.node.LongLongNode;
 import util.node.LongNode;
 import util.node.Node;
 import util.node.StringNode;
+
+import writer.DACPResponseGenerator;
 
 public class WriteVisitorTest {
 
 	private static PipedOutputStream out;
 	private static PipedInputStream in;
 	
-	private static LengthVisitor len;
-	private WriteVisitor visitor;
+	private DACPResponseGenerator visitor;
 	
 	@BeforeClass
 	public static void setUp() throws Exception {
@@ -38,20 +39,18 @@ public class WriteVisitorTest {
 		in = new PipedInputStream();
 		
 		in.connect(out);
-		
-		len = new LengthVisitor();
 	}
 	
 	@Before
 	public void prepare() throws Exception {
-		visitor = new WriteVisitor(len, out);
+		visitor = new DACPResponseGenerator();
 	}
 
 	@Test
 	public void testVisitBooleanNode() throws Exception {
 		
 		Node node = new BooleanNode(5, true);
-		visitor.visit(node);
+		visitor.visit(node, out);
 		
 		int length = 9;
 		
@@ -68,7 +67,7 @@ public class WriteVisitorTest {
 	public void testVisitByteNode() throws Exception {
 		
 		Node node = new ByteNode(5, (byte)'c');
-		visitor.visit(node);
+		visitor.visit(node, out);
 		
 		int length = 9;
 		
@@ -92,7 +91,7 @@ public class WriteVisitorTest {
 		node.append(new BooleanNode(4, true));
 		node.append(new LongNode(5, 1l));
 		
-		visitor.visit(node);
+		visitor.visit(node, out);
 		
 		int length = 67;
 		
@@ -128,7 +127,7 @@ public class WriteVisitorTest {
 		node.append(node2);	
 		node.append(node3);
 		
-		visitor.visit(node);
+		visitor.visit(node, out);
 		
 		int length = 60;
 		
@@ -180,7 +179,7 @@ public class WriteVisitorTest {
 		}
 		
 		
-		visitor.visit(node);
+		visitor.visit(node, out);
 		
 		int length = 60;
 		
@@ -222,7 +221,7 @@ public class WriteVisitorTest {
 		
 		System.out.println(parent4);
 		
-		visitor.visit(parent4);
+		visitor.visit(parent4, out);
 		int length = 100;		
 		byte[] read = new byte[length];
 		in.read(read);
@@ -239,7 +238,7 @@ public class WriteVisitorTest {
 	@Test
 	public void testVisitIntegerNode() throws Exception {
 		Node node = new IntegerNode(5, 50);
-		visitor.visit(node);
+		visitor.visit(node, out);
 		
 		int length = 12;
 		
@@ -255,7 +254,7 @@ public class WriteVisitorTest {
 	@Test
 	public void testVisitLongLongNode() throws Exception {
 		Node node = new LongLongNode(5, 1, 2);
-		visitor.visit(node);
+		visitor.visit(node, out);
 		
 		int length = 24;
 		
@@ -271,7 +270,7 @@ public class WriteVisitorTest {
 	@Test
 	public void testVisitLongNode() throws Exception {
 		Node node = new LongNode(5, 72623859790382856l);
-		visitor.visit(node);
+		visitor.visit(node, out);
 		
 		System.out.println(Integer.MAX_VALUE);
 		
@@ -290,7 +289,7 @@ public class WriteVisitorTest {
 	@Test
 	public void testVisitStringNode() throws Exception {
 		Node node = new StringNode(5, "hello world!");
-		visitor.visit(node);
+		visitor.visit(node,out);
 		
 		int length = 20;
 		

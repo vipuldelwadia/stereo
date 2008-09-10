@@ -192,4 +192,10 @@ public class Controller implements PlaybackController {
 		return this.dacp.getLibrary();
 	}
 
+
+	public int libraryVersion() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

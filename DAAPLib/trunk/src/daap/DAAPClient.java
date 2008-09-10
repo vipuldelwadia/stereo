@@ -9,7 +9,6 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.impl.SimpleLog;
 
-import playlist.Track;
 
 
 public class DAAPClient {
@@ -49,10 +48,10 @@ public class DAAPClient {
 
 	}
 
-	public List<Track> getTrackList() {	
+	public List<DAAPTrack> getTrackList() {	
 		if(dbid < 0) return null;
 		
-		List<Track> tracks = new ArrayList<Track>();
+		List<DAAPTrack> tracks = new ArrayList<DAAPTrack>();
 
 		String request = "databases/"
 			+ dbid
@@ -82,7 +81,7 @@ public class DAAPClient {
 					continue;
 				}
 				final Map<Integer, Object> values = e.getValueMap();
-				tracks.add(new Track(values, this));
+				tracks.add(new DAAPTrack(values, this));
 
 			}
 
@@ -94,7 +93,7 @@ public class DAAPClient {
 		}
 	}
 
-	public InputStream getStream(Track track) throws IOException {
+	public InputStream getStream(DAAPTrack track) throws IOException {
 		int song = track.getTrackId();
 		return helper.songRequest(hostname, port, "databases/" + dbid + "/items/" + song
 				+ ".mp3?session-id=" + sessionID, log);
@@ -206,5 +205,4 @@ public class DAAPClient {
 	public class ClientExpiredException extends Throwable{
 		private static final long serialVersionUID = 1L;
 	}
-
 }

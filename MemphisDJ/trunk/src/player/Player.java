@@ -5,26 +5,28 @@ import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Set;
 
-import music.DJ;
-
 import javazoom.jl.decoder.JavaLayerException;
+
+//TODO: find a way to pause playback which doesn't involve deprecated methods
 
 public class Player implements music.Player {
 	
 	public Player() {
-		final Player player = this;
-		/*Runtime.getRuntime().addShutdownHook(new Thread() {
+		/*final Player player = this;
+		Runtime.getRuntime().addShutdownHook(new Thread() {
 			public void run () {
 				player.stop();
 			}
 		});*/
 	}
 
+	@SuppressWarnings("deprecation")
 	public synchronized void pause() {
 		if (thread != null)
 			thread.suspend();
 	}
 
+	@SuppressWarnings("deprecation")
 	public synchronized void setInputStream(InputStream i) {
 		System.out.println("Setting input stream in player");
 		if (thread != null) {
@@ -37,6 +39,7 @@ public class Player implements music.Player {
 		start();
 	}
 
+	@SuppressWarnings("deprecation")
 	public synchronized void start() {
 		if (thread == null);
 		else if (thread.isAlive()) {
@@ -47,6 +50,7 @@ public class Player implements music.Player {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public synchronized void stop() {
 		if (thread != null){
 			thread.resume();

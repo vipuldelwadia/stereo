@@ -13,8 +13,6 @@ public class LengthVisitor implements Visitor {
 	public int visitByteNode(ByteNode node) {
 		return 9;
 	}
-
-	
 	
 	public int visitComposite(Composite node) {
 		int length = 8;
@@ -38,5 +36,9 @@ public class LengthVisitor implements Visitor {
 
 	public int visitStringNode(StringNode node) {
 		return 8+node.getValue().length();
+	}
+	
+	public int visitVersionNode(VersionNode node) {
+		return 8+4;
 	}
 }
