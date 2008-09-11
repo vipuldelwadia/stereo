@@ -175,420 +175,164 @@ public class DAAPConstants {
         return size;
     }
     
-    static {
-    	longCodes.put(abal, "daap.browsealbumlisting");
-    	longCodes.put(abar, "daap.browseartistlisting");
-    	longCodes.put(abcp, "daap.browsecomposerlisting");
-    	longCodes.put(abgn, "daap.browsegenrelisting");
-    	longCodes.put(abpl, "daap.baseplaylist");
-    	longCodes.put(abro, "daap.databasebrowse");
-    	longCodes.put(adbs, "daap.databasesongs");
-    	longCodes.put(aeAI, "com.apple.itunes.itms-artistid");
-    	longCodes.put(aeCI, "com.apple.itunes.itms-composerid");
-    	longCodes.put(aeCR, "com.apple.itunes.content-rating");
-    	longCodes.put(aeEN, "com.apple.itunes.episode-num-str");
-    	longCodes.put(aeES, "com.apple.itunes.episode-sort");
-    	longCodes.put(aeGD, "com.apple.itunes.gapless-enc-dr");
-    	longCodes.put(aeGE, "com.apple.itunes.gapless-enc-del");
-    	longCodes.put(aeGH, "com.apple.itunes.gapless-heur");
-    	longCodes.put(aeGI, "com.apple.itunes.itms-genreid");
-    	longCodes.put(aeGR, "com.apple.itunes.gapless-resy");
-    	longCodes.put(aeGU, "com.apple.itunes.gapless-dur");
-    	longCodes.put(aeHV, "com.apple.itunes.has-video");
-    	longCodes.put(aeMK, "com.apple.itunes.mediakind");
-    	longCodes.put(aeNN, "com.apple.itunes.network-name");
-    	longCodes.put(aeNV, "com.apple.itunes.norm-volume");
-    	longCodes.put(aePC, "com.apple.itunes.is-podcast");
-    	longCodes.put(aePI, "com.apple.itunes.itms-playlistid");
-    	longCodes.put(aePP, "com.apple.itunes.is-podcast-playlist");
-    	longCodes.put(aePS, "com.apple.itunes.special-playlist");
-    	longCodes.put(aeSF, "com.apple.itunes.itms-storefrontid");
-    	longCodes.put(aeSI, "com.apple.itunes.itms-songid");
-    	longCodes.put(aeSN, "com.apple.itunes.series-name");
-    	longCodes.put(aeSP, "com.apple.itunes.smart-playlist");
-    	longCodes.put(aeSU, "com.apple.itunes.season-num");
-    	longCodes.put(aeSV, "com.apple.itunes.music-sharing-version");
-    	longCodes.put(agrp, "daap.songgrouping");
-    	longCodes.put(aply, "daap.databaseplaylists");
-    	longCodes.put(aprm, "daap.playlistrepeatmode");
-    	longCodes.put(apro, "daap.protocolversion");
-    	longCodes.put(apsm, "daap.playlistshufflemode");
-    	longCodes.put(apso, "daap.playlistsongs");
-    	longCodes.put(arif, "daap.resolveinfo");
-    	longCodes.put(arsv, "daap.resolve");
-    	longCodes.put(asaa, "daap.songalbumartist");
-    	longCodes.put(asai, "daap.songalbumid");
-    	longCodes.put(asal, "daap.songalbum");
-    	longCodes.put(asar, "daap.songartist");
-    	longCodes.put(asbk, "daap.bookmarkable");
-    	longCodes.put(asbo, "daap.songbookmark");
-    	longCodes.put(asbr, "daap.songbitrate");
-    	longCodes.put(asbt, "daap.songbeatsperminute");
-    	longCodes.put(ascd, "daap.songcodectype");
-    	longCodes.put(ascm, "daap.songcomment");
-    	longCodes.put(ascn, "daap.songcontentdescription");
-    	longCodes.put(asco, "daap.songcompilation");
-    	longCodes.put(ascp, "daap.songcomposer");
-    	longCodes.put(ascr, "daap.songcontentrating");
-    	longCodes.put(ascs, "daap.songcodecsubtype");
-    	longCodes.put(asct, "daap.songcategory");
-    	longCodes.put(asda, "daap.songdateadded");
-    	longCodes.put(asdb, "daap.songdisabled");
-    	longCodes.put(asdc, "daap.songdisccount");
-    	longCodes.put(asdk, "daap.songdatakind");
-    	longCodes.put(asdm, "daap.songdatemodified");
-    	longCodes.put(asdn, "daap.songdiscnumber");
-    	longCodes.put(asdp, "daap.songdatepurchased");
-    	longCodes.put(asdr, "daap.songdatereleased");
-    	longCodes.put(asdt, "daap.songdescription");
-    	longCodes.put(ased, "daap.songextradata");
-    	longCodes.put(aseq, "daap.songeqpreset");
-    	longCodes.put(asfm, "daap.songformat");
-    	longCodes.put(asgn, "daap.songgenre");
-    	longCodes.put(asgp, "daap.songgapless");
-    	longCodes.put(ashp, "daap.songhasbeenplayed");
-    	longCodes.put(asky, "daap.songkeywords");
-    	longCodes.put(aslc, "daap.songlongcontentdescription");
-    	longCodes.put(aspu, "daap.songpodcasturl");
-    	longCodes.put(asrv, "daap.songrelativevolume");
-    	longCodes.put(assa, "daap.sortartist");
-    	longCodes.put(assc, "daap.sortcomposer");
-    	longCodes.put(assl, "daap.sortalbumartist");
-    	longCodes.put(assn, "daap.sortname");
-    	longCodes.put(assp, "daap.songstoptime");
-    	longCodes.put(assr, "daap.songsamplerate");
-    	longCodes.put(asss, "daap.sortseriesname");
-    	longCodes.put(asst, "daap.songstarttime");
-    	longCodes.put(assu, "daap.sortalbum");
-    	longCodes.put(assz, "daap.songsize");
-    	longCodes.put(astc, "daap.songtrackcount");
-    	longCodes.put(astm, "daap.songtime");
-    	longCodes.put(astn, "daap.songtracknumber");
-    	longCodes.put(asul, "daap.songdataurl");
-    	longCodes.put(asur, "daap.songuserrating");
-    	longCodes.put(asyr, "daap.songyear");
-    	longCodes.put(ated, "daap.supportsextradata");
-    	longCodes.put(avdb, "daap.serverdatabases");
-    	longCodes.put(mbcl, "dmap.bag");
-    	longCodes.put(mccr, "dmap.contentcodesresponse");
-    	longCodes.put(mcna, "dmap.contentcodesname");
-    	longCodes.put(mcnm, "dmap.contentcodesnumber");
-    	longCodes.put(mcon, "dmap.container");
-    	longCodes.put(mctc, "dmap.containercount");
-    	longCodes.put(mcti, "dmap.containeritemid");
-    	longCodes.put(mcty, "dmap.contentcodestype");
-    	longCodes.put(mdcl, "dmap.dictionary");
-    	longCodes.put(miid, "dmap.itemid");
-    	longCodes.put(mikd, "dmap.itemkind");
-    	longCodes.put(mimc, "dmap.itemcount");
-    	longCodes.put(minm, "dmap.itemname");
-    	longCodes.put(mlcl, "dmap.listing");
-    	longCodes.put(mlid, "dmap.sessionid");
-    	longCodes.put(mlit, "dmap.listingitem");
-    	longCodes.put(mlog, "dmap.loginresponse");
-    	longCodes.put(mpco, "dmap.parentcontainerid");
-    	longCodes.put(mper, "dmap.persistentid");
-    	longCodes.put(mpro, "dmap.protocolversion");
-    	longCodes.put(mrco, "dmap.returnedcount");
-    	longCodes.put(msal, "dmap.supportsautologout");
-    	longCodes.put(msas, "dmap.authenticationschemes");
-    	longCodes.put(msau, "dmap.authenticationmethod");
-    	longCodes.put(msbr, "dmap.supportsbrowse");
-    	longCodes.put(msdc, "dmap.databasescount");
-    	longCodes.put(msex, "dmap.supportsextensions");
-    	longCodes.put(msix, "dmap.supportsindex");
-    	longCodes.put(mslr, "dmap.loginrequired");
-    	longCodes.put(mspi, "dmap.supportspersistentids");
-    	longCodes.put(msqy, "dmap.supportsquery");
-    	longCodes.put(msrs, "dmap.supportsresolve");
-    	longCodes.put(msrv, "dmap.serverinforesponse");
-    	longCodes.put(mstc, "dmap.utctime");
-    	longCodes.put(mstm, "dmap.timeoutinterval");
-    	longCodes.put(msto, "dmap.utcoffset");
-    	longCodes.put(msts, "dmap.statusstring");
-    	longCodes.put(mstt, "dmap.status");
-    	longCodes.put(msup, "dmap.supportsupdate");
-    	longCodes.put(mtco, "dmap.specifiedtotalcount");
-    	longCodes.put(mudl, "dmap.deletedidlisting");
-    	longCodes.put(mupd, "dmap.updateresponse");
-    	longCodes.put(musr, "dmap.serverrevision");
-    }
+	protected interface CCBuilder {
+		public CCBuilder type(int raw, String shortCode, String longCode, int type);
+	}
     
     static {
-    	shortCodes.put("daap.browsealbumlisting", abal);
-    	shortCodes.put("daap.browseartistlisting", abar);
-    	shortCodes.put("daap.browsecomposerlisting", abcp);
-    	shortCodes.put("daap.browsegenrelisting", abgn);
-    	shortCodes.put("daap.baseplaylist", abpl);
-    	shortCodes.put("daap.databasebrowse", abro);
-    	shortCodes.put("daap.databasesongs", adbs);
-    	shortCodes.put("com.apple.itunes.itms-artistid", aeAI);
-    	shortCodes.put("com.apple.itunes.itms-composerid", aeCI);
-    	shortCodes.put("com.apple.itunes.content-rating", aeCR);
-    	shortCodes.put("com.apple.itunes.episode-num-str", aeEN);
-    	shortCodes.put("com.apple.itunes.episode-sort", aeES);
-    	shortCodes.put("com.apple.itunes.gapless-enc-dr", aeGD);
-    	shortCodes.put("com.apple.itunes.gapless-enc-del", aeGE);
-    	shortCodes.put("com.apple.itunes.gapless-heur", aeGH);
-    	shortCodes.put("com.apple.itunes.itms-genreid", aeGI);
-    	shortCodes.put("com.apple.itunes.gapless-resy", aeGR);
-    	shortCodes.put("com.apple.itunes.gapless-dur", aeGU);
-    	shortCodes.put("com.apple.itunes.has-video", aeHV);
-    	shortCodes.put("com.apple.itunes.mediakind", aeMK);
-    	shortCodes.put("com.apple.itunes.network-name", aeNN);
-    	shortCodes.put("com.apple.itunes.norm-volume", aeNV);
-    	shortCodes.put("com.apple.itunes.is-podcast", aePC);
-    	shortCodes.put("com.apple.itunes.itms-playlistid", aePI);
-    	shortCodes.put("com.apple.itunes.is-podcast-playlist", aePP);
-    	shortCodes.put("com.apple.itunes.special-playlist", aePS);
-    	shortCodes.put("com.apple.itunes.itms-storefrontid", aeSF);
-    	shortCodes.put("com.apple.itunes.itms-songid", aeSI);
-    	shortCodes.put("com.apple.itunes.series-name", aeSN);
-    	shortCodes.put("com.apple.itunes.smart-playlist", aeSP);
-    	shortCodes.put("com.apple.itunes.season-num", aeSU);
-    	shortCodes.put("com.apple.itunes.music-sharing-version", aeSV);
-    	shortCodes.put("daap.songgrouping", agrp);
-    	shortCodes.put("daap.databaseplaylists", aply);
-    	shortCodes.put("daap.playlistrepeatmode", aprm);
-    	shortCodes.put("daap.protocolversion", apro);
-    	shortCodes.put("daap.playlistshufflemode", apsm);
-    	shortCodes.put("daap.playlistsongs", apso);
-    	shortCodes.put("daap.resolveinfo", arif);
-    	shortCodes.put("daap.resolve", arsv);
-    	shortCodes.put("daap.songalbumartist", asaa);
-    	shortCodes.put("daap.songalbumid", asai);
-    	shortCodes.put("daap.songalbum", asal);
-    	shortCodes.put("daap.songartist", asar);
-    	shortCodes.put("daap.bookmarkable", asbk);
-    	shortCodes.put("daap.songbookmark", asbo);
-    	shortCodes.put("daap.songbitrate", asbr);
-    	shortCodes.put("daap.songbeatsperminute", asbt);
-    	shortCodes.put("daap.songcodectype", ascd);
-    	shortCodes.put("daap.songcomment", ascm);
-    	shortCodes.put("daap.songcontentdescription", ascn);
-    	shortCodes.put("daap.songcompilation", asco);
-    	shortCodes.put("daap.songcomposer", ascp);
-    	shortCodes.put("daap.songcontentrating", ascr);
-    	shortCodes.put("daap.songcodecsubtype", ascs);
-    	shortCodes.put("daap.songcategory", asct);
-    	shortCodes.put("daap.songdateadded", asda);
-    	shortCodes.put("daap.songdisabled", asdb);
-    	shortCodes.put("daap.songdisccount", asdc);
-    	shortCodes.put("daap.songdatakind", asdk);
-    	shortCodes.put("daap.songdatemodified", asdm);
-    	shortCodes.put("daap.songdiscnumber", asdn);
-    	shortCodes.put("daap.songdatepurchased", asdp);
-    	shortCodes.put("daap.songdatereleased", asdr);
-    	shortCodes.put("daap.songdescription", asdt);
-    	shortCodes.put("daap.songextradata", ased);
-    	shortCodes.put("daap.songeqpreset", aseq);
-    	shortCodes.put("daap.songformat", asfm);
-    	shortCodes.put("daap.songgenre", asgn);
-    	shortCodes.put("daap.songgapless", asgp);
-    	shortCodes.put("daap.songhasbeenplayed", ashp);
-    	shortCodes.put("daap.songkeywords", asky);
-    	shortCodes.put("daap.songlongcontentdescription", aslc);
-    	shortCodes.put("daap.songpodcasturl", aspu);
-    	shortCodes.put("daap.songrelativevolume", asrv);
-    	shortCodes.put("daap.sortartist", assa);
-    	shortCodes.put("daap.sortcomposer", assc);
-    	shortCodes.put("daap.sortalbumartist", assl);
-    	shortCodes.put("daap.sortname", assn);
-    	shortCodes.put("daap.songstoptime", assp);
-    	shortCodes.put("daap.songsamplerate", assr);
-    	shortCodes.put("daap.sortseriesname", asss);
-    	shortCodes.put("daap.songstarttime", asst);
-    	shortCodes.put("daap.sortalbum", assu);
-    	shortCodes.put("daap.songsize", assz);
-    	shortCodes.put("daap.songtrackcount", astc);
-    	shortCodes.put("daap.songtime", astm);
-    	shortCodes.put("daap.songtracknumber", astn);
-    	shortCodes.put("daap.songdataurl", asul);
-    	shortCodes.put("daap.songuserrating", asur);
-    	shortCodes.put("daap.songyear", asyr);
-    	shortCodes.put("daap.supportsextradata", ated);
-    	shortCodes.put("daap.serverdatabases", avdb);
-    	shortCodes.put("dmap.bag", mbcl);
-    	shortCodes.put("dmap.contentcodesresponse", mccr);
-    	shortCodes.put("dmap.contentcodesname", mcna);
-    	shortCodes.put("dmap.contentcodesnumber", mcnm);
-    	shortCodes.put("dmap.container", mcon);
-    	shortCodes.put("dmap.containercount", mctc);
-    	shortCodes.put("dmap.containeritemid", mcti);
-    	shortCodes.put("dmap.contentcodestype", mcty);
-    	shortCodes.put("dmap.dictionary", mdcl);
-    	shortCodes.put("dmap.itemid", miid);
-    	shortCodes.put("dmap.itemkind", mikd);
-    	shortCodes.put("dmap.itemcount", mimc);
-    	shortCodes.put("dmap.itemname", minm);
-    	shortCodes.put("dmap.listing", mlcl);
-    	shortCodes.put("dmap.sessionid", mlid);
-    	shortCodes.put("dmap.listingitem", mlit);
-    	shortCodes.put("dmap.loginresponse", mlog);
-    	shortCodes.put("dmap.parentcontainerid", mpco);
-    	shortCodes.put("dmap.persistentid", mper);
-    	shortCodes.put("dmap.protocolversion", mpro);
-    	shortCodes.put("dmap.returnedcount", mrco);
-    	shortCodes.put("dmap.supportsautologout", msal);
-    	shortCodes.put("dmap.authenticationschemes", msas);
-    	shortCodes.put("dmap.authenticationmethod", msau);
-    	shortCodes.put("dmap.supportsbrowse", msbr);
-    	shortCodes.put("dmap.databasescount", msdc);
-    	shortCodes.put("dmap.supportsextensions", msex);
-    	shortCodes.put("dmap.supportsindex", msix);
-    	shortCodes.put("dmap.loginrequired", mslr);
-    	shortCodes.put("dmap.supportspersistentids", mspi);
-    	shortCodes.put("dmap.supportsquery", msqy);
-    	shortCodes.put("dmap.supportsresolve", msrs);
-    	shortCodes.put("dmap.serverinforesponse", msrv);
-    	shortCodes.put("dmap.utctime", mstc);
-    	shortCodes.put("dmap.timeoutinterval", mstm);
-    	shortCodes.put("dmap.utcoffset", msto);
-    	shortCodes.put("dmap.statusstring", msts);
-    	shortCodes.put("dmap.status", mstt);
-    	shortCodes.put("dmap.supportsupdate", msup);
-    	shortCodes.put("dmap.specifiedtotalcount", mtco);
-    	shortCodes.put("dmap.deletedidlisting", mudl);
-    	shortCodes.put("dmap.updateresponse", mupd);
-    	shortCodes.put("dmap.serverrevision", musr);
-    }
-    
-    static {
-    	types.put(abal, 12);
-    	types.put(abar, 12);
-    	types.put(abcp, 12);
-    	types.put(abgn, 12);
-    	types.put(abpl, 1);
-    	types.put(abro, 12);
-    	types.put(adbs, 12);
-    	types.put(aeAI, 5);
-    	types.put(aeCI, 5);
-    	types.put(aeCR, 9);
-    	types.put(aeEN, 9);
-    	types.put(aeES, 5);
-    	types.put(aeGD, 5);
-    	types.put(aeGE, 5);
-    	types.put(aeGH, 5);
-    	types.put(aeGI, 5);
-    	types.put(aeGR, 7);
-    	types.put(aeGU, 7);
-    	types.put(aeHV, 1);
-    	types.put(aeMK, 1);
-    	types.put(aeNN, 9);
-    	types.put(aeNV, 5);
-    	types.put(aePC, 1);
-    	types.put(aePI, 5);
-    	types.put(aePP, 1);
-    	types.put(aePS, 1);
-    	types.put(aeSF, 5);
-    	types.put(aeSI, 5);
-    	types.put(aeSN, 9);
-    	types.put(aeSP, 1);
-    	types.put(aeSU, 5);
-    	types.put(aeSV, 5);
-    	types.put(agrp, 9);
-    	types.put(aply, 12);
-    	types.put(aprm, 1);
-    	types.put(apro, 11);
-    	types.put(apsm, 1);
-    	types.put(apso, 12);
-    	types.put(arif, 12);
-    	types.put(arsv, 12);
-    	types.put(asaa, 9);
-    	types.put(asai, 7);
-    	types.put(asal, 9);
-    	types.put(asar, 9);
-    	types.put(asbk, 1);
-    	types.put(asbo, 5);
-    	types.put(asbr, 3);
-    	types.put(asbt, 3);
-    	types.put(ascd, 5);
-    	types.put(ascm, 9);
-    	types.put(ascn, 9);
-    	types.put(asco, 1);
-    	types.put(ascp, 9);
-    	types.put(ascr, 1);
-    	types.put(ascs, 5);
-    	types.put(asct, 9);
-    	types.put(asda, 10);
-    	types.put(asdb, 1);
-    	types.put(asdc, 3);
-    	types.put(asdk, 1);
-    	types.put(asdm, 10);
-    	types.put(asdn, 3);
-    	types.put(asdp, 10);
-    	types.put(asdr, 10);
-    	types.put(asdt, 9);
-    	types.put(ased, 3);
-    	types.put(aseq, 9);
-    	types.put(asfm, 9);
-    	types.put(asgn, 9);
-    	types.put(asgp, 1);
-    	types.put(ashp, 1);
-    	types.put(asky, 9);
-    	types.put(aslc, 9);
-    	types.put(aspu, 9);
-    	types.put(asrv, 2);
-    	types.put(assa, 9);
-    	types.put(assc, 9);
-    	types.put(assl, 9);
-    	types.put(assn, 9);
-    	types.put(assp, 5);
-    	types.put(assr, 5);
-    	types.put(asss, 9);
-    	types.put(asst, 5);
-    	types.put(assu, 9);
-    	types.put(assz, 5);
-    	types.put(astc, 3);
-    	types.put(astm, 5);
-    	types.put(astn, 3);
-    	types.put(asul, 9);
-    	types.put(asur, 1);
-    	types.put(asyr, 3);
-    	types.put(ated, 3);
-    	types.put(avdb, 12);
-    	types.put(mbcl, 12);
-    	types.put(mccr, 12);
-    	types.put(mcna, 9);
-    	types.put(mcnm, 5);
-    	types.put(mcon, 12);
-    	types.put(mctc, 5);
-    	types.put(mcti, 5);
-    	types.put(mcty, 3);
-    	types.put(mdcl, 12);
-    	types.put(miid, 5);
-    	types.put(mikd, 1);
-    	types.put(mimc, 5);
-    	types.put(minm, 9);
-    	types.put(mlcl, 12);
-    	types.put(mlid, 5);
-    	types.put(mlit, 12);
-    	types.put(mlog, 12);
-    	types.put(mpco, 5);
-    	types.put(mper, 7);
-    	types.put(mpro, 11);
-    	types.put(mrco, 5);
-    	types.put(msal, 1);
-    	types.put(msas, 5);
-    	types.put(msau, 1);
-    	types.put(msbr, 1);
-    	types.put(msdc, 5);
-    	types.put(msex, 1);
-    	types.put(msix, 1);
-    	types.put(mslr, 1);
-    	types.put(mspi, 1);
-    	types.put(msqy, 1);
-    	types.put(msrs, 1);
-    	types.put(msrv, 12);
-    	types.put(mstc, 10);
-    	types.put(mstm, 5);
-    	types.put(msto, 6);
-    	types.put(msts, 9);
-    	types.put(mstt, 5);
-    	types.put(msup, 1);
-    	types.put(mtco, 5);
-    	types.put(mudl, 12);
-    	types.put(mupd, 12);
-    	types.put(musr, 5);
+		CCBuilder b = new CCBuilder() {
+			public CCBuilder type(int raw, String shortCode, String longCode, int type) {
+				longCodes.put(raw, longCode);
+				shortCodes.put(shortCode, raw);
+				types.put(raw, type);
+				return this;
+			}
+		};
+
+		/*
+		 while read short type long; do
+		     printf ".type(%s, \"%s\", %-43s, %3i)\n" \
+		       $short $short \"$long\" $type
+		 done < content-codes.txt
+		 */
+
+		b
+		.type(abal, "abal", "daap.browsealbumlisting"                  ,  12)
+		.type(abar, "abar", "daap.browseartistlisting"                 ,  12)
+		.type(abcp, "abcp", "daap.browsecomposerlisting"               ,  12)
+		.type(abgn, "abgn", "daap.browsegenrelisting"                  ,  12)
+		.type(abpl, "abpl", "daap.baseplaylist"                        ,   1)
+		.type(abro, "abro", "daap.databasebrowse"                      ,  12)
+		.type(adbs, "adbs", "daap.databasesongs"                       ,  12)
+		.type(aeAI, "aeAI", "com.apple.itunes.itms-artistid"           ,   5)
+		.type(aeCI, "aeCI", "com.apple.itunes.itms-composerid"         ,   5)
+		.type(aeCR, "aeCR", "com.apple.itunes.content-rating"          ,   9)
+		.type(aeEN, "aeEN", "com.apple.itunes.episode-num-str"         ,   9)
+		.type(aeES, "aeES", "com.apple.itunes.episode-sort"            ,   5)
+		.type(aeGD, "aeGD", "com.apple.itunes.gapless-enc-dr"          ,   5)
+		.type(aeGE, "aeGE", "com.apple.itunes.gapless-enc-del"         ,   5)
+		.type(aeGH, "aeGH", "com.apple.itunes.gapless-heur"            ,   5)
+		.type(aeGI, "aeGI", "com.apple.itunes.itms-genreid"            ,   5)
+		.type(aeGR, "aeGR", "com.apple.itunes.gapless-resy"            ,   7)
+		.type(aeGU, "aeGU", "com.apple.itunes.gapless-dur"             ,   7)
+		.type(aeHV, "aeHV", "com.apple.itunes.has-video"               ,   1)
+		.type(aeMK, "aeMK", "com.apple.itunes.mediakind"               ,   1)
+		.type(aeNN, "aeNN", "com.apple.itunes.network-name"            ,   9)
+		.type(aeNV, "aeNV", "com.apple.itunes.norm-volume"             ,   5)
+		.type(aePC, "aePC", "com.apple.itunes.is-podcast"              ,   1)
+		.type(aePI, "aePI", "com.apple.itunes.itms-playlistid"         ,   5)
+		.type(aePP, "aePP", "com.apple.itunes.is-podcast-playlist"     ,   1)
+		.type(aePS, "aePS", "com.apple.itunes.special-playlist"        ,   1)
+		.type(aeSF, "aeSF", "com.apple.itunes.itms-storefrontid"       ,   5)
+		.type(aeSI, "aeSI", "com.apple.itunes.itms-songid"             ,   5)
+		.type(aeSN, "aeSN", "com.apple.itunes.series-name"             ,   9)
+		.type(aeSP, "aeSP", "com.apple.itunes.smart-playlist"          ,   1)
+		.type(aeSU, "aeSU", "com.apple.itunes.season-num"              ,   5)
+		.type(aeSV, "aeSV", "com.apple.itunes.music-sharing-version"   ,   5)
+		.type(agrp, "agrp", "daap.songgrouping"                        ,   9)
+		.type(aply, "aply", "daap.databaseplaylists"                   ,  12)
+		.type(aprm, "aprm", "daap.playlistrepeatmode"                  ,   1)
+		.type(apro, "apro", "daap.protocolversion"                     ,  11)
+		.type(apsm, "apsm", "daap.playlistshufflemode"                 ,   1)
+		.type(apso, "apso", "daap.playlistsongs"                       ,  12)
+		.type(arif, "arif", "daap.resolveinfo"                         ,  12)
+		.type(arsv, "arsv", "daap.resolve"                             ,  12)
+		.type(asaa, "asaa", "daap.songalbumartist"                     ,   9)
+		.type(asai, "asai", "daap.songalbumid"                         ,   7)
+		.type(asal, "asal", "daap.songalbum"                           ,   9)
+		.type(asar, "asar", "daap.songartist"                          ,   9)
+		.type(asbk, "asbk", "daap.bookmarkable"                        ,   1)
+		.type(asbo, "asbo", "daap.songbookmark"                        ,   5)
+		.type(asbr, "asbr", "daap.songbitrate"                         ,   3)
+		.type(asbt, "asbt", "daap.songbeatsperminute"                  ,   3)
+		.type(ascd, "ascd", "daap.songcodectype"                       ,   5)
+		.type(ascm, "ascm", "daap.songcomment"                         ,   9)
+		.type(ascn, "ascn", "daap.songcontentdescription"              ,   9)
+		.type(asco, "asco", "daap.songcompilation"                     ,   1)
+		.type(ascp, "ascp", "daap.songcomposer"                        ,   9)
+		.type(ascr, "ascr", "daap.songcontentrating"                   ,   1)
+		.type(ascs, "ascs", "daap.songcodecsubtype"                    ,   5)
+		.type(asct, "asct", "daap.songcategory"                        ,   9)
+		.type(asda, "asda", "daap.songdateadded"                       ,  10)
+		.type(asdb, "asdb", "daap.songdisabled"                        ,   1)
+		.type(asdc, "asdc", "daap.songdisccount"                       ,   3)
+		.type(asdk, "asdk", "daap.songdatakind"                        ,   1)
+		.type(asdm, "asdm", "daap.songdatemodified"                    ,  10)
+		.type(asdn, "asdn", "daap.songdiscnumber"                      ,   3)
+		.type(asdp, "asdp", "daap.songdatepurchased"                   ,  10)
+		.type(asdr, "asdr", "daap.songdatereleased"                    ,  10)
+		.type(asdt, "asdt", "daap.songdescription"                     ,   9)
+		.type(ased, "ased", "daap.songextradata"                       ,   3)
+		.type(aseq, "aseq", "daap.songeqpreset"                        ,   9)
+		.type(asfm, "asfm", "daap.songformat"                          ,   9)
+		.type(asgn, "asgn", "daap.songgenre"                           ,   9)
+		.type(asgp, "asgp", "daap.songgapless"                         ,   1)
+		.type(ashp, "ashp", "daap.songhasbeenplayed"                   ,   1)
+		.type(asky, "asky", "daap.songkeywords"                        ,   9)
+		.type(aslc, "aslc", "daap.songlongcontentdescription"          ,   9)
+		.type(aspu, "aspu", "daap.songpodcasturl"                      ,   9)
+		.type(asrv, "asrv", "daap.songrelativevolume"                  ,   2)
+		.type(assa, "assa", "daap.sortartist"                          ,   9)
+		.type(assc, "assc", "daap.sortcomposer"                        ,   9)
+		.type(assl, "assl", "daap.sortalbumartist"                     ,   9)
+		.type(assn, "assn", "daap.sortname"                            ,   9)
+		.type(assp, "assp", "daap.songstoptime"                        ,   5)
+		.type(assr, "assr", "daap.songsamplerate"                      ,   5)
+		.type(asss, "asss", "daap.sortseriesname"                      ,   9)
+		.type(asst, "asst", "daap.songstarttime"                       ,   5)
+		.type(assu, "assu", "daap.sortalbum"                           ,   9)
+		.type(assz, "assz", "daap.songsize"                            ,   5)
+		.type(astc, "astc", "daap.songtrackcount"                      ,   3)
+		.type(astm, "astm", "daap.songtime"                            ,   5)
+		.type(astn, "astn", "daap.songtracknumber"                     ,   3)
+		.type(asul, "asul", "daap.songdataurl"                         ,   9)
+		.type(asur, "asur", "daap.songuserrating"                      ,   1)
+		.type(asyr, "asyr", "daap.songyear"                            ,   3)
+		.type(ated, "ated", "daap.supportsextradata"                   ,   3)
+		.type(avdb, "avdb", "daap.serverdatabases"                     ,  12)
+		.type(mbcl, "mbcl", "dmap.bag"                                 ,  12)
+		.type(mccr, "mccr", "dmap.contentcodesresponse"                ,  12)
+		.type(mcna, "mcna", "dmap.contentcodesname"                    ,   9)
+		.type(mcnm, "mcnm", "dmap.contentcodesnumber"                  ,   5)
+		.type(mcon, "mcon", "dmap.container"                           ,  12)
+		.type(mctc, "mctc", "dmap.containercount"                      ,   5)
+		.type(mcti, "mcti", "dmap.containeritemid"                     ,   5)
+		.type(mcty, "mcty", "dmap.contentcodestype"                    ,   3)
+		.type(mdcl, "mdcl", "dmap.dictionary"                          ,  12)
+		.type(miid, "miid", "dmap.itemid"                              ,   5)
+		.type(mikd, "mikd", "dmap.itemkind"                            ,   1)
+		.type(mimc, "mimc", "dmap.itemcount"                           ,   5)
+		.type(minm, "minm", "dmap.itemname"                            ,   9)
+		.type(mlcl, "mlcl", "dmap.listing"                             ,  12)
+		.type(mlid, "mlid", "dmap.sessionid"                           ,   5)
+		.type(mlit, "mlit", "dmap.listingitem"                         ,  12)
+		.type(mlog, "mlog", "dmap.loginresponse"                       ,  12)
+		.type(mpco, "mpco", "dmap.parentcontainerid"                   ,   5)
+		.type(mper, "mper", "dmap.persistentid"                        ,   7)
+		.type(mpro, "mpro", "dmap.protocolversion"                     ,  11)
+		.type(mrco, "mrco", "dmap.returnedcount"                       ,   5)
+		.type(msal, "msal", "dmap.supportsautologout"                  ,   1)
+		.type(msas, "msas", "dmap.authenticationschemes"               ,   5)
+		.type(msau, "msau", "dmap.authenticationmethod"                ,   1)
+		.type(msbr, "msbr", "dmap.supportsbrowse"                      ,   1)
+		.type(msdc, "msdc", "dmap.databasescount"                      ,   5)
+		.type(msex, "msex", "dmap.supportsextensions"                  ,   1)
+		.type(msix, "msix", "dmap.supportsindex"                       ,   1)
+		.type(mslr, "mslr", "dmap.loginrequired"                       ,   1)
+		.type(mspi, "mspi", "dmap.supportspersistentids"               ,   1)
+		.type(msqy, "msqy", "dmap.supportsquery"                       ,   1)
+		.type(msrs, "msrs", "dmap.supportsresolve"                     ,   1)
+		.type(msrv, "msrv", "dmap.serverinforesponse"                  ,  12)
+		.type(mstc, "mstc", "dmap.utctime"                             ,  10)
+		.type(mstm, "mstm", "dmap.timeoutinterval"                     ,   5)
+		.type(msto, "msto", "dmap.utcoffset"                           ,   6)
+		.type(msts, "msts", "dmap.statusstring"                        ,   9)
+		.type(mstt, "mstt", "dmap.status"                              ,   5)
+		.type(msup, "msup", "dmap.supportsupdate"                      ,   1)
+		.type(mtco, "mtco", "dmap.specifiedtotalcount"                 ,   5)
+		.type(mudl, "mudl", "dmap.deletedidlisting"                    ,  12)
+		.type(mupd, "mupd", "dmap.updateresponse"                      ,  12)
+		.type(musr, "musr", "dmap.serverrevision"                      ,   5)
+		;
     }
 }
