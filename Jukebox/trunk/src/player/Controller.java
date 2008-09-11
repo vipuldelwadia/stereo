@@ -198,4 +198,28 @@ public class Controller implements PlaybackController {
 		return 0;
 	}
 
+
+	public Track getCurrentTrack() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	public int playbackRevision() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public byte playbackStatus() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public int playbackTime() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

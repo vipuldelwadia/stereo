@@ -22,8 +22,10 @@ public class Player implements music.Player {
 
 	@SuppressWarnings("deprecation")
 	public synchronized void pause() {
-		if (thread != null)
+		if (thread != null) {
 			thread.suspend();
+			state = PAUSED;
+		}
 	}
 
 	@SuppressWarnings("deprecation")
@@ -44,9 +46,11 @@ public class Player implements music.Player {
 		if (thread == null);
 		else if (thread.isAlive()) {
 			thread.resume();
+			state = PLAYING;
 		}
 		else {
 			thread.start();
+			state = PLAYING;
 		}
 	}
 
@@ -56,6 +60,20 @@ public class Player implements music.Player {
 			thread.resume();
 			thread.close();
 			thread = null;
+			state = STOPPED;
+		}
+	}
+	
+	public byte status() {
+		return state;
+	}
+	
+	public int elapsed() {
+		if (thread != null) {
+			return thread.elapsed();
+		}
+		else {
+			return 0;
 		}
 	}
 
@@ -81,12 +99,18 @@ public class Player implements music.Player {
 
 
 	private volatile TrackThread thread;
+	private volatile byte state;
+	
+	public static final byte STOPPED = 2;
+	public static final byte PAUSED = 3;
+	public static final byte PLAYING = 4;
 
 	private class TrackThread extends Thread {
 
 		private javazoom.jl.player.Player player;
 		private volatile boolean stopped = false;
 		private final InputStream in ;
+		private long timestamp;
 
 		public TrackThread(InputStream stream) {
 			in = stream;
@@ -107,9 +131,15 @@ public class Player implements music.Player {
 			}
 
 		}
+		
+		public int elapsed() {
+			long elapsed = System.currentTimeMillis() - timestamp;
+			return (int)elapsed;
+		}
 
 		public void run() {
 			trackStarted();
+			timestamp = System.currentTimeMillis();
 			try {
 				player.play();
 			}

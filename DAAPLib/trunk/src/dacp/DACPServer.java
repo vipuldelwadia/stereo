@@ -125,7 +125,7 @@ public class DACPServer {
 
 						if (s != null) {
 							Node reply = s.run(dj);
-
+								
 							printer.visit(reply, sock.getOutputStream());
 						}
 						else {

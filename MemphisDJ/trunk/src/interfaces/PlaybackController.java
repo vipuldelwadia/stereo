@@ -26,5 +26,10 @@ public interface PlaybackController {
 	public int libraryVersion();
 
 	public void append(String type, String crit);
+	
+	public Track getCurrentTrack();
+	public byte playbackStatus();
+	public int playbackRevision();
+	public int playbackTime();
 
 }

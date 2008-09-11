@@ -29,6 +29,12 @@ public class Update implements Command {
 	}
 
 	public Node run(PlaybackController dj) {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		//TODO use version to check whether update is needed
 		return DACPTreeBuilder.buildUpdateResponse(dj.libraryVersion());
 	}

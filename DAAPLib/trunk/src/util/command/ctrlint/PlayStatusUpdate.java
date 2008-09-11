@@ -1,6 +1,7 @@
 package util.command.ctrlint;
 
 import interfaces.PlaybackController;
+import interfaces.Track;
 
 import java.util.Map;
 
@@ -26,8 +27,19 @@ public class PlayStatusUpdate implements Command {
 	public Node run(PlaybackController dj) {
 		
 		//TODO use revision number to compare with dj revision
-		//TODO get the information from dj to return a proper status update
-		return DACPTreeBuilder.buildPlayStatusUpdate();
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Track current = dj.getCurrentTrack();
+		byte state = dj.playbackStatus();
+		int revision = dj.playbackRevision();
+		int elapsed = dj.playbackTime();
+		
+		return DACPTreeBuilder.buildPlayStatusUpdate(revision, state,
+				(byte)0, (byte)0, current, elapsed);
 		
 	}
 

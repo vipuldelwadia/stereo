@@ -5,7 +5,7 @@ public class StringNode extends Node {
     
     public StringNode(int code, String value) {
         super(code);
-        this.value = value;
+        this.value = (value != null)?value:"";
     }
     
     public String toString() {

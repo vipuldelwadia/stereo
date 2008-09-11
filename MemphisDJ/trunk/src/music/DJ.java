@@ -193,6 +193,7 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 	 * Modify DJ state
 	 */
 	public void play() {
+		playbackRevision++;
 		if(paused){
 			player.start();
 			paused=false;
@@ -201,16 +202,19 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 	}
 
 	public void pause(){
+		playbackRevision++;
 		player.pause();
 		paused=true;
 	}
 
 
 	public void stop(){
+		playbackRevision++;
 		player.stop();
 	}
 
 	public void next() {
+		playbackRevision++;
 		player.stop();
 		playbackFinished();
 	}
@@ -306,13 +310,14 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 			}
 		}
 
-
+		playbackRevision++;
 
 		player.setInputStream(stream);
 	}
 
 	public void playbackStarted() {
 		System.out.println("Playback started");
+		playbackRevision++;
 	}
 
 	public static void main(String[] args){
@@ -393,5 +398,17 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 			return Constants.ARTIST;
 		}
 		throw new Exception("Invalid for query: " + name);
+	}
+	
+	private int playbackRevision = 0;
+	
+	public int playbackRevision() {
+		return playbackRevision;
+	}
+	public byte playbackStatus() {
+		return player.status();
+	}
+	public int playbackTime() {
+		return player.elapsed();
 	}
 }
