@@ -183,7 +183,7 @@ public class DAAPConstants {
 		CCBuilder b = new CCBuilder() {
 			public CCBuilder type(int raw, String shortCode, String longCode, int type) {
 				longCodes.put(raw, longCode);
-				shortCodes.put(shortCode, raw);
+				shortCodes.put(longCode, raw);
 				types.put(raw, type);
 				return this;
 			}

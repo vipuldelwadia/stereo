@@ -1,14 +1,14 @@
 package util.command.ctrlint;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 import interfaces.Track;
 
 import java.util.List;
 import java.util.Map;
 
-import dacp.DACPTreeBuilder;
 import util.command.Command;
 import util.node.Node;
+import dacp.DACPTreeBuilder;
 
 public class RequestPlaylist implements Command {
 
@@ -20,7 +20,7 @@ public class RequestPlaylist implements Command {
 		// no args
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		
 		List<Track> playlist = dj.getPlaylist();
 		return DACPTreeBuilder.buildPlaylistResponse(playlist);

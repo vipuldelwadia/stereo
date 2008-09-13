@@ -1,18 +1,18 @@
 package util.command.ctrlint;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
+import interfaces.PlaybackStatusInterface;
+import interfaces.PlaylistStatusListener;
 import interfaces.Track;
 
 import java.util.Map;
 
-import dacp.DACPTreeBuilder;
-
 import util.command.Command;
 import util.node.Node;
+import dacp.DACPTreeBuilder;
 
-public class PlayStatusUpdate implements Command {
+public class PlayStatusUpdate implements Command, PlaylistStatusListener {
 
-	@SuppressWarnings("unused")
 	private int revision;
 	
 	public void init(Map<String, String> args) {
@@ -24,23 +24,43 @@ public class PlayStatusUpdate implements Command {
 		}
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		
 		//TODO use revision number to compare with dj revision
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		if (this.revision >= dj.playbackRevision()) {
+			
+			dj.registerPlaybackStatusListener(this);
+			
+			System.out.println("........waiting for playback status change");
+			
+			try {
+				synchronized (this) {
+					this.wait();
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			System.out.println("........finished waiting for playback status change");
+			
+			dj.removePlaybackStatusListener(this);
 		}
-		Track current = dj.getCurrentTrack();
+		
+		Track current = dj.currentTrack();
 		byte state = dj.playbackStatus();
 		int revision = dj.playbackRevision();
-		int elapsed = dj.playbackTime();
+		int elapsed = dj.playbackElapsedTime();
 		
 		return DACPTreeBuilder.buildPlayStatusUpdate(revision, state,
 				(byte)0, (byte)0, current, elapsed);
 		
+	}
+
+	public void currentTrackChanged(PlaybackStatusInterface dj) {
+		synchronized (this) {
+			this.notify();
+		}
 	}
 
 }

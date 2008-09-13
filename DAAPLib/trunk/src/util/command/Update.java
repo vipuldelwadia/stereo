@@ -1,12 +1,11 @@
 package util.command;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 
 import java.util.Map;
 
-import dacp.DACPTreeBuilder;
-
 import util.node.Node;
+import dacp.DACPTreeBuilder;
 
 public class Update implements Command {
 
@@ -28,7 +27,7 @@ public class Update implements Command {
 		}
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {

@@ -1,6 +1,6 @@
 package clinterface;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 import interfaces.Track;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,17 +17,17 @@ public class CLI {
 	private final static boolean DEBUG = false;
 
 	private Scanner    scan;
-	private PlaybackController controller;
+	private DJInterface controller;
 
 
-	public CLI(PlaybackController controller) {
+	public CLI(DJInterface controller) {
 
 		scan = new Scanner(System.in);
 		this.controller = controller;
 		run();
 	}
 
-	public CLI(PlaybackController controller, String args) {
+	public CLI(DJInterface controller, String args) {
 		scan = new Scanner(System.in);
 		this.controller = controller;
 		input(args);
@@ -48,16 +48,16 @@ public class CLI {
 
 	private class Top {
 		public void list() {
-			List<Track> p = controller.getPlaylist();
-			for(Track t:p){
-				System.out.println(t.toString());
-			}
+			//List<Track> p = controller.getPlaylist();
+			//for(Track t:p){
+			//	System.out.println(t.toString());
+			//}
 		}
 		public void play() {
 			controller.play();
 		}
 		public void recent() {
-			controller.queryRecentlyPlayed();
+			//controller.queryRecentlyPlayed();
 		}
 		public void query(String param) {
 			System.out.println(param);
@@ -66,11 +66,16 @@ public class CLI {
 			type=s.hasNext()? s.next().trim(): "";
 			crit=s.hasNextLine()? s.nextLine().trim():"";
 			System.out.println("Query Type: "+type+" with the Criteria of:"+crit+"");
-			controller.queryLibrary(type,crit);
+			//controller.queryLibrary(type,crit);
 		}
 
 		public void status(){
-			controller.status();
+			switch(controller.playbackStatus()) {
+			case 2: System.out.println("Stopped"); break;
+			case 3: System.out.println("Paused"); break;
+			case 4: System.out.println("Playing"); break;
+			default: System.out.println("Unknown status: " + controller.playbackStatus());
+			}
 		}
 
 		public void library(){
@@ -83,7 +88,7 @@ public class CLI {
 			type=s.hasNext()? s.next().trim(): "";
 			crit=s.hasNextLine()? s.nextLine().trim():"";
 			System.out.println("Filter Type: "+type+" with the Criteria of:"+crit+"");
-			controller.createPlaylistWithFilter(type, crit);
+			//controller.createPlaylistWithFilter(type, crit);
 		}
 
 		public void append(String param) {
@@ -92,13 +97,13 @@ public class CLI {
 			type=s.hasNext()? s.next().trim(): "";
 			crit=s.hasNextLine()? s.nextLine().trim():"";
 			System.out.println("Appended with a new list with Type: "+type+" with the Criteria of:"+crit+"");
-			controller.append(type, crit);
+			//controller.append(type, crit);
 		}
 
 		public void tracklist() {
-			for(Track currentTrack: controller.getPlaylist()) {
-				System.out.print(currentTrack.toString());
-			}
+			//for(Track currentTrack: controller.getPlaylist()) {
+			//	System.out.print(currentTrack.toString());
+			//}
 		}
 		public void pause() { 
 			controller.pause();
@@ -124,7 +129,7 @@ public class CLI {
 		public void volume(String volume) {
 			try {
 				Integer value = Integer.parseInt(volume);
-				controller.changeVolume(value);
+				controller.setVolume(value);
 			}
 			catch (NumberFormatException ex) {
 				System.out.println("You were supposed to give me a volume dumbass!");
@@ -274,10 +279,15 @@ public class CLI {
 		String appName = "Controller";
 		System.out.println("Usage: " + appName + " HOST (PORT | --) [COMMANDS]");
 	}
-
-	private static void printTracks(List<Track> tracks) {
+	
+	private void printTracks(List<Track> tracks) {
 		for (Track t: tracks) {
-			System.out.println(t);
+			printTrack(t);
 		}
 	}
+	
+	private void printTrack(Track t) {
+		System.out.println(t);
+	}
+
 }

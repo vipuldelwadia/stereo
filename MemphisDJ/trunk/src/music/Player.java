@@ -13,4 +13,5 @@ public interface Player {
 	public void addPlaybackListener(PlaybackListener l);
 	public void removePlaybackListener(PlaybackListener l);
 	public int elapsed();
+	public byte[] getAlbumArt();
 }

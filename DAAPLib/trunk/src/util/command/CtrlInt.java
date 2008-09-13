@@ -3,9 +3,10 @@ package util.command;
 import java.util.Map;
 
 import dacp.DACPTreeBuilder;
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 import util.command.ctrlint.GetProperty;
 import util.command.ctrlint.NextItem;
+import util.command.ctrlint.NowPlayingArtwork;
 import util.command.ctrlint.Pause;
 import util.command.ctrlint.PlayPause;
 import util.command.ctrlint.PlayStatusUpdate;
@@ -18,7 +19,7 @@ public class CtrlInt extends PathNode implements Command {
 		// no args
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		
 		return DACPTreeBuilder.buildCtrlIntNode();
 	}
@@ -54,6 +55,10 @@ public class CtrlInt extends PathNode implements Command {
 	public Command controlpromptupdate() {
 		return new ControlPromptUpdate();
 	}
+	
+	public Command nowplayingartwork() {
+		return new NowPlayingArtwork();
+	}
 }
 
 class GetSpeakers implements Command {
@@ -62,7 +67,7 @@ class GetSpeakers implements Command {
 		// no args needed
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		return DACPTreeBuilder.buildGetSpeakers();
 	}
 	

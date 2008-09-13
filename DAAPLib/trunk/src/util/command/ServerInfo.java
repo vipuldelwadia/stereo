@@ -1,10 +1,11 @@
 package util.command;
 
+import interfaces.DJInterface;
+
 import java.util.Map;
 
-import interfaces.PlaybackController;
-import dacp.DACPTreeBuilder;
 import util.node.Node;
+import dacp.DACPTreeBuilder;
 
 public class ServerInfo implements Command {
 
@@ -12,7 +13,7 @@ public class ServerInfo implements Command {
 		//no arguments
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		System.out.println("Request for server info");
 
 		Node response = DACPTreeBuilder.buildServerInfoNode();

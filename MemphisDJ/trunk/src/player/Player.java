@@ -1,11 +1,22 @@
 package player;
 
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
+import java.util.Scanner;
 import java.util.Set;
 
+import javazoom.jl.decoder.Bitstream;
 import javazoom.jl.decoder.JavaLayerException;
+import de.vdheide.mp3.ID3v2;
+import de.vdheide.mp3.ID3v2DecompressionException;
+import de.vdheide.mp3.ID3v2Frame;
+import de.vdheide.mp3.ID3v2IllegalVersionException;
+import de.vdheide.mp3.ID3v2NoSuchFrameException;
+import de.vdheide.mp3.ID3v2WrongCRCException;
+import de.vdheide.mp3.NoID3v2TagException;
 
 //TODO: find a way to pause playback which doesn't involve deprecated methods
 
@@ -111,10 +122,77 @@ public class Player implements music.Player {
 		private volatile boolean stopped = false;
 		private final InputStream in ;
 		private long timestamp;
+		private byte[] image;
 
 		public TrackThread(InputStream stream) {
 			in = stream;
 			try {
+				Thread.sleep(100); //TODO Bitstream is broken and doesn't read the whole tag
+				Bitstream s = new Bitstream(stream);
+				InputStream tags = s.getRawID3v2();
+				if (tags != null) {
+					try {
+						ID3v2 t = new ID3v2(tags);
+						if (t.hasTag()) System.out.println("We have an ID3v2 Tag");
+						
+						ID3v2Frame img = (ID3v2Frame)t.getFrame("APIC").firstElement();
+						byte[] bytes = img.getContent();
+						ByteArrayInputStream ba = new ByteArrayInputStream(bytes);
+						
+						int read = 0;
+						
+						ba.read(); //read the first null byte
+						read++;
+						
+						String contentType = "";
+						
+						//read content type from stream:
+						while (true) {
+							int b = ba.read();
+							read++;
+							
+							if (b == 0) break;
+							contentType += (char)b;
+						}
+						System.out.println(contentType);
+						
+						ba.read(); //picture type;
+						read++;
+						
+						//read description
+						while (true) {
+							int b = ba.read();
+							read++;
+							
+							if (b == 0) break;
+							System.out.print((char)b);
+						}
+						System.out.println();
+						
+						image = new byte[bytes.length - read];
+						ba.read(image);
+						
+					} catch (ID3v2IllegalVersionException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ID3v2WrongCRCException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (ID3v2DecompressionException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (NoID3v2TagException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ID3v2NoSuchFrameException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
 				player = new javazoom.jl.player.Player(stream);
 			}
 			catch (JavaLayerException ex) {
@@ -128,13 +206,15 @@ public class Player implements music.Player {
 				}
 				player = null;
 				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 
 		}
 		
 		public int elapsed() {
-			long elapsed = System.currentTimeMillis() - timestamp;
-			return (int)elapsed;
+			return player.getPosition();
 		}
 
 		public void run() {
@@ -171,4 +251,8 @@ public class Player implements music.Player {
 	}
 
 	private Set<PlaybackListener> listeners = new HashSet<PlaybackListener>();
+
+	public byte[] getAlbumArt() {
+		return thread.image;
+	}
 }

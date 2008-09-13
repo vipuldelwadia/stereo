@@ -1,10 +1,8 @@
 package cli;
 
-import interfaces.PlaybackController;
-import interfaces.Track;
+import interfaces.DJInterface;
 
 import java.lang.reflect.Method;
-import java.util.List;
 import java.util.Scanner;
 
 import music.DJ;
@@ -12,17 +10,17 @@ import music.DJ;
 
 public class CLITest {
     private Scanner    scan;
-    private PlaybackController controller;
+    private DJInterface controller;
     
 
-    public CLITest(PlaybackController controller) {
+    public CLITest(DJInterface controller) {
 
         scan = new Scanner(System.in);
         this.controller = controller;
         run();
     }
     
-    public CLITest(PlaybackController controller, String args) {
+    public CLITest(DJInterface controller, String args) {
         scan = new Scanner(System.in);
         this.controller = controller;
         input(args);
@@ -42,10 +40,10 @@ public class CLITest {
     
     private class Top {
         public void list(String dummy) {
-            List<Track> p = controller.getPlaylist();
-            for(Track t:p){
-                System.out.println(t.toString());
-            }
+            //List<Track> p = controller.getPlaylist();
+            //for(Track t:p){
+            //    System.out.println(t.toString());
+            //}
         }
         public void play(String dummy) {
             controller.play();
@@ -54,7 +52,7 @@ public class CLITest {
 
         
         public void recent(String dummy) {
-            controller.queryRecentlyPlayed();
+            //controller.queryRecentlyPlayed();
         }
     
         public void query(String param) {
@@ -64,11 +62,11 @@ public class CLITest {
         	type=s.hasNext()? s.next().trim(): "";
         	crit=s.hasNextLine()? s.nextLine().trim():"";
         	System.out.println("Query Type: "+type+" with the Criteria of:"+crit+"");
-        	controller.queryLibrary(type,crit);
+        	//controller.queryLibrary(type,crit);
         }
         
         public void status(String dummy){
-        	controller.status();
+        	controller.playbackStatus();
         }
         
         public void library(String dummy){
@@ -81,7 +79,7 @@ public class CLITest {
         	type=s.hasNext()? s.next().trim(): "";
         	crit=s.hasNextLine()? s.nextLine().trim():"";
         	System.out.println("Filter Type: "+type+" with the Criteria of:"+crit+"");
-            controller.createPlaylistWithFilter(type, crit);
+            //controller.createPlaylistWithFilter(type, crit);
             status(null);
         }
         
@@ -91,14 +89,14 @@ public class CLITest {
         	type=s.hasNext()? s.next().trim(): "";
         	crit=s.hasNextLine()? s.nextLine().trim():"";
         	System.out.println("Appended with a new list with Type: "+type+" with the Criteria of:"+crit+"");
-            controller.append(type, crit);
+            //controller.append(type, crit);
             status(null);
         }
         
         public void tracklist(String dummy) {
         	
-        	for(Track currentTrack: controller.getPlaylist())
-        	System.out.print(currentTrack.toString());
+        	//for(Track currentTrack: controller.getPlaylist())
+        	//System.out.print(currentTrack.toString());
         }
         
         public void pause(String dummy) { 
@@ -126,7 +124,7 @@ public class CLITest {
         public void volume(String volume) {
             try {
                 Integer value = Integer.parseInt(volume);
-                controller.changeVolume(value);
+                controller.setVolume(value);
             }
             catch (NumberFormatException ex) {
                 System.out.println("You were supposed to give me a volume dumbass!");

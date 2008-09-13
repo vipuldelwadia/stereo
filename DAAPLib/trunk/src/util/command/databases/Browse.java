@@ -1,6 +1,6 @@
 package util.command.databases;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 import interfaces.Track;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class Browse implements Command {
 		System.out.println(args);
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		
 		List<Track> songs = dj.getLibrary();
 		

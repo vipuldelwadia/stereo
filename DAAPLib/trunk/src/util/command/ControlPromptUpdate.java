@@ -1,6 +1,6 @@
 package util.command;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 
 import java.util.Map;
 
@@ -19,7 +19,7 @@ public class ControlPromptUpdate implements Command {
 		}
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		return DACPTreeBuilder.buildControlPromptUpdate(promptId);
 	}
 	

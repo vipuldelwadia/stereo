@@ -1,6 +1,6 @@
 package player;
 
-import interfaces.PlaybackController;
+import interfaces.AbstractDJ;
 import interfaces.Track;
 
 import java.io.IOException;
@@ -19,7 +19,7 @@ import music.Constants;
  *         playlist TODO make it recieve and interpret DACP requests
  */
 
-public class Controller implements PlaybackController {
+public class Controller extends AbstractDJ {
 
 	private final static boolean DEBUG = false;
 
@@ -98,7 +98,7 @@ public class Controller implements PlaybackController {
 	 * 
 	 * @see player.ControllerInterface#changeVolume(int)
 	 */
-	public void changeVolume(int newVolume) {
+	public void setVolume(int newVolume) {
 		if (newVolume < 0 || newVolume > 255)
 			throw new IllegalArgumentException("volume must be between 0-255");
 		if (this.connect())
@@ -199,7 +199,7 @@ public class Controller implements PlaybackController {
 	}
 
 
-	public Track getCurrentTrack() {
+	public Track currentTrack() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -217,9 +217,15 @@ public class Controller implements PlaybackController {
 	}
 
 
-	public int playbackTime() {
+	public int playbackElapsedTime() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+
+	public byte[] getAlbumArt() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

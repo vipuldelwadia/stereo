@@ -1,6 +1,6 @@
 package util.command;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class Databases extends PathNode implements Command {
 		// no parameters expected
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		//TODO when multiple playlist support is added this will need to change
 		return DACPTreeBuilder.buildDatabaseResponse(dj.getLibrary().size(), 1); //no playlists so far
 	}

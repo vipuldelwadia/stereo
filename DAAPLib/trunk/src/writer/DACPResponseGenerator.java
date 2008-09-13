@@ -198,4 +198,26 @@ public class DACPResponseGenerator {
 		}
 
 	}
+
+	public void image(byte[] image, OutputStream output) {
+		PrintStream out = new PrintStream(output);
+
+		out.print("HTTP/1.1 200 OK\r\n");
+
+		out.print("Content-Type: application/x-dmap-tagged\r\n");
+		out.print("Content-Length: "+image.length+"\r\n");
+		out.print("DAAP-Server: memphis-dj-0.1\r\n");
+		out.print("Date: "+DateFormat.getDateInstance().format(new Date())+"\r\n");
+
+		out.print("\r\n");
+
+		try {
+			out.write(image);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		out.flush();
+	}
 }

@@ -1,6 +1,6 @@
 package util.command.databases;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 import interfaces.Track;
 
 import java.util.Collections;
@@ -8,13 +8,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
-import daap.DAAPConstants;
-
 import util.command.Command;
 import util.node.Node;
 import util.queryparser.Filter;
 import util.queryparser.FilterTracks;
 import util.queryparser.QueryParser;
+import daap.DAAPConstants;
 
 public class Groups implements Command {
 
@@ -24,7 +23,7 @@ public class Groups implements Command {
 		this.args = args;
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 
 		List<Track> songs = dj.getLibrary();
 		

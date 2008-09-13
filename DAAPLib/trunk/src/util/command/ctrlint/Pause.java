@@ -1,6 +1,6 @@
 package util.command.ctrlint;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 
 import java.util.Map;
 
@@ -13,7 +13,7 @@ public class Pause implements Command {
 		//no args
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		dj.pause();
 		return null;
 	}

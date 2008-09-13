@@ -1,7 +1,7 @@
 package dacp;
 
 import interfaces.ControlServerCreator;
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 
 import java.io.IOException;
 import java.net.Inet4Address;
@@ -21,6 +21,7 @@ import javax.jmdns.ServiceInfo;
 import music.DJ;
 import reader.DACPRequestParser;
 import util.command.Command;
+import util.node.ImageNode;
 import util.node.Node;
 import writer.DACPResponseGenerator;
 
@@ -31,11 +32,11 @@ public class DACPServer {
 
 	private final ServerSocket SERVER_SOCK;
 
-	private final PlaybackController dj;
+	private final DJInterface dj;
 
 	private final DACPResponseGenerator printer = new DACPResponseGenerator();
 
-	public DACPServer(int port, PlaybackController dj) throws IOException {
+	public DACPServer(int port, DJInterface dj) throws IOException {
 		this.PORT = port;
 		this.dj = dj;
 		SERVER_SOCK = new ServerSocket(PORT);
@@ -125,8 +126,18 @@ public class DACPServer {
 
 						if (s != null) {
 							Node reply = s.run(dj);
-								
-							printer.visit(reply, sock.getOutputStream());
+							
+							if (reply instanceof ImageNode) {
+								ImageNode node = (ImageNode)reply;
+								if (node.image() == null) {
+									System.err.println("No album art: sending 404");
+									throw new NullPointerException();
+								}
+								printer.image(node.image(), sock.getOutputStream());
+							}
+							else {
+								printer.visit(reply, sock.getOutputStream());
+							}
 						}
 						else {
 							System.out.println("No command to execute for " + parseText);
@@ -136,6 +147,9 @@ public class DACPServer {
 						ex.printStackTrace();
 
 						printer.error("501 Not Implemented", sock.getOutputStream());
+					}
+					catch (NullPointerException ex) {
+						printer.error("404 Not Found", sock.getOutputStream());
 					}
 
 
@@ -157,7 +171,7 @@ public class DACPServer {
 	}
 
 	private static class DACPServerCreator implements ControlServerCreator {
-		public void create(PlaybackController dj) {
+		public void create(DJInterface dj) {
 			try {
 				new DACPServer(3689, dj);
 			}

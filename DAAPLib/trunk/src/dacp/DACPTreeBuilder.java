@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import daap.DAAPConstants;
-
 import util.DACPConstants;
 import util.node.BooleanNode;
 import util.node.ByteNode;

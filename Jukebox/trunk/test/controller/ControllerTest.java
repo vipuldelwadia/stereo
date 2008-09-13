@@ -1,6 +1,6 @@
 package controller;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -9,7 +9,7 @@ import player.Controller;
 
 
 public class ControllerTest {
-	PlaybackController c;
+	DJInterface c;
 
 	@Before
 	public void testInstantiation(){
@@ -18,19 +18,19 @@ public class ControllerTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void volumeSetNegative(){
-		c.changeVolume(-1);
+		c.setVolume(-1);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
-	public void volumeSetGreaterThan255(){
-		c.changeVolume(256);
+	public void volumeSetGreaterThan100(){
+		c.setVolume(101);
 	}
 	
 	@Test
 	public void volumeAcceptableValue(){
-		c.changeVolume(0);
-		c.changeVolume(40);
-		c.changeVolume(255);
+		c.setVolume(0);
+		c.setVolume(40);
+		c.setVolume(100);
 	}
 	
 	@Test

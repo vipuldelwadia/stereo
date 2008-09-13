@@ -1,10 +1,11 @@
 package util.command;
 
+import interfaces.DJInterface;
+
 import java.util.Map;
 
-import dacp.DACPTreeBuilder;
-import interfaces.PlaybackController;
 import util.node.Node;
+import dacp.DACPTreeBuilder;
 
 public class Login implements Command {
 
@@ -12,7 +13,7 @@ public class Login implements Command {
 		System.out.println("logged in with argument: " + args);
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		
 		return DACPTreeBuilder.buildLoginNode();
 	}

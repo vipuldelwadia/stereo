@@ -1,10 +1,10 @@
 package music;
 
+import interfaces.AbstractDJ;
 import interfaces.ControlServerCreator;
 import interfaces.Lackey;
 import interfaces.LackeyClient;
 import interfaces.LackeyCreator;
-import interfaces.PlaybackController;
 import interfaces.Track;
 
 import java.io.IOException;
@@ -21,7 +21,7 @@ import java.util.Set;
 
 import player.PlaybackListener;
 
-public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
+public class DJ extends AbstractDJ implements PlaybackListener, LackeyClient {
 
 	private Lackey lackey;
 
@@ -140,7 +140,7 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 		playlist.addAll(toAppend);
 	}
 
-	public void changeVolume(int volume) {
+	public void setVolume(int volume) {
 		currentVolume = volume;
 		URL url = DJ.class.getResource("setvolume.sh");
 
@@ -193,7 +193,7 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 	 * Modify DJ state
 	 */
 	public void play() {
-		playbackRevision++;
+		playbackEvent();
 		if(paused){
 			player.start();
 			paused=false;
@@ -202,19 +202,19 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 	}
 
 	public void pause(){
-		playbackRevision++;
+		playbackEvent();
 		player.pause();
 		paused=true;
 	}
 
 
 	public void stop(){
-		playbackRevision++;
+		playbackEvent();
 		player.stop();
 	}
 
 	public void next() {
-		playbackRevision++;
+		playbackEvent();
 		player.stop();
 		playbackFinished();
 	}
@@ -258,7 +258,7 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 		return list;
 	}
 
-	public Track getCurrentTrack(){
+	public Track currentTrack(){
 		return current;
 	}
 
@@ -310,14 +310,12 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 			}
 		}
 
-		playbackRevision++;
-
 		player.setInputStream(stream);
 	}
 
 	public void playbackStarted() {
 		System.out.println("Playback started");
-		playbackRevision++;
+		playbackEvent();
 	}
 
 	public static void main(String[] args){
@@ -381,14 +379,6 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 	public List<Track> queryRecentlyPlayed(){
 		return getRecentlyPlayedTracks();
 	}
-
-	public String status(){
-		if(getCurrentTrack()!=null)
-			return " #Current Track: " + getCurrentTrack().toString()+" | Playback "+
-					(isPaused()? "Paused" : "Playing");
-		else
-			return "No track loaded";
-	}
 	
 	private static int getCode(String name) throws Exception {
 		if (name.equals("name")) {
@@ -400,7 +390,11 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 		throw new Exception("Invalid for query: " + name);
 	}
 	
-	private int playbackRevision = 0;
+	private int playbackRevision = 1;
+	private void playbackEvent() {
+		playbackRevision++;
+		this.notifyCurrentTrackChanged();
+	}
 	
 	public int playbackRevision() {
 		return playbackRevision;
@@ -408,7 +402,10 @@ public class DJ implements PlaybackListener, PlaybackController, LackeyClient {
 	public byte playbackStatus() {
 		return player.status();
 	}
-	public int playbackTime() {
+	public int playbackElapsedTime() {
 		return player.elapsed();
+	}
+	public byte[] getAlbumArt() {
+		return player.getAlbumArt();
 	}
 }

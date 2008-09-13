@@ -1,13 +1,12 @@
 package util.command.ctrlint;
 
-import interfaces.PlaybackController;
+import interfaces.DJInterface;
 
 import java.util.Map;
 
-import dacp.DACPTreeBuilder;
-
 import util.command.Command;
 import util.node.Node;
+import dacp.DACPTreeBuilder;
 
 public class GetProperty implements Command {
 
@@ -17,7 +16,7 @@ public class GetProperty implements Command {
 		this.args = args;
 	}
 
-	public Node run(PlaybackController dj) {
+	public Node run(DJInterface dj) {
 		
 		if (args != null && args.containsKey("properties")) {
 			String property = args.get("properties");

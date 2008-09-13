@@ -2,6 +2,6 @@ package interfaces;
 
 public interface ControlServerCreator {
 	
-	public void create(PlaybackController dj);
+	public void create(DJInterface dj);
 	
 }

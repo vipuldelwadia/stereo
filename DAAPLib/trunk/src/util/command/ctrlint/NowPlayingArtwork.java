@@ -5,19 +5,20 @@ import interfaces.DJInterface;
 import java.util.Map;
 
 import util.command.Command;
+import util.node.ImageNode;
 import util.node.Node;
 
-public class NextItem implements Command {
+public class NowPlayingArtwork implements Command {
 
 	public void init(Map<String, String> args) {
-		// no args
+		// TODO read maximum width and height and actually use these
 	}
 
 	public Node run(DJInterface dj) {
 		
-		dj.next();
+		byte[] image = dj.getAlbumArt();
 		
-		return null;
+		return new ImageNode(image);
 	}
 
 }
