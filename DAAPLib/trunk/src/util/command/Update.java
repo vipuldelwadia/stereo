@@ -11,7 +11,6 @@ import dacp.DACPTreeBuilder;
 
 public class Update implements Command, LibraryListener {
 
-	@SuppressWarnings("unused")
 	private int revision;
 
 	public void init(Map<String, String> args) {

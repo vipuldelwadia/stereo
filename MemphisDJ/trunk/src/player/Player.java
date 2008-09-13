@@ -1,11 +1,9 @@
 package player;
 
 import java.io.ByteArrayInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
-import java.util.Scanner;
 import java.util.Set;
 
 import javazoom.jl.decoder.Bitstream;
@@ -121,7 +119,6 @@ public class Player implements music.Player {
 		private javazoom.jl.player.Player player;
 		private volatile boolean stopped = false;
 		private final InputStream in ;
-		private long timestamp;
 		private byte[] image;
 
 		public TrackThread(InputStream stream) {
@@ -219,7 +216,6 @@ public class Player implements music.Player {
 
 		public void run() {
 			trackStarted();
-			timestamp = System.currentTimeMillis();
 			try {
 				player.play();
 			}

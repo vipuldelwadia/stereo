@@ -21,7 +21,6 @@ import javax.jmdns.ServiceInfo;
 import music.DJ;
 import reader.DACPRequestParser;
 import util.command.Command;
-import util.node.ImageNode;
 import util.node.Node;
 import writer.DACPResponseGenerator;
 
