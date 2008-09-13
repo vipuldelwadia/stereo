@@ -9,6 +9,7 @@ import java.util.Date;
 import util.node.BooleanNode;
 import util.node.ByteNode;
 import util.node.Composite;
+import util.node.ImageNode;
 import util.node.IntegerNode;
 import util.node.LengthVisitor;
 import util.node.LongLongNode;
@@ -21,14 +22,14 @@ import util.node.Visitor;
 public class DACPResponseGenerator {
 
 	private final LengthVisitor len;
-	
+
 	public DACPResponseGenerator() {
-		
+
 		len = new LengthVisitor();
 	}
-	
+
 	public void visit(Node tree, OutputStream output) {
-		
+
 		PrintStream out = new PrintStream(output);
 
 		if (tree == null) {
@@ -36,7 +37,7 @@ public class DACPResponseGenerator {
 		}
 		else {
 			out.print("HTTP/1.1 200 OK\r\n");
-			
+
 			int length = new LengthVisitor().visit(tree);
 			out.print("Content-Type: application/x-dmap-tagged\r\n");
 			out.print("Content-Length: "+length+"\r\n");
@@ -44,19 +45,19 @@ public class DACPResponseGenerator {
 			out.print("Date: "+DateFormat.getDateInstance().format(new Date())+"\r\n");
 
 			out.print("\r\n");
-			
+
 			new WriteVisitor(len, out).visit(tree);
 		}
-		
+
 		out.flush();
 	}
-	
+
 	public void error(String msg, OutputStream output) {
 		PrintStream out = new PrintStream(output);
 		out.printf("HTTP/1.1 %s\r\n\r\n", msg);
 		out.flush();
 	}
-	
+
 	public static void writeCode(int code, OutputStream out) {
 		byte[] bytes = new byte[4];
 		bytes[0] = (byte)(code>>24);
@@ -71,17 +72,17 @@ public class DACPResponseGenerator {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public static void writeInt(int code, OutputStream out) {
 		writeCode(code, out);
 	}
-	
+
 	public static void writeLong(long code, OutputStream out) {
 		writeInt((int)(code>>32), out);
 		long base = code & 0xFFFFFFFF;
 		writeInt((int)base, out);
 	}
-	
+
 	public static void writeString(String code, OutputStream out) {
 		try {
 			char[] chars = code.toCharArray();
@@ -94,7 +95,7 @@ public class DACPResponseGenerator {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	public static void writeVersion(byte[] b, OutputStream out) {
 		try {
 			for (byte bb: b) {
@@ -105,14 +106,26 @@ public class DACPResponseGenerator {
 			//e.printStackTrace();
 		}
 	}
-	
+
 	public static void writeNodeHeader(Node node, int length, OutputStream out){
 		writeCode(node.code, out);
 		writeInt(length-8, out);
 	}
 	
-	private static class WriteVisitor implements Visitor {
+	public static int writeBytes(byte[] b, OutputStream out){
 		
+		try {
+			out.write(b);
+		} catch (IOException e) {
+			System.err.println("error writing to output stream");
+			//e.printStackTrace();
+		}
+		
+		return b.length;
+	}
+
+	private static class WriteVisitor implements Visitor {
+
 		private LengthVisitor len;
 		private OutputStream output;
 
@@ -189,7 +202,7 @@ public class DACPResponseGenerator {
 			DACPResponseGenerator.writeString(node.getValue(), output);
 			return length;
 		}
-		
+
 		public int visitVersionNode(VersionNode node) {
 			int length = len.visit(node);
 			DACPResponseGenerator.writeNodeHeader(node, length, output);
@@ -197,27 +210,8 @@ public class DACPResponseGenerator {
 			return length;
 		}
 
-	}
-
-	public void image(byte[] image, OutputStream output) {
-		PrintStream out = new PrintStream(output);
-
-		out.print("HTTP/1.1 200 OK\r\n");
-
-		out.print("Content-Type: application/x-dmap-tagged\r\n");
-		out.print("Content-Length: "+image.length+"\r\n");
-		out.print("DAAP-Server: memphis-dj-0.1\r\n");
-		out.print("Date: "+DateFormat.getDateInstance().format(new Date())+"\r\n");
-
-		out.print("\r\n");
-
-		try {
-			out.write(image);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		public int visitImageNode(ImageNode node) {
+			return DACPResponseGenerator.writeBytes(node.image(), output);
 		}
-
-		out.flush();
 	}
 }

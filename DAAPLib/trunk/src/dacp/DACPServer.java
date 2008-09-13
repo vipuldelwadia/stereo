@@ -126,18 +126,7 @@ public class DACPServer {
 
 						if (s != null) {
 							Node reply = s.run(dj);
-							
-							if (reply instanceof ImageNode) {
-								ImageNode node = (ImageNode)reply;
-								if (node.image() == null) {
-									System.err.println("No album art: sending 404");
-									throw new NullPointerException();
-								}
-								printer.image(node.image(), sock.getOutputStream());
-							}
-							else {
-								printer.visit(reply, sock.getOutputStream());
-							}
+							printer.visit(reply, sock.getOutputStream());
 						}
 						else {
 							System.out.println("No command to execute for " + parseText);
@@ -149,7 +138,7 @@ public class DACPServer {
 						printer.error("501 Not Implemented", sock.getOutputStream());
 					}
 					catch (NullPointerException ex) {
-						printer.error("404 Not Found", sock.getOutputStream());
+						printer.visit(null, sock.getOutputStream());
 					}
 
 

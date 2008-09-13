@@ -1,25 +1,27 @@
 package util.command;
 
 import interfaces.DJInterface;
+import interfaces.LibraryInterface;
+import interfaces.LibraryListener;
 
 import java.util.Map;
 
 import util.node.Node;
 import dacp.DACPTreeBuilder;
 
-public class Update implements Command {
+public class Update implements Command, LibraryListener {
 
 	@SuppressWarnings("unused")
-	private int version;
-	
+	private int revision;
+
 	public void init(Map<String, String> args) {
 		String rev = args.get("revision-number");
 		if (rev == null) {
-			version = 1;
+			revision = 0;
 		}
 		else {
 			try {
-				version = Integer.parseInt(rev);
+				revision = Integer.parseInt(rev);
 			}
 			catch (NumberFormatException ex) {
 				throw new IllegalArgumentException("revision number " + rev + " is not valid");
@@ -28,15 +30,31 @@ public class Update implements Command {
 	}
 
 	public Node run(DJInterface dj) {
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+
+		if (this.revision >= dj.playbackRevision()) {
+
+			dj.registerLibraryListener(this);
+			
+			try {
+				synchronized (this) {
+					this.wait(10000); //wait 10 seconds if nothing has changed
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			
+			dj.registerLibraryListener(this);
 		}
+
 		//TODO use version to check whether update is needed
 		return DACPTreeBuilder.buildUpdateResponse(dj.libraryVersion());
 	}
 
-	
+	public void libraryVersionChanged(LibraryInterface l) {
+		synchronized (this) {
+			this.notify();
+		}
+	}
+
+
 }

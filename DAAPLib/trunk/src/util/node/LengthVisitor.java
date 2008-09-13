@@ -41,4 +41,8 @@ public class LengthVisitor implements Visitor {
 	public int visitVersionNode(VersionNode node) {
 		return 8+4;
 	}
+	
+	public int visitImageNode(ImageNode node) {
+		return node.image().length;
+	}
 }

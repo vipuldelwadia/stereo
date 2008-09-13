@@ -134,8 +134,10 @@ public class DACPTreeBuilder {
 			//was  0x000000280000210f00002df300000f19 //playing
 			// 2a (42) is the database number - significant?
 			
+			int id = (Integer)track.getTag(DACPConstants.TRACK_ID);
+			
 			//don't know what this is
-			response.append(new LongLongNode(DACPConstants.canp,0,0));
+			response.append(new LongLongNode(DACPConstants.canp, 1, id, 2,id));
 			
 			String name = (String)track.getTag(DACPConstants.NAME);
 			if (name==null) name = "";

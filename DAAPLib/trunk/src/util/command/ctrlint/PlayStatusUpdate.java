@@ -26,24 +26,18 @@ public class PlayStatusUpdate implements Command, PlaylistStatusListener {
 
 	public Node run(DJInterface dj) {
 		
-		//TODO use revision number to compare with dj revision
-		
 		if (this.revision >= dj.playbackRevision()) {
 			
 			dj.registerPlaybackStatusListener(this);
-			
-			System.out.println("........waiting for playback status change");
-			
+
 			try {
 				synchronized (this) {
-					this.wait();
+					this.wait(10000); //wait 10 seconds if nothing has changed
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			
-			System.out.println("........finished waiting for playback status change");
-			
+
 			dj.removePlaybackStatusListener(this);
 		}
 		

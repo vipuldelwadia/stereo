@@ -15,8 +15,7 @@ public class ImageNode extends Node {
 	
 	@Override
 	public int visit(Visitor visitor) {
-		//should not traverse this node
-		throw new RuntimeException("Not implemented!");
+		return visitor.visitImageNode(this);
 	}
 
 }

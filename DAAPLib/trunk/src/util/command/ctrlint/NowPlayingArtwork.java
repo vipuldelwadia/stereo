@@ -18,7 +18,12 @@ public class NowPlayingArtwork implements Command {
 		
 		byte[] image = dj.getAlbumArt();
 		
-		return new ImageNode(image);
+		if (image != null) {
+			return new ImageNode(image);
+		}
+		else {
+			return null;
+		}
 	}
 
 }

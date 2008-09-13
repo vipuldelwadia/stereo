@@ -186,6 +186,7 @@ public class DJ extends AbstractDJ implements PlaybackListener, LackeyClient {
 			fillPlaylist();	
 		}
 		System.out.println("Library changed: playlist updated");
+		this.notifyLibraryVersionChanged();
 	}
 
 

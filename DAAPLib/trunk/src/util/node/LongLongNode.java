@@ -10,7 +10,13 @@ public class LongLongNode extends Node {
         this.value2 = value2;
     }
     
-    public String toString() {
+    public LongLongNode(int code, int i, int j, int k, int l) {
+		super(code);
+		this.value = ((long)i<<32) | j;
+		this.value2 = ((long)k<<32) | l;
+	}
+
+	public String toString() {
         return "<" + super.toString() + " value=\"" + value  + " " + value2 + "\" />";
     }
 
