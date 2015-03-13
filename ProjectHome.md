@@ -1,0 +1,1 @@
+A music player with a distributed backend using DAAP and a distributed frontend using DACP.
